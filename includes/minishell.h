@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/19 17:51:18 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/20 13:05:36 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,17 @@ int 		built_in_unset(t_shell *shell, char **args);
 char		**envdup(char **envp, int pass);
 /* paths.c */
 char		**recup_paths(t_shell *shell);
+
+/* EXEC */
+
+/* exec_errors.c */
+void		display_cmd_not_found(char **cmd_args, char **paths);
+void		handle_access_denied(char *path_with_cmd,
+	t_shell *shell, char **cmd_args);
+int			is_path_functionnal(char *path_with_cmd,
+	t_shell *shell, char **cmd_args);
+/* exec_path_cmd.c */
+void		path_cmd_exec(t_shell *shell, char **cmd_args);
 
 /* PARSING */
 
