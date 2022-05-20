@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/20 13:05:36 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/20 19:39:17 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@
 #define	S_QUOTES		1
 #define D_QUOTES		2
 
+#define	IN_PIPE			1
+#define OUT_PIPE		2
+#define COMBINED		3
+
 typedef struct s_shell
 {
 	int				i;
@@ -49,6 +53,11 @@ typedef struct s_shell
 	char			*ui_copy;
 	int				fd_in;
 	int				fd_out;
+	int				nbr_cmds;
+	int				cmds_used;
+	int				nb_pipes;
+	int				*pipes;
+	pid_t			*pids_arr;
 }					t_shell;
 
 typedef struct s_token
