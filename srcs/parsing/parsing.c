@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:49:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/29 16:37:36 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/23 19:30:50 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,25 @@ static void	is_within_quotes(t_token *token)
 		token->is_quotted = 0;
 }
 
+/* should check wether token type is a CMD or not
+return 1 if the case, 0 otherwise 
+the 2 cases identified are :
+1) the token is the first token or is locatec just after a pipe
+2) the token is an ARG situated after the filename for a redirection
+(or the heredoc DELIMITER) */
+
+static int	is_cmd(t_token *token)
+{
+	if (token->type == ARG)
+	{
+		if (!token->prev || (token->prev && token->prev->type == PIPE))
+			return (1);
+		if (token->prev && token->prev->type == REDIR_ARG)
+			return (1);
+	}
+	return (0);
+}
+
 /* find thew type of the token (among | < < >> >>)
 check also if the token is entirely surrounded
 by simple or double quotes (with is_within_quotes func)
@@ -49,8 +68,7 @@ static void	find_token_type(t_token *token)
 {		
 	while (token)
 	{
-		if (!ft_strncmp(token->item, "|", 1)
-			&& ft_strlen(token->item) == 1)
+		if (!ft_strncmp(token->item, "|", 1) && ft_strlen(token->item) == 1)
 			token->type = PIPE;
 		else if (!ft_strncmp(token->item, "<<", 2)
 			&& ft_strlen(token->item) == 2)
@@ -64,14 +82,18 @@ static void	find_token_type(t_token *token)
 		else if (!ft_strncmp(token->item, ">", 1)
 			&& ft_strlen(token->item) == 1)
 			token->type = REDIR_OUTPUT;
+		else if (token->prev && token->prev->type <= 5
+			&& token->prev->type > 1)
+			token->type = REDIR_ARG;
 		else
 			token->type = ARG;
-		is_within_quotes(token);
+		if (is_cmd(token) == 1)
+			token->type = CMD;
 		token = token->next;
 	}
 }
 
-/* as asked by the subject, we need to expand the env variables (preceded by $)*/
+/* as asked by the subject, we need to expand the env variables (preceeded by $)*/
 
 int	modify_tokens(t_token *token)
 {
@@ -122,6 +144,7 @@ t_token	*parse_user_input(t_shell *shell)
 		i++;
 	}
 	find_token_type(tokens);
+	// put there a verifier function
 	modify_tokens(tokens);
 	return (tokens);
 }

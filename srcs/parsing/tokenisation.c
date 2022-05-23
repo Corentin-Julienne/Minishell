@@ -6,18 +6,22 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:04:56 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/29 15:53:29 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/23 17:48:49 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static void	trim_user_input(t_shell *shell, size_t item_len)
+static void	trim_user_input(t_shell *shell, size_t item_len) // check if segfault
 {
 	char	*trm_line;
+	char	*tmp_ui;
 
-	trm_line = shell->user_input;
-	trm_line = trm_line + item_len;
+	trm_line = ft_strdup(shell->user_input + item_len);
+	if (trm_line)
+		; // handle adequately
+	free(shell->user_input);
+	shell->user_input = NULL;
 	shell->user_input = trm_line;
 }
 
@@ -44,7 +48,7 @@ static size_t	manage_chevrons_length(char *user_input, size_t i)
 	return (1);
 }
 
-/* this will calcultate the length of the token :
+/* this will calculate the length of the token :
 => if it is a quote, calc the length until next quote (if present)
 => redir and pipes count as a single token
 => if blank space and not inside quote, then stop there 

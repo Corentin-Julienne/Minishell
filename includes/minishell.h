@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/20 19:39:17 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/23 19:03:10 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,9 @@
 #define REDIR_OUTPUT	3
 #define HERE_DOC		4
 #define RO_APPEND		5
-#define CMD				6
-#define	ARG				7
+#define	REDIR_ARG		6
+#define CMD				7
+#define	ARG				8
 
 #define	S_QUOTES		1
 #define D_QUOTES		2
@@ -50,7 +51,6 @@ typedef struct s_shell
 	char			**env;
 	char			**paths;
 	char			*user_input;
-	char			*ui_copy;
 	int				fd_in;
 	int				fd_out;
 	int				nbr_cmds;

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/19 17:55:29 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/23 17:11:19 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ static int	minishell(t_shell *shell)
 			token = parse_user_input(shell);
 			display_every_token(token); // test func
 		}
-		free(user_input);
 	}
 	return (0);
 }

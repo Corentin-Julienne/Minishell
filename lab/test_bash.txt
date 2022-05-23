@@ -1,0 +1,27 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    test_bash.txt                                      :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/05/23 16:28:56 by cjulienn          #+#    #+#              #
+#    Updated: 2022/05/23 17:00:09 by cjulienn         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+// main findings
+
+1) the redirection can be after or before the cmd, it does not matter at all in bash
+2) first the pipes redirections are to be made, then the redirection, then the commands
+3) therefore, redirections supersedes (erase) the pipes redirections
+4) therefore, the pipe will redirect with an empty input !!! (does not return an error msg normally)
+
+// the goal of this file is to test different cases in bash regarding to intricating commands,
+pipes and redirections
+
+// 1) standard case : pipex-like case scenario
+
+cat  < infile.txt | grep truc | wc -l > outfile.txt
+
+
