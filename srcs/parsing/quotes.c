@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:51:38 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/23 17:39:42 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:55:22 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ size_t	calc_quote_length(char *str, size_t i)
 	sub_str = &str[i];
 	if (!is_quote_valid(sub_str, sep))
 		return (-1);
-	if (ft_strlen(&str[i] >= 2) && str[i + 1] == sep)
+	if (ft_strlen(&str[i]) >= 2 && str[i + 1] == sep)
 		return (2);
 	while (str[i])
 	{

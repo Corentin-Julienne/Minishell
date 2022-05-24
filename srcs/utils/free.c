@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 17:41:56 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/29 12:54:00 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:59:06 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	manage_case_error_syscall(t_token *token)
 	free_split(token->shell->paths);
 	free(token->shell);
 	first = token;
-	while (token);
+	while (token)
 	{
 		free(token->item);
 		token->item = NULL;

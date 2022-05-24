@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 17:16:09 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/19 17:54:53 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:46:34 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	fulfill_env(char **dup_env, char **envp, int pass)
 		if (i != pass && !dup_env[j])
 		{
 			free_problem_str_arr(dup_env, j);
-			return (NULL);
+			return ; // should handle this problem in a better way
 		}
 		i++;
 		j++;

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/23 19:03:10 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 17:11:47 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,6 @@
 #define	S_QUOTES		1
 #define D_QUOTES		2
 
-#define	IN_PIPE			1
-#define OUT_PIPE		2
-#define COMBINED		3
-
 typedef struct s_shell
 {
 	int				i;
@@ -73,12 +69,9 @@ typedef struct s_token
 
 typedef struct s_seq
 {
-	char			*cmd;
-	char			**cmds;
-	char			*redir;
-	char			**redirs;
-}
-				t_seq;
+	char			*cmd_with_args;
+	char			**fd_redirs;
+}					t_seq;
 
 /* BUILTINS */
 
@@ -99,6 +92,8 @@ char		**recup_paths(t_shell *shell);
 
 /* EXEC */
 
+/* exec_cmd.c*/
+void		cmd_exec(t_shell *shell, char **cmd_args);
 /* exec_errors.c */
 void		display_cmd_not_found(char **cmd_args, char **paths);
 void		handle_access_denied(char *path_with_cmd,
@@ -120,6 +115,18 @@ int			is_quote_valid(char *item, char sep);
 size_t		calc_quote_length(char *str, size_t i);
 /* tokenisation.c */
 char		*isolate_item(t_shell *shell);
+
+/* REDIRS */
+
+/* fd_redirs.c */
+void		operate_redir(t_shell *shell, int type, char *path);
+/* pipes.c */
+void		pipes_activation(t_shell *shell, int num_pipes);
+void		close_all_pipes(t_shell *shell, int num_pipes);
+void		redirect_to_pipe(t_shell *shell, int iter);
+
+/* spawn_children.c */
+
 
 /* STRUCTS */
 
@@ -147,5 +154,6 @@ char		*ft_triple_join(const char *s1, const char *s2, const char *s3);
 /* DEBUG */
 
 /* debug_utils.c */
+void		display_every_token(t_token *token);
 
 #endif

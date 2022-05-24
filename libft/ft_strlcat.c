@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/10 13:01:05 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/27 17:31:40 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 14:01:17 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	const unsigned char			*s;
 	unsigned char				*d;
 
+	s = (const unsigned char *)src;
+	d = (unsigned char *)dst;
 	n = dstsize;
 	total_counter = ft_total_counter(dst, src, n);
 	if (n == 0 || (n <= (ft_count_size_dest(dst, n))))

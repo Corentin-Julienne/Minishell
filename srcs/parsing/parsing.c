@@ -6,14 +6,14 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:49:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/23 19:30:50 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 15:45:30 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// /* bash allows CMDS to work regardless of the case
-// e.g echo will works but also Echo or eChO */
+/* bash allows CMDS to work regardless of the case
+e.g echo will works but also Echo or eChO */
 
 // static void	*lowercase_cmds(t_token *token)
 // {
@@ -27,18 +27,6 @@
 // 		i++;
 // 	}
 // }
-
-static void	is_within_quotes(t_token *token)
-{
-	if (token->item[0] == '\''
-		&& token->item[ft_strlen(token->item) - 1] == '\'')
-		token->is_quotted = S_QUOTES;
-	else if (token->item[0] == '"'
-		&& token->item[ft_strlen(token->item) - 1] == '"')
-		token->is_quotted = D_QUOTES;
-	else
-		token->is_quotted = 0;
-}
 
 /* should check wether token type is a CMD or not
 return 1 if the case, 0 otherwise 
@@ -97,16 +85,13 @@ static void	find_token_type(t_token *token)
 
 int	modify_tokens(t_token *token)
 {
-	int				i;
-	char			*expanded_token;
-
 	while (token)
 	{
 		expand_env_var(token);
 		if (remove_quotes(token) == -1)
 			; // handle this
 		if (token->type == CMD)
-			lowercase_cmds(token);
+			;// implement  lowercase_cmds(token) later !!!
 		token = token->next;
 	}
 	return (0);

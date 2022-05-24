@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/20 13:46:29 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:48:44 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int		is_built_in(char *cmd)
 void	cmd_exec(t_shell *shell, char **cmd_args)
 {
 	if (is_built_in(cmd_args[0]) == 1)
-		builtin_exec(); // to implement
+		; // implement builtin_exec() later !!!
 	else
 		path_cmd_exec(shell, cmd_args);
 }

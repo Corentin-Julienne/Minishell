@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:02 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/12/22 16:22:03 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:37:06 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int	built_in_cd(char **args, t_shell *shell)
 	char	*home;
 	char	*path;
 	
-	home = getenv("HOME");
+	home = getenv("HOME"); // check wether it is allowed or not
 	if (args[2])
 	{
 		ft_putstr_fd("minishell: cd: too many arguments\n", STDERR_FILENO); // check that

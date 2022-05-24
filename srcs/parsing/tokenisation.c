@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:04:56 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/23 17:48:49 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 15:34:47 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,11 @@
 static void	trim_user_input(t_shell *shell, size_t item_len) // check if segfault
 {
 	char	*trm_line;
-	char	*tmp_ui;
 
 	trm_line = ft_strdup(shell->user_input + item_len);
 	if (trm_line)
 		; // handle adequately
-	free(shell->user_input);
+	// free(shell->user_input);
 	shell->user_input = NULL;
 	shell->user_input = trm_line;
 }
@@ -33,7 +32,7 @@ static size_t	manage_chevrons_length(char *user_input, size_t i)
 	char	*cutted_str;
 	size_t	len;
 	
-	cutted_str = user_input[i];
+	cutted_str = &user_input[i];
 	len = ft_strlen(cutted_str);
 	if (user_input[i] == '<' && len > 1)
 	{
@@ -54,7 +53,7 @@ static size_t	manage_chevrons_length(char *user_input, size_t i)
 => if blank space and not inside quote, then stop there 
 */
 
-static size_t	calc_token_length(t_shell *shell, char *user_input)
+static size_t	calc_token_length(char *user_input)
 {
 	size_t		i;
 
@@ -94,7 +93,7 @@ char	*isolate_item(t_shell *shell)
 
 	while (shell->user_input[0] == ' ')
 		shell->user_input++;
-	item_len = calc_token_length(shell, shell->user_input);
+	item_len = calc_token_length(shell->user_input);
 	item = (char *)malloc(sizeof(char) * (item_len + 1));
 	if (!item)
 		return (NULL); // change this

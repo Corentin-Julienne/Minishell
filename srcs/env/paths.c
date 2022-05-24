@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 17:48:27 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/19 17:51:57 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:47:50 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ bash-like error msg at execution (bash : command not found))*/
 
 static void	handle_slashes_prbl(t_shell *shell, char **paths_ws)
 {
-	free_problem_split(paths_ws, shell->i);
+	free_problem_str_arr(paths_ws, shell->i);
 	ft_putstr_fd("minishell : Unable to allocate memory\n", STDERR_FILENO);
 	// some cleaning function there
 }

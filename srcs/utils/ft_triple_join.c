@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/27 17:35:46 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/27 17:46:06 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 13:59:43 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int ft_assemble_parts(char *copy, const char *s2,
 	size_t			k;
 
 	j = 0;
-	j = 0;
+	k = 0;
 	while (s2[j])
 	{
 		copy[i] = s2[j];

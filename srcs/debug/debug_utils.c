@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:54:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/19 16:58:15 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/24 15:35:58 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	display_every_token(t_token *token)
 	i = 0;
 	while (token)
 	{
-		printf("token [%i] = [%s]\n", i, token->item);
+		printf("token [%i] = [%s] | type = %d\n", i, token->item, token->type);
 		token = token->next;
 		i++;
 	}
