@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/24 17:11:47 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 13:17:27 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,11 @@ int			is_path_functionnal(char *path_with_cmd,
 /* exec_path_cmd.c */
 void		path_cmd_exec(t_shell *shell, char **cmd_args);
 
+/* MINISHELL */
+
+/* process_tokens.c */
+void		process_tokens(t_token *token, t_shell *shell);
+
 /* PARSING */
 
 /* expansions.c */
@@ -118,15 +123,14 @@ char		*isolate_item(t_shell *shell);
 
 /* REDIRS */
 
+/* children.c */
+int			child_process(t_shell *shell, t_token *token, int iter);
 /* fd_redirs.c */
 void		operate_redir(t_shell *shell, int type, char *path);
 /* pipes.c */
 void		pipes_activation(t_shell *shell, int num_pipes);
 void		close_all_pipes(t_shell *shell, int num_pipes);
 void		redirect_to_pipe(t_shell *shell, int iter);
-
-/* spawn_children.c */
-
 
 /* STRUCTS */
 
@@ -148,7 +152,7 @@ void		token_add_back(t_token **token, t_token *new);
 void		free_three_ptn(void *ptn_1, void *ptn_2, void *ptn_3);
 void		free_split(char **split);
 void		free_problem_str_arr(char **split, int i);
-
+/* triple_join.c */
 char		*ft_triple_join(const char *s1, const char *s2, const char *s3);
 
 /* DEBUG */

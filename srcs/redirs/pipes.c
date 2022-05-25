@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:31 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/24 17:12:34 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 12:50:20 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static void	close_useless_pipes(t_shell *shell, int iter)
 			close(shell->pipes[i]);
 		i++;
 	}
-	if (iter = 0)
+	if (iter == 0)
 		close(shell->pipes[(iter * 2) + 1]);
-	else if (iter = shell->nb_pipes)
+	else if (iter == shell->nb_pipes)
 		close(shell->pipes[(iter * 2) - 2]);
 }
 
@@ -75,13 +75,13 @@ dup2 the stdin, stdout or both , then close the used pipes */
 void	redirect_to_pipe(t_shell *shell, int iter)
 {
 	close_useless_pipes(shell, iter);
-	if (iter = shell->nb_pipes) // check that
+	if (iter == shell->nb_pipes) // check that
 	{
 		if (dup2(shell->pipes[(iter * 2) - 2], STDIN_FILENO) == -1)
 			; // handle correctly
 		close(shell->pipes[(iter * 2) - 2]);
 	}
-	else if (iter = 0)
+	else if (iter == 0)
 	{
 		if (dup2(shell->pipes[1], STDOUT_FILENO) == -1)
 			; // handle correctly

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:49:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/24 15:45:30 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 13:12:06 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,7 +129,6 @@ t_token	*parse_user_input(t_shell *shell)
 		i++;
 	}
 	find_token_type(tokens);
-	// put there a verifier function
-	modify_tokens(tokens);
+	// modify_tokens(tokens); WILL DO THIS AFTER
 	return (tokens);
 }
