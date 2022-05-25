@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:04 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/24 13:36:30 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 13:44:31 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static int	is_flag_n(char **args)
 	return (flag_num);
 }
 
-int	built_in_echo(char **args)
+int	built_in_echo(t_shell *shell, char **cmd_args)
 {
 	size_t	size;
 	int		n_flag;

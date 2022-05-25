@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:09 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/12/15 16:52:14 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 13:45:34 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	are_args_valid(char **args)
 	return (args_valid);
 }
 
-void	built_in_exit(char **args, t_shell *shell)
+void	built_in_exit(t_shell *shell, char **cmd_args)
 {
 	int			args_valid;
 	size_t		args_num;

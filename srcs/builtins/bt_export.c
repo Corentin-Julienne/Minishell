@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/12/24 15:55:43 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 13:46:07 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ static int	check_var_val(char *arg)
 	// TODO
 }
 
-int built_in_export(t_shell *shell, char **args)
+int built_in_export(t_shell *shell, char **cmd_args)
 {
 	char	**sorted_env;
 	

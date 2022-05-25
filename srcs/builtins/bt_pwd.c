@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/12/21 19:28:50 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 13:46:22 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // need to check if PATH_MAX actually enabled in school 19 MacOS
 
-int	built_in_pwd(void)
+int	built_in_pwd(t_shell *shell, char *cmd_args)
 {
 	char	*buf;
 	char	*cwd;

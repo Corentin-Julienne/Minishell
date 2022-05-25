@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/25 13:17:27 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 13:47:19 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,13 @@ typedef struct s_seq
 
 /* BUILTINS */
 
-int			built_in_cd(char **args, t_shell *shell);
-int			built_in_echo(char **args);
-int			built_in_env(t_shell *shell);
-void		built_in_exit(char **args, t_shell *shell);
-int 		built_in_export(t_shell *shell, char **args);
-int			built_in_pwd(void);
-int 		built_in_unset(t_shell *shell, char **args);
+int			built_in_cd(t_shell *shell, char **cmd_args);
+int			built_in_echo(t_shell *shell, char **cmd_args);
+int			built_in_env(t_shell *shell, char **cmd_args);
+int			built_in_exit(t_shell *shell, char **cmd_args);
+int 		built_in_export(t_shell *shell, char **cmd_args);
+int			built_in_pwd(t_shell *shell, char **cmd_args);
+int 		built_in_unset(t_shell *shell, char **cmd_args);
 
 /* ENV */
 

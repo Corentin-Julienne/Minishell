@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:15 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/12/15 20:10:57 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 13:46:30 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ static int	find_index(t_shell *shell, char *arg)
 	return (index);
 }
 
-int built_in_unset(t_shell *shell, char **args)
+int built_in_unset(t_shell *shell, char **cmd_args)
 {
 	int			index;
 	int			i;

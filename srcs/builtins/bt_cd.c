@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:02 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/24 13:37:06 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 13:42:37 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ static int	change_dir(char **args, char *path, t_shell *shell)
 	return (0);
 }
 
-int	built_in_cd(char **args, t_shell *shell)
+int	built_in_cd(t_shell *shell, char **cmd_args)
 {
 	char	*home;
 	char	*path;
