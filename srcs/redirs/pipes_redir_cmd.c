@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   children.c                                         :+:      :+:    :+:   */
+/*   pipes_redir_cmd.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:33 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/25 13:17:14 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/25 17:46:41 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static char	**rtn_cmd_arr(t_token *cmd_token)
 /* based on parsing result, this function should take care of redirections,
 pipes and cmd exec in a relevant way */
 
-int	child_process(t_shell *shell, t_token *token, int iter)
+int	pipes_redirs_cmd(t_shell *shell, t_token *token, int iter)
 {
 	t_token		*redir_token;
 	t_token		*cmd_token;
