@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/25 17:46:01 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/26 17:00:03 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ char		*isolate_item(t_shell *shell);
 /* fd_redirs.c */
 void		operate_redir(t_shell *shell, int type, char *path);
 /* pipes_redirs_cmds.c */
-int			pipes_redirs_cmds(t_shell *shell, t_token *token, int iter);
+int			pipes_redirs_cmd(t_shell *shell, t_token *token, int iter);
 /* pipes.c */
 void		pipes_activation(t_shell *shell, int num_pipes);
 void		close_all_pipes(t_shell *shell, int num_pipes);

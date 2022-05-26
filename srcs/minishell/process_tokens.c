@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:58:37 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/25 18:56:38 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/26 17:01:03 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ void	process_tokens(t_token *token, t_shell *shell)
 	}
 	else // case use of cmd without pipes
 	{
-		process_first_seq(token, shell); // useful in case of use of cd (directly in parent process)
-		shell->cmds_used++;
+		pipes_redirs_cmd(shell, token, 0);
+		return ;
 	}
 	while (shell->cmds_used < shell->nbr_cmds)
 	{

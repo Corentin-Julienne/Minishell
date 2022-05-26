@@ -6,7 +6,7 @@
 #    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/24 16:57:50 by cjulienn          #+#    #+#              #
-#    Updated: 2022/05/25 12:51:23 by cjulienn         ###   ########.fr        #
+#    Updated: 2022/05/26 16:59:56 by cjulienn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,8 +55,8 @@ SRCS_TEST= \
 	  $(SRCS_PATH)parsing/parsing.c \
 	  $(SRCS_PATH)parsing/quotes.c \
 	  $(SRCS_PATH)parsing/tokenisation.c \
-	  $(SRCS_PATH)redirs/children.c \
 	  $(SRCS_PATH)redirs/fd_redirs.c \
+	  $(SRCS_PATH)redirs/pipes_redirs_cmd.c \
 	  $(SRCS_PATH)redirs/pipes.c \
 	  $(SRCS_PATH)structs/init_structs.c \
 	  $(SRCS_PATH)structs/token_utils_1.c \
