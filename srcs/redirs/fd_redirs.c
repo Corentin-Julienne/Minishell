@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/20 20:12:08 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/26 17:53:56 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,7 @@ static void	file_opener(t_shell *shell, int type, char *path)
 }
 
 /* operate_redir should take the parsing parameter and perform
-a SINGLE redir per call, based on the parameter 
-OPERATE_REDIR IS MEANT TO BE USED WITHIN A CHILD PROCESS ONLY !!!! */
+a SINGLE redir per call, based on the parameter */
 
 void	operate_redir(t_shell *shell, int type, char *path)
 {
@@ -44,13 +43,13 @@ void	operate_redir(t_shell *shell, int type, char *path)
 	if (type == REDIR_INPUT)
 	{
 		if (dup2(shell->fd_in, STDIN_FILENO) == -1)
-			; // handle this properly
+			ft_putstr_fd("REDIR_INPUT failed\n", 2); // handle this properly
 		close(shell->fd_in);
 	}
 	else if (type == REDIR_OUTPUT || type == RO_APPEND)
 	{
 		if (dup2(shell->fd_out, STDOUT_FILENO) == -1)
-			; // handle this properly
+			ft_putstr_fd("REDIR_OUTPUT failed\n", 2); // handle this properly
 		close(shell->fd_out);
 	}
 }

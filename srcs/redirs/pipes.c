@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:31 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/25 12:50:20 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/26 18:37:30 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ static void	close_useless_pipes(t_shell *shell, int iter)
 		i++;
 	}
 	if (iter == 0)
-		close(shell->pipes[(iter * 2) + 1]);
+		close(shell->pipes[0]);
 	else if (iter == shell->nb_pipes)
-		close(shell->pipes[(iter * 2) - 2]);
+		close(shell->pipes[(iter * 2) + 1]);
 }
 
 /* pipes_activation return an array of activated pipes
@@ -78,21 +78,21 @@ void	redirect_to_pipe(t_shell *shell, int iter)
 	if (iter == shell->nb_pipes) // check that
 	{
 		if (dup2(shell->pipes[(iter * 2) - 2], STDIN_FILENO) == -1)
-			; // handle correctly
+			ft_putstr_fd("redir to STDIN failed\n", 2); // handle correctly
 		close(shell->pipes[(iter * 2) - 2]);
 	}
 	else if (iter == 0)
 	{
 		if (dup2(shell->pipes[1], STDOUT_FILENO) == -1)
-			; // handle correctly
+			ft_putstr_fd("redir to STDOUT failed\n", 2); // handle correctly
 		close(shell->pipes[1]);
 	}
 	else
 	{
 		if (dup2(shell->pipes[(iter * 2) - 2], STDIN_FILENO) == -1)
-			; // handle correctly
+			ft_putstr_fd("intermediate STDIN pipe redir failed\n", 2); // handle correctly
 		if (dup2(shell->pipes[(iter * 2) + 1], STDOUT_FILENO) == -1)
-			; // handle correctly
+			ft_putstr_fd("intermediate STDOUT pipe redir failed\n", 2); // handle correctly
 		close(shell->pipes[(iter * 2) - 2]);
 		close(shell->pipes[(iter * 2) + 1]);
 	}

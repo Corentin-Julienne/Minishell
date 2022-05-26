@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:58:37 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/26 17:01:03 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/26 18:35:53 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,14 @@ static int	wait_process_and_exit_status(t_shell *shell, int iter)
 	rtn_code = -1;
 	if (waitpid(shell->pids_arr[iter], &waitpid_status, 0) == -1)
 	{
+		printf("waitpid failure\n");
 		// handle this in a clean way case syscall failure
 	}
 	if (WIFEXITED(waitpid_status))
+	{
 		rtn_code = WEXITSTATUS(waitpid_status);
+		printf("child process iter num %i has exited succesfully\n", iter);
+	}
 	return (rtn_code);
 }
 
@@ -36,8 +40,6 @@ NO OPERATIONS OF THIS TYPE SHOULD HAPPEN OUTSIDE OF A CHILD PROCESS !!! */
 
 static void	spawn_child_process(t_shell *shell, t_token *token, int iter)
 {
-	int		rtn_code;
-
 	shell->pids_arr[iter] = fork();
 	if (shell->pids_arr[iter] == -1)
 	{
@@ -45,12 +47,6 @@ static void	spawn_child_process(t_shell *shell, t_token *token, int iter)
 	}
 	else if (shell->pids_arr[iter] == 0)
 		pipes_redirs_cmd(shell, token, iter);
-	else
-	{
-		rtn_code = wait_process_and_exit_status(shell, iter);
-		if (rtn_code != -1)
-			shell->exit_status = rtn_code;
-	}
 }
 
 /* So, it should be one child process per cmd (including redirs and pipes)
@@ -86,6 +82,9 @@ static void	count_pipes_num(t_token *token, t_shell *shell)
 
 void	process_tokens(t_token *token, t_shell *shell)
 {
+	int			rtn_code;
+	int			i;
+	
 	count_pipes_num(token, shell);
 	shell->nbr_cmds = shell->nb_pipes + 1;
 	if (shell->nb_pipes != 0)
@@ -103,6 +102,14 @@ void	process_tokens(t_token *token, t_shell *shell)
 		spawn_child_process(shell, token, shell->cmds_used);
 		shell->cmds_used++;
 	}
+	i = 0;
+	while (i < shell->nbr_cmds)
+	{
+		rtn_code = wait_process_and_exit_status(shell, i);
+		i++;
+	}
+	if (rtn_code != -1)
+		shell->exit_status = rtn_code;
 	if (shell->nb_pipes != 0)
 		close(shell->pids_arr[1]);
 }
