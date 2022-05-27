@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:31 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/27 17:24:58 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/27 17:44:23 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /* close every useless pipe in a given child process
 MEANT TO BE USED IN CHILD PROCESSES ONLY !!!!*/
 
-static void	close_useless_pipes(t_shell *shell, int iter)
+static void	close_useless_pipes(t_shell *shell, int iter) // write this in a better way
 {
 	int			i;
 
@@ -68,8 +68,7 @@ void	close_all_pipes(t_shell *shell, int num_pipes)
 	i = 0;
 	while (i < (num_pipes * 2))
 	{
-		if (close(shell->pipes[i]) == -1)
-			dprintf(2, "pipe closing problem [close_all_pipes]\n");
+		close(shell->pipes[i]);
 		i++;
 	}
 }

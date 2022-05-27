@@ -6,21 +6,11 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/27 17:06:21 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/27 18:30:36 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/* used when a redirections are used in the main process
-(case no pipe involved and only built_in is lauched) 
-avoid 
-*/
-
-// static void	reset_fds()
-// {
-// 	// TO IMPLEMENT
-// }
 
 // static void	exec_built_in(t_shell *shell, char **cmd_args)
 // {
@@ -67,7 +57,7 @@ static int	is_built_in(char *cmd)
 	return (0);
 }
 
-/* add a fork when in the case for a  */
+/* add a fork when in the case for a single command  */
 
 static void	exec_single_cmd(t_shell *shell, char **cmd_args)
 {
@@ -104,14 +94,22 @@ built in AND cmd are executed in the child process
 THEN, NO NEED TO FORK AGAIN !!!!*/
 
 void	cmd_exec(t_shell *shell, char **cmd_args)
-{
-	if (is_built_in(cmd_args[0]) == 1)
+{	
+	if (is_built_in(cmd_args[0]) == 1 && shell->nb_pipes == 0)
 	{
+		shell->fd_in =  dup(STDIN_FILENO);
+		shell->fd_out = dup(STDOUT_FILENO);
 		// exec_built_in(shell, cmd_args);
-		// reset_fds(); // implement that
-		return ;
+		dup2(shell->fd_in, STDIN_FILENO);
+		close(shell->fd_in);
+		shell->fd_in = -1;
+		dup2(shell->fd_out, STDOUT_FILENO);
+		close(shell->fd_out);
+		shell->fd_out = -1;
 	}
-	if (shell->nb_pipes == 0) // fork there
+	else if (is_built_in(cmd_args[0]) == 1 && shell->nb_pipes != 0)
+		; // exec_built_in(shell, cmd_args);
+	else if (is_built_in(cmd_args[0]) == 0 && shell->nb_pipes == 0)
 		exec_single_cmd(shell, cmd_args);
 	else
 		path_cmd_exec(shell, cmd_args);

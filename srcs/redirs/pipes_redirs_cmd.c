@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:33 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/27 16:17:53 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/27 17:42:53 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static t_token	*goto_relevant_token(t_token *token, int iter)
 			i++;
 		gd_token = gd_token->next;
 	}
-	dprintf(2, "gd token is %s of type %d\n", gd_token->item, gd_token->type);
 	return (gd_token);
 }
 
