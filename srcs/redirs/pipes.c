@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:31 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/26 18:37:30 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/27 17:24:58 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,16 +20,18 @@ static void	close_useless_pipes(t_shell *shell, int iter)
 	int			i;
 
 	i = 0;
-	while (i < shell->nb_pipes * 2)
+	while (iter == 0 && i < shell->nb_pipes)
+	{
+		if (i != 1)
+			close(shell->pipes[i]);
+		i++;
+	}
+	while (iter > 0 && i < (shell->nb_pipes * 2))
 	{
 		if (i != ((iter * 2) - 2) && i != ((iter * 2) + 1))
 			close(shell->pipes[i]);
 		i++;
 	}
-	if (iter == 0)
-		close(shell->pipes[0]);
-	else if (iter == shell->nb_pipes)
-		close(shell->pipes[(iter * 2) + 1]);
 }
 
 /* pipes_activation return an array of activated pipes
@@ -43,12 +45,14 @@ void	pipes_activation(t_shell *shell, int num_pipes)
 	if (!shell->pipes)
 	{
 		// handle this in a clean way
+		dprintf(2, "pipe arr malloc failed\n");
 	}
 	i = 0;
 	while (i < num_pipes)
 	{
 		if (pipe(shell->pipes + (2 * i)) == -1)
 		{
+			dprintf(2, "a pipe activation failed\n");
 			// handle this in a clean way
 		}
 		i++;
@@ -64,7 +68,8 @@ void	close_all_pipes(t_shell *shell, int num_pipes)
 	i = 0;
 	while (i < (num_pipes * 2))
 	{
-		close(shell->pipes[i]);
+		if (close(shell->pipes[i]) == -1)
+			dprintf(2, "pipe closing problem [close_all_pipes]\n");
 		i++;
 	}
 }
@@ -79,21 +84,25 @@ void	redirect_to_pipe(t_shell *shell, int iter)
 	{
 		if (dup2(shell->pipes[(iter * 2) - 2], STDIN_FILENO) == -1)
 			ft_putstr_fd("redir to STDIN failed\n", 2); // handle correctly
-		close(shell->pipes[(iter * 2) - 2]);
+		if (close(shell->pipes[(iter * 2) - 2]) == -1)
+			dprintf(2, "pipe closing problem [close_useless_pipes]\n");
 	}
 	else if (iter == 0)
 	{
 		if (dup2(shell->pipes[1], STDOUT_FILENO) == -1)
 			ft_putstr_fd("redir to STDOUT failed\n", 2); // handle correctly
-		close(shell->pipes[1]);
+		if (close(shell->pipes[1]) == -1)
+			dprintf(2, "pipe closing problem [close_useless_pipes]\n");
 	}
 	else
 	{
 		if (dup2(shell->pipes[(iter * 2) - 2], STDIN_FILENO) == -1)
 			ft_putstr_fd("intermediate STDIN pipe redir failed\n", 2); // handle correctly
+		if (close(shell->pipes[(iter * 2) - 2]) == -1)
+			dprintf(2, "pipe closing problem [close_useless_pipes]\n");
 		if (dup2(shell->pipes[(iter * 2) + 1], STDOUT_FILENO) == -1)
 			ft_putstr_fd("intermediate STDOUT pipe redir failed\n", 2); // handle correctly
-		close(shell->pipes[(iter * 2) - 2]);
-		close(shell->pipes[(iter * 2) + 1]);
+		if (close(shell->pipes[(iter * 2) + 1]) == -1)
+			dprintf(2, "pipe closing problem [close_useless_pipes]\n");
 	}
 }

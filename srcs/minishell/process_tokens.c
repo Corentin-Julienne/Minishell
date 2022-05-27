@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:58:37 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/26 18:35:53 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/27 17:38:02 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ void	process_tokens(t_token *token, t_shell *shell)
 	shell->nbr_cmds = shell->nb_pipes + 1;
 	if (shell->nb_pipes != 0)
 	{
-		pipes_activation(shell, shell->nb_pipes);
+		pipes_activation(shell, shell->nb_pipes); // ?
 		init_pids_arr(shell, shell->nbr_cmds);
 	}
 	else // case use of cmd without pipes
@@ -102,6 +102,8 @@ void	process_tokens(t_token *token, t_shell *shell)
 		spawn_child_process(shell, token, shell->cmds_used);
 		shell->cmds_used++;
 	}
+	if (shell->nb_pipes != 0)
+		close_all_pipes(shell, shell->nb_pipes);
 	i = 0;
 	while (i < shell->nbr_cmds)
 	{
@@ -110,6 +112,4 @@ void	process_tokens(t_token *token, t_shell *shell)
 	}
 	if (rtn_code != -1)
 		shell->exit_status = rtn_code;
-	if (shell->nb_pipes != 0)
-		close(shell->pids_arr[1]);
 }

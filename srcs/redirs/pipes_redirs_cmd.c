@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:33 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/26 18:19:36 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/27 16:17:53 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static t_token	*goto_relevant_token(t_token *token, int iter)
 			i++;
 		gd_token = gd_token->next;
 	}
+	dprintf(2, "gd token is %s of type %d\n", gd_token->item, gd_token->type);
 	return (gd_token);
 }
 
@@ -89,9 +90,6 @@ int	pipes_redirs_cmd(t_shell *shell, t_token *token, int iter)
 			operate_redir(shell, redir_token->type, redir_token->next->item);
 		redir_token = redir_token->next;
 	}
-	ft_putstr_fd("iter number : ", 2); // correc
-	ft_putstr_fd(ft_itoa(iter), 2); // correc
-	ft_putstr_fd("\n", 2); // correc
 	while (cmd_token && cmd_token->type != PIPE)
 	{
 		if (cmd_token->type == CMD)

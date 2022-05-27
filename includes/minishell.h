@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/26 17:00:03 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/27 16:16:30 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,5 +160,6 @@ char		*ft_triple_join(const char *s1, const char *s2, const char *s3);
 
 /* debug_utils.c */
 void		display_every_token(t_token *token);
+void		inspect_char_arr(char **arr);
 
 #endif

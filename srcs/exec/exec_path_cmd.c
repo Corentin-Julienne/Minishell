@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:02:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/20 13:05:28 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/27 16:31:15 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ void	path_cmd_exec(t_shell *shell, char **cmd_args)
 		exit(127);
 	}
 	shell->i = 0;
+	dprintf(2, "go to cmd exec\n");
 	while (shell->paths[shell->i])
 	{
 		path_with_cmd = join_cmd_to_path(shell, cmd_args, shell->i);
@@ -63,6 +64,7 @@ void	path_cmd_exec(t_shell *shell, char **cmd_args)
 		free(path_with_cmd);
 		shell->i++;
 	}
+	dprintf(2, "execve did not works\n");
 	display_cmd_not_found(cmd_args, shell->paths);
 	free_split(cmd_args);
 	exit(127);

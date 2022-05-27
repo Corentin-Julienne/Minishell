@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/26 17:01:55 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/27 17:06:21 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ static void	exec_single_cmd(t_shell *shell, char **cmd_args)
 	else
 	{
 		rtn_code = -1;
-		if (waitpid(pid, &waitpid_status, 0) == -1)
+		if (waitpid(pid, &waitpid_status, WNOHANG) == -1)
 		{
 			; // handle this in a clean way case syscall failure
 		}
