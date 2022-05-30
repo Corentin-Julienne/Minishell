@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 13:18:46 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 18:08:48 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,30 @@ in an infinite loop, ask for input using readline,
 then, if not composed of whitespaces only, add the input to the history,
 tokenise the user input, process it, and then free it */
 
-static int	minishell(t_shell *shell)
+static void	miniloop(t_shell *shell)
 {
 	t_token		*token;
 
+	add_history(shell->user_input);
+	token = parse_user_input(shell);
+	if (!token)
+		return ;
+	display_every_token(token); // debug func
+	free(shell->user_input);
+	shell->user_input = NULL;
+	process_tokens(token, shell);
+	token_clear(&token);
+}
+
+static int	minishell(t_shell *shell)
+{
 	while (42)
 	{
 		shell->user_input = readline("$> ");
 		if (!shell->user_input)
 			free_parent_case_err(shell, NULL);
 		if (ft_strlen(shell->user_input) && !is_spaces_only(shell->user_input))
-		{
-			add_history(shell->user_input);
-			token = parse_user_input(shell);
-			display_every_token(token); // debug func
-			free(shell->user_input);
-			shell->user_input = NULL;
-			process_tokens(token, shell);
-			token_clear(&token);
-		}
+			miniloop(shell);
 		if (shell->user_input)
 		{
 			free(shell->user_input);

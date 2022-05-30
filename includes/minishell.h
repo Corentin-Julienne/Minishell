@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 16:46:29 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 17:08:47 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 typedef struct s_shell
 {
 	int				i;
-	size_t			j;
+	ssize_t			item_length;
 	int				exit_status;
 	char			**env;
 	char			**paths;

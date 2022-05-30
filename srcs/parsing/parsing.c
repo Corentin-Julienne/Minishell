@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:49:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 16:19:24 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 17:37:22 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,22 @@ e.g echo will works but also Echo or eChO */
 // 			token->item[i] = token->item[i] - 32;
 // 		i++;
 // 	}
+// }
+
+// /* as asked by the subject, we need to expand the env variables (preceeded by $)*/
+
+// int	modify_tokens(t_token *token)
+// {
+// 	while (token)
+// 	{
+// 		expand_env_var(token);
+// 		if (remove_quotes(token) == -1)
+// 			; // handle this
+// 		if (token->type == CMD)
+// 			;// implement  lowercase_cmds(token) later !!!
+// 		token = token->next;
+// 	}
+// 	return (0);
 // }
 
 /* should check wether token type is a CMD or not
@@ -81,22 +97,6 @@ static void	find_token_type(t_token *token)
 	}
 }
 
-/* as asked by the subject, we need to expand the env variables (preceeded by $)*/
-
-int	modify_tokens(t_token *token)
-{
-	while (token)
-	{
-		expand_env_var(token);
-		if (remove_quotes(token) == -1)
-			; // handle this
-		if (token->type == CMD)
-			;// implement  lowercase_cmds(token) later !!!
-		token = token->next;
-	}
-	return (0);
-}
-
 /* the parse_user_input func is converting the string user_input
 into tokens. Tokens are words, quotted expressions separated
 by space or | < << >> >, or | < << >> >.
@@ -104,10 +104,21 @@ every token is a part of a linked list containing the str,
 the type of the token, if it is surrounded by closed quotes or not
 */
 
+static void	add_new_token(t_token *token, t_shell *shell, char *item)
+{
+	t_token		*new_elem;
+
+	new_elem = token_new(item);
+	free(item);
+	item = NULL;
+	if (!new_elem)
+		free_parent_case_err(shell, token);
+	token_add_back(&token, new_elem);
+}
+
 t_token	*parse_user_input(t_shell *shell)
 {
 	t_token		*token;
-	t_token		*new_elem;
 	char		*item;
 	char		*ui_cpy;
 
@@ -116,16 +127,15 @@ t_token	*parse_user_input(t_shell *shell)
 	while (ui_cpy)
 	{
 		item = isolate_item(ui_cpy, shell, token);
-		if (!ft_strlen(item))
+		if (!item && shell->item_length == -1)
 		{
-			free(item);
-			break ;
+			token_clear(&token);
+			return (NULL);
 		}
-		ui_cpy = ui_cpy + shell->j;
-		new_elem = token_new(item);
-		if (!new_elem)
-			free_parent_case_err(shell, token);
-		token_add_back(&token, new_elem);
+		else if (!item && shell->item_length == 0)
+			break ;
+		ui_cpy = ui_cpy + shell->item_length;
+		add_new_token(token, shell , item);
 	}
 	find_token_type(token);
 	// modify_tokens(tokens); WILL DO THIS AFTER
