@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:36:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 16:44:54 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 18:07:14 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	free_parent_case_err(t_shell *shell, t_token *token)
 		free_split(shell->env);
 	if (shell->paths)
 		free_split(shell->paths);
-	if (shell->user_input);
+	if (shell->user_input)
 	{
 		free(shell->user_input);
 		shell->user_input = NULL;
@@ -40,13 +40,6 @@ void	free_parent_case_err(t_shell *shell, t_token *token)
 	if (token)
 		token_clear(&token);
 	exit(EXIT_FAILURE);
-}
-
-/* this function avoid leaks when the main process have to be be terminated */
-
-void	free_main_process(t_shell *shell)
-{
-	// TO IMPLEMENT
 }
 
 /* in case of a probleme of alloc during the split,

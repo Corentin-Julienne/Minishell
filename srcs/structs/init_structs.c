@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:59:00 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 13:32:38 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 18:06:29 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ malloc a copy of envp (to facilitate further modification) */
 void	init_shell_struct(t_shell *shell, char **envp)
 {
 	shell->i = 0;
-	shell->j = 0;
+	shell->item_length = 0;
 	shell->exit_status = 0;
 	shell->env = NULL;
 	shell->env = envdup(envp, -1);
