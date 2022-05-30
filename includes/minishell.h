@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/27 16:16:30 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 16:46:29 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,14 @@
 typedef struct s_shell
 {
 	int				i;
+	size_t			j;
 	int				exit_status;
 	char			**env;
 	char			**paths;
 	char			*user_input;
 	int				fd_in;
 	int				fd_out;
-	int				nbr_cmds;
+	int				nb_cmds;
 	int				cmds_used;
 	int				nb_pipes;
 	int				*pipes;
@@ -64,7 +65,6 @@ typedef struct s_token
 	int				used;
 	struct s_token	*prev;
 	struct s_token	*next;
-	struct s_shell	*shell;
 }					t_token;
 
 typedef struct s_seq
@@ -103,6 +103,15 @@ int			is_path_functionnal(char *path_with_cmd,
 /* exec_path_cmd.c */
 void		path_cmd_exec(t_shell *shell, char **cmd_args);
 
+/* FREE */
+
+/* free_child.c */
+
+/* free_parent.c */
+void		free_parent_case_err(t_shell *shell, t_token *token);
+void		free_problem_str_arr(char **split, int i);
+void		free_split(char **split);
+
 /* MINISHELL */
 
 /* process_tokens.c */
@@ -119,7 +128,7 @@ int			remove_quotes(t_token *token);
 int			is_quote_valid(char *item, char sep);
 size_t		calc_quote_length(char *str, size_t i);
 /* tokenisation.c */
-char		*isolate_item(t_shell *shell);
+char		*isolate_item(char *user_input, t_shell *shell, t_token *token);
 
 /* REDIRS */
 
@@ -128,7 +137,7 @@ void		operate_redir(t_shell *shell, int type, char *path);
 /* pipes_redirs_cmds.c */
 int			pipes_redirs_cmd(t_shell *shell, t_token *token, int iter);
 /* pipes.c */
-void		pipes_activation(t_shell *shell, int num_pipes);
+void		pipes_activation(t_shell *shell, int num_pipes, t_token *token);
 void		close_all_pipes(t_shell *shell, int num_pipes);
 void		redirect_to_pipe(t_shell *shell, int iter);
 
@@ -151,8 +160,6 @@ void		token_add_back(t_token **token, t_token *new);
 
 /* free.c */
 void		free_three_ptn(void *ptn_1, void *ptn_2, void *ptn_3);
-void		free_split(char **split);
-void		free_problem_str_arr(char **split, int i);
 /* triple_join.c */
 char		*ft_triple_join(const char *s1, const char *s2, const char *s3);
 

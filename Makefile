@@ -6,7 +6,7 @@
 #    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/24 16:57:50 by cjulienn          #+#    #+#              #
-#    Updated: 2022/05/26 16:59:56 by cjulienn         ###   ########.fr        #
+#    Updated: 2022/05/30 16:47:56 by cjulienn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,7 @@ SRCS_TEST= \
 	  $(SRCS_PATH)exec/exec_cmd.c \
 	  $(SRCS_PATH)exec/exec_errors.c \
 	  $(SRCS_PATH)exec/exec_path_cmd.c \
+	  $(SRCS_PATH)free/free_parent.c \
 	  $(SRCS_PATH)minishell/minishell.c \
 	  $(SRCS_PATH)minishell/process_tokens.c \
 	  $(SRCS_PATH)parsing/expansions.c \
@@ -61,8 +62,6 @@ SRCS_TEST= \
 	  $(SRCS_PATH)structs/init_structs.c \
 	  $(SRCS_PATH)structs/token_utils_1.c \
 	  $(SRCS_PATH)structs/token_utils_2.c \
-	  $(SRCS_PATH)utils/free.c \
-	  $(SRCS_PATH)utils/ft_triple_join.c
 
 # suppress in final repo
 OBJS_TEST = $(SRCS_TEST:.c=.o)
