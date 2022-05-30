@@ -6,23 +6,11 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:04:56 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/24 15:34:47 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 13:28:01 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-static void	trim_user_input(t_shell *shell, size_t item_len) // check if segfault
-{
-	char	*trm_line;
-
-	trm_line = ft_strdup(shell->user_input + item_len);
-	if (trm_line)
-		; // handle adequately
-	// free(shell->user_input);
-	shell->user_input = NULL;
-	shell->user_input = trm_line;
-}
 
 /* return 1 if pipe or < or >, 
 return 2 if << or >> */
@@ -81,23 +69,21 @@ static size_t	calc_token_length(char *user_input)
 1) move the pointer forward for removing whitespaces
 2) calc the length of the token (a strlen for tokens, basically)
 3) malloc memory for create a str with the token
-4) copy the token in the allow char*
-5) move the pointer forward to rm the token
-6) return the malloqued token
+4) copy the token in the malloqued char*
+5) return the malloqued token
 */
 
-char	*isolate_item(t_shell *shell)
+char	*isolate_item(char *user_input, t_shell *shell, t_token *token)
 {
 	char	*item;
-	size_t	item_len;
 
-	while (shell->user_input[0] == ' ')
-		shell->user_input++;
-	item_len = calc_token_length(shell->user_input);
-	item = (char *)malloc(sizeof(char) * (item_len + 1));
+	while (user_input[0] == ' ')
+		user_input++;
+	shell->j = 0;
+	shell->j = calc_token_length(user_input);
+	item = (char *)malloc(sizeof(char) * (shell->j + 1));
 	if (!item)
-		return (NULL); // change this
-	ft_strlcpy(item, shell->user_input, item_len + 1);
-	trim_user_input(shell, item_len);
+		free_parent_case_err(shell, token);
+	ft_strlcpy(item, user_input, shell->j + 1);
 	return (item);
 }

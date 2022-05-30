@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/26 17:53:56 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 16:24:29 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,12 @@ void	operate_redir(t_shell *shell, int type, char *path)
 	file_opener(shell, type, path);
 	if (type == REDIR_INPUT)
 	{
-		if (dup2(shell->fd_in, STDIN_FILENO) == -1)
-			ft_putstr_fd("REDIR_INPUT failed\n", 2); // handle this properly
+		dup2(shell->fd_in, STDIN_FILENO);
 		close(shell->fd_in);
 	}
 	else if (type == REDIR_OUTPUT || type == RO_APPEND)
 	{
-		if (dup2(shell->fd_out, STDOUT_FILENO) == -1)
-			ft_putstr_fd("REDIR_OUTPUT failed\n", 2); // handle this properly
+		dup2(shell->fd_out, STDOUT_FILENO);
 		close(shell->fd_out);
 	}
 }

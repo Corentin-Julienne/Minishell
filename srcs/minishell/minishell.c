@@ -6,22 +6,21 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/25 13:08:18 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 13:18:46 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 /* this function prevent segfault during tokenisation process
-by assessing if the user input is only composed of whitespace */
+by assessing if the user input is only composed of whitespace
+return 1 if only whitespace, 0 otherwise */
 
 static int	is_spaces_only(char *str)
 {
-	int 	res;
 	int		i;
 	int		error;
 
-	res = 0;
 	i = 0;
 	error = 0;
 	if (!str)
@@ -33,29 +32,38 @@ static int	is_spaces_only(char *str)
 		i++;
 	}
 	if (error == 0)
-		res = 1;
-	return (res);
+		return (1);
+	return (0);
 }
+
+/* the core of the shell
+in an infinite loop, ask for input using readline,
+then, if not composed of whitespaces only, add the input to the history,
+tokenise the user input, process it, and then free it */
 
 static int	minishell(t_shell *shell)
 {
-	char		*user_input;
 	t_token		*token;
 
-	user_input = NULL;
 	while (42)
 	{
-		user_input = readline("$> ");
-		if (ft_strlen(user_input) && !is_spaces_only(user_input))
+		shell->user_input = readline("$> ");
+		if (!shell->user_input)
+			free_parent_case_err(shell, NULL);
+		if (ft_strlen(shell->user_input) && !is_spaces_only(shell->user_input))
 		{
-			shell->user_input = user_input;
-			add_history(user_input);
+			add_history(shell->user_input);
 			token = parse_user_input(shell);
-			display_every_token(token); // test func
-			free(user_input);
-			user_input = NULL;
-			process_tokens(token, shell); // process actual complete tokens
-			token_clear(&token); // free_function
+			display_every_token(token); // debug func
+			free(shell->user_input);
+			shell->user_input = NULL;
+			process_tokens(token, shell);
+			token_clear(&token);
+		}
+		if (shell->user_input)
+		{
+			free(shell->user_input);
+			shell->user_input = NULL;
 		}
 	}
 	return (0);

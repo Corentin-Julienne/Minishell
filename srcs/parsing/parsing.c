@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:49:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/25 13:12:06 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 16:19:24 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,29 +106,28 @@ the type of the token, if it is surrounded by closed quotes or not
 
 t_token	*parse_user_input(t_shell *shell)
 {
-	t_token		*tokens;
+	t_token		*token;
 	t_token		*new_elem;
 	char		*item;
-	int			i;
+	char		*ui_cpy;
 
-	tokens = NULL;
-	i = 0;
-	while (shell->user_input)
+	token = NULL;
+	ui_cpy = shell->user_input;
+	while (ui_cpy)
 	{
-		item = isolate_item(shell);
+		item = isolate_item(ui_cpy, shell, token);
 		if (!ft_strlen(item))
 		{
 			free(item);
 			break ;
 		}
+		ui_cpy = ui_cpy + shell->j;
 		new_elem = token_new(item);
 		if (!new_elem)
-			return (NULL); // change this !!!
-		new_elem->shell = shell;
-		token_add_back(&tokens, new_elem);
-		i++;
+			free_parent_case_err(shell, token);
+		token_add_back(&token, new_elem);
 	}
-	find_token_type(tokens);
+	find_token_type(token);
 	// modify_tokens(tokens); WILL DO THIS AFTER
-	return (tokens);
+	return (token);
 }
