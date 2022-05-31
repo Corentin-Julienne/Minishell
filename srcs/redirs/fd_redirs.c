@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 13:54:11 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/31 16:10:59 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 	character sequence \<newline> is ignored, and \ must be used  to  quote
 	the characters \, $, and `. */
 
-static void	handle_here_doc(t_shell *shell, char *delimiter)
+static void	handle_here_doc(t_shell *shell, char *delimiter, t_token *token)
 {
 	char		*user_input;
 	char		*prompt;
@@ -39,8 +39,8 @@ static void	handle_here_doc(t_shell *shell, char *delimiter)
 	{
 		user_input = readline(prompt);
 		if (!user_input)
-			;
-		if (!ft_strncmp(user_input, delimiter, ft_strlen(delimiter)));
+			free_case_err(shell, token);
+		if (!ft_strncmp(user_input, delimiter, ft_strlen(delimiter)))
 			break ;
 		ft_putstr_fd(user_input, shell->fd_in);
 		ft_putstr_fd("\n", shell->fd_in);
@@ -82,7 +82,7 @@ void	operate_redir(t_shell *shell, int type, char *path, t_token *token)
 	if (type == REDIR_INPUT || type == HERE_DOC)
 	{
 		if (type == HERE_DOC)
-			handle_here_doc(shell, path);
+			handle_here_doc(shell, path, token);
 		dup2(shell->fd_in, STDIN_FILENO);
 		close(shell->fd_in);
 	}
