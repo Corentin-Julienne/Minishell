@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:49:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 17:37:22 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/31 16:55:24 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,21 +104,10 @@ every token is a part of a linked list containing the str,
 the type of the token, if it is surrounded by closed quotes or not
 */
 
-static void	add_new_token(t_token *token, t_shell *shell, char *item)
-{
-	t_token		*new_elem;
-
-	new_elem = token_new(item);
-	free(item);
-	item = NULL;
-	if (!new_elem)
-		free_parent_case_err(shell, token);
-	token_add_back(&token, new_elem);
-}
-
 t_token	*parse_user_input(t_shell *shell)
 {
 	t_token		*token;
+	t_token		*new_elem;
 	char		*item;
 	char		*ui_cpy;
 
@@ -127,15 +116,15 @@ t_token	*parse_user_input(t_shell *shell)
 	while (ui_cpy)
 	{
 		item = isolate_item(ui_cpy, shell, token);
-		if (!item && shell->item_length == -1)
-		{
-			token_clear(&token);
-			return (NULL);
-		}
-		else if (!item && shell->item_length == 0)
+		if (!item && shell->item_length > 0)
+			free_case_err(shell, token);
+		if (!item && shell->item_length == 0)
 			break ;
 		ui_cpy = ui_cpy + shell->item_length;
-		add_new_token(token, shell , item);
+		new_elem = token_new(item);
+		if (!new_elem)
+			free_case_err(shell, token);
+		token_add_back(&token, new_elem);
 	}
 	find_token_type(token);
 	// modify_tokens(tokens); WILL DO THIS AFTER

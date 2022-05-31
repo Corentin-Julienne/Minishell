@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:04:56 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 21:26:28 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/31 16:30:13 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ static size_t	manage_chevrons_length(char *user_input, size_t i)
 => if blank space and not inside quote, then stop there 
 */
 
-static ssize_t	calc_token_length(char *user_input)
+static size_t	calc_token_length(char *user_input)
 {
-	ssize_t		i;
+	size_t		i;
 
 	i = 0;
 	while (user_input[i])
@@ -71,26 +71,33 @@ static ssize_t	calc_token_length(char *user_input)
 /* the goal is to cut every token :
 1) move the pointer forward for removing whitespaces
 2) calc the length of the token (a strlen for tokens, basically)
-3) if unclosed quotes, print msg on STDERR and return NULL
-4) if token length == 0, then return NULL
-5) malloc memory for create a str with the token
-6) copy the token in the malloqued char*
+3) if token length == 0, then return NULL
+4) malloc memory for create a str with the token
+5) copy the token in the malloqued char*
+6) add the size of the whitespace in shell->item_length to be able to
+move ui_copy later
 7) return the malloqued token
 */
 
 char	*isolate_item(char *user_input, t_shell *shell, t_token *token)
 {
 	char	*item;
+	size_t	free_space_len;
 
+	free_space_len = 0;
 	while (user_input[0] == ' ')
+	{
+		free_space_len++;
 		user_input++;
+	}
 	shell->item_length = 0;
 	shell->item_length = calc_token_length(user_input);
 	if (shell->item_length == 0)
 		return (NULL);
 	item = (char *)malloc(sizeof(char) * (shell->item_length + 1));
 	if (!item)
-		free_parent_case_err(shell, token);
+		free_case_err(shell, token);
 	ft_strlcpy(item, user_input, shell->item_length + 1);
+	shell->item_length += free_space_len;
 	return (item);
 }

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 17:16:09 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/24 13:46:34 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/31 16:07:20 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /* fulfill the allocated array with env values */
 
-static void	fulfill_env(char **dup_env, char **envp, int pass)
+static int	fulfill_env(char **dup_env, char **envp, int pass)
 {
 	int			i;
 	int			j;
@@ -30,12 +30,13 @@ static void	fulfill_env(char **dup_env, char **envp, int pass)
 		if (i != pass && !dup_env[j])
 		{
 			free_problem_str_arr(dup_env, j);
-			return ; // should handle this problem in a better way
+			return (-1);
 		}
 		i++;
 		j++;
 	}
 	dup_env[j] = NULL;
+	return (0);
 }
 
 /* envdup is a strdup for the env. However, if pass >= 0, it removes a variable 
@@ -55,6 +56,7 @@ char	**envdup(char **envp, int pass)
 		dup_env = (char **)malloc(sizeof(char *) * i);
 	if (!dup_env)
 		return (NULL);
-	fulfill_env(dup_env, envp, pass);
+	if (fulfill_env(dup_env, envp, pass) == -1)
+		return (NULL);
 	return (dup_env);
 }
