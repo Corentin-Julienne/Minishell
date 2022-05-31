@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:36:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 18:07:14 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/31 13:39:24 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /* this function avoid leaks and kill the main process when an error occurs */
 
-void	free_parent_case_err(t_shell *shell, t_token *token)
+void	free_case_err(t_shell *shell, t_token *token)
 {
 	if (shell->env)
 		free_split(shell->env);

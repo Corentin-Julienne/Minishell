@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 17:08:47 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/31 13:57:48 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char		**recup_paths(t_shell *shell);
 /* EXEC */
 
 /* exec_cmd.c*/
-void		cmd_exec(t_shell *shell, char **cmd_args);
+void		cmd_exec(t_shell *shell, char **cmd_args, t_token *token);
 /* exec_errors.c */
 void		display_cmd_not_found(char **cmd_args, char **paths);
 void		handle_access_denied(char *path_with_cmd,
@@ -108,7 +108,7 @@ void		path_cmd_exec(t_shell *shell, char **cmd_args);
 /* free_child.c */
 
 /* free_parent.c */
-void		free_parent_case_err(t_shell *shell, t_token *token);
+void		free_case_err(t_shell *shell, t_token *token);
 void		free_problem_str_arr(char **split, int i);
 void		free_split(char **split);
 
@@ -133,9 +133,10 @@ char		*isolate_item(char *user_input, t_shell *shell, t_token *token);
 /* REDIRS */
 
 /* fd_redirs.c */
-void		operate_redir(t_shell *shell, int type, char *path);
+void		operate_redir(t_shell *shell, int type,
+	char *path, t_token *token);
 /* pipes_redirs_cmds.c */
-int			pipes_redirs_cmd(t_shell *shell, t_token *token, int iter);
+void		pipes_redirs_cmd(t_shell *shell, t_token *token, int iter);
 /* pipes.c */
 void		pipes_activation(t_shell *shell, int num_pipes, t_token *token);
 void		close_all_pipes(t_shell *shell, int num_pipes);

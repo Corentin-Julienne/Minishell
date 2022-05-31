@@ -6,11 +6,15 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:33 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/27 17:42:53 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/31 13:58:02 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/* every sequences of tokens between pipes is treatead separately
+this function will go to the first token after the pipe num iter,
+or to the beginning of the tokens if iter == 0 */
 
 static t_token	*goto_relevant_token(t_token *token, int iter)
 {
@@ -28,7 +32,7 @@ static t_token	*goto_relevant_token(t_token *token, int iter)
 	return (gd_token);
 }
 
-static size_t	calc_cmd_len(t_token *cmd_token)
+static size_t	calc_cmd_len(t_token *cmd_token)  // does not handle strange cases yet
 {
 	size_t		cmd_len;
 
@@ -70,10 +74,29 @@ static char	**rtn_cmd_arr(t_token *cmd_token)
 	return (cmd_arr);
 }
 
+static void	parse_and_launch_cmd(t_shell *shell, t_token *token,
+	t_token *cmd_token)
+{
+	char		**cmd_arr;
+	
+	while (cmd_token && cmd_token->type != PIPE)
+	{
+		if (cmd_token->type == CMD)
+		{
+			cmd_arr = rtn_cmd_arr(cmd_token);
+			if (!cmd_arr)
+				free_case_err(shell, token);
+			cmd_exec(shell, cmd_arr, token);
+			break ;
+		}
+		cmd_token = cmd_token->next;
+	}
+}
+
 /* based on parsing result, this function should take care of redirections,
 pipes and cmd exec in a relevant way */
 
-int	pipes_redirs_cmd(t_shell *shell, t_token *token, int iter)
+void	pipes_redirs_cmd(t_shell *shell, t_token *token, int iter)
 {
 	t_token		*redir_token;
 	t_token		*cmd_token;
@@ -84,19 +107,11 @@ int	pipes_redirs_cmd(t_shell *shell, t_token *token, int iter)
 	cmd_token = redir_token;
 	while (redir_token && redir_token->type != PIPE)
 	{
-		if (redir_token->type >= 2 && redir_token->type <= 5 // need to be handled when no path provided
+		if (redir_token->type >= 2 && redir_token->type <= 5
 			&& redir_token->next)
-			operate_redir(shell, redir_token->type, redir_token->next->item);
+			operate_redir(shell, redir_token->type,
+				redir_token->next->item, token);
 		redir_token = redir_token->next;
 	}
-	while (cmd_token && cmd_token->type != PIPE)
-	{
-		if (cmd_token->type == CMD)
-		{
-			cmd_exec(shell, rtn_cmd_arr(cmd_token));
-			break ;
-		}
-		cmd_token = cmd_token->next;
-	}
-	return (0);
+	parse_and_launch_cmd(shell, token, cmd_token);
 }

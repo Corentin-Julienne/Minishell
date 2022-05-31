@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:58:37 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 16:44:16 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/31 13:40:22 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	wait_process_and_exit_status(t_shell *shell, t_token *token, int iter
 	if (waitpid(shell->pids_arr[iter], &waitpid_status, 0) == -1)
 	{
 		ft_putstr_fd("minishell : Waitpid syscall failure\n", STDERR_FILENO);
-		free_parent_case_err(shell, token);
+		free_case_err(shell, token);
 	}
 	if (WIFEXITED(waitpid_status))
 		rtn_code = WEXITSTATUS(waitpid_status);
@@ -43,7 +43,7 @@ static void	init_pids_arr(t_shell *shell, t_token *token, int nb_cmds)
 	if (!pids)
 	{
 		ft_putstr_fd("minishell : Unable to allocate memory\n", STDERR_FILENO);
-		free_parent_case_err(shell, token);
+		free_case_err(shell, token);
 	}
 	shell->pids_arr = pids;
 }
@@ -57,7 +57,7 @@ static void	spawn_child_process(t_shell *shell, t_token *token, int iter)
 	if (shell->pids_arr[iter] == -1)
 	{
 		ft_putstr_fd("minishell : Fork syscall failure\n", STDERR_FILENO);
-		free_parent_case_err(shell, token);
+		free_case_err(shell, token);
 	}
 	else if (shell->pids_arr[iter] == 0)
 		pipes_redirs_cmd(shell, token, iter);
