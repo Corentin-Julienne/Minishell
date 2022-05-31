@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:04:56 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 17:25:42 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 21:26:28 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ static size_t	manage_chevrons_length(char *user_input, size_t i)
 
 /* this will calculate the length of the token :
 => if it is a quote, calc the length until next quote (if present)
-=> case unvalid quote, then return -1
 => redir and pipes count as a single token
 => if blank space and not inside quote, then stop there 
 */
@@ -51,9 +50,8 @@ static ssize_t	calc_token_length(char *user_input)
 	{
 		if (user_input[i] == '\'' || user_input[i] == '"')
 		{
-			if (is_quote_valid(&user_input[i], user_input[i]) == 0)
-				return (-1);
-			i = i + calc_quote_length(user_input, i) - 1;
+			if (is_quote_valid(&user_input[i], user_input[i]) == 1)
+				i = i + calc_quote_length(user_input, i) - 1;
 		}
 		else if (user_input[i] == '|' || user_input[i] == '<'
 			|| user_input[i] == '>')
@@ -88,13 +86,7 @@ char	*isolate_item(char *user_input, t_shell *shell, t_token *token)
 		user_input++;
 	shell->item_length = 0;
 	shell->item_length = calc_token_length(user_input);
-	if (shell->item_length == -1)
-	{
-		ft_putstr_fd("minishell : ", STDERR_FILENO);
-		ft_putstr_fd("Does not accept unclosed quotes\n", STDERR_FILENO);
-		return (NULL);
-	}
-	else if (shell->item_length == 0)
+	if (shell->item_length == 0)
 		return (NULL);
 	item = (char *)malloc(sizeof(char) * (shell->item_length + 1));
 	if (!item)

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/27 18:30:36 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/31 13:52:03 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 
 /* return 0 if cmd is not a builtin, 1 otherwise */
 
-static int	is_built_in(char *cmd)
+static int	is_built_in(const char *cmd)
 {
 	if (!ft_strncmp(cmd, "cd", 2) && ft_strlen(cmd) == 2)
 		return (1);
@@ -59,7 +59,7 @@ static int	is_built_in(char *cmd)
 
 /* add a fork when in the case for a single command  */
 
-static void	exec_single_cmd(t_shell *shell, char **cmd_args)
+static void	exec_single_cmd(t_shell *shell, char **cmd_args, t_token *token)
 {
 	pid_t		pid;
 	int			rtn_code;
@@ -68,16 +68,18 @@ static void	exec_single_cmd(t_shell *shell, char **cmd_args)
 	pid = fork();
 	if (pid == 1)
 	{
-		; // handle error
+		perror("minishell: Fork");
+		free_case_err(shell, token);
 	}
 	else if (pid == 0)
 		path_cmd_exec(shell, cmd_args);
 	else
 	{
 		rtn_code = -1;
-		if (waitpid(pid, &waitpid_status, WNOHANG) == -1)
+		if (waitpid(pid, &waitpid_status, 0) == -1)
 		{
-			; // handle this in a clean way case syscall failure
+			perror("minishell: Waitpid");
+			free_case_err(shell, token);
 		}
 		if (WIFEXITED(waitpid_status))
 			rtn_code = WEXITSTATUS(waitpid_status);
@@ -93,7 +95,7 @@ Otherwise, this func is launched from a child process, so
 built in AND cmd are executed in the child process
 THEN, NO NEED TO FORK AGAIN !!!!*/
 
-void	cmd_exec(t_shell *shell, char **cmd_args)
+void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token)
 {	
 	if (is_built_in(cmd_args[0]) == 1 && shell->nb_pipes == 0)
 	{
@@ -110,7 +112,7 @@ void	cmd_exec(t_shell *shell, char **cmd_args)
 	else if (is_built_in(cmd_args[0]) == 1 && shell->nb_pipes != 0)
 		; // exec_built_in(shell, cmd_args);
 	else if (is_built_in(cmd_args[0]) == 0 && shell->nb_pipes == 0)
-		exec_single_cmd(shell, cmd_args);
+		exec_single_cmd(shell, cmd_args, token);
 	else
 		path_cmd_exec(shell, cmd_args);
 }

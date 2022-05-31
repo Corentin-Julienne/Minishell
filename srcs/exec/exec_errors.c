@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:24:47 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/27 16:23:08 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 18:26:37 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	display_cmd_not_found(char **cmd_args, char **paths)
 }
 
 /* this function handle the case when access is denied because cmd exist
-but the program don't have sufficient rigths to execute the cmd
+but the program don't have sufficient rights to execute the cmd
 exit the process with code 126, like bash */
 
 void	handle_access_denied(char *path_with_cmd,

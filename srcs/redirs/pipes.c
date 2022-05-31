@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:31 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 16:43:53 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/31 13:56:33 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,17 @@ void	pipes_activation(t_shell *shell, int num_pipes, t_token *token)
 
 	shell->pipes = (int *)malloc(sizeof(int) * (num_pipes * 2));
 	if (!shell->pipes)
-		free_parent_case_err(shell, token);
+		free_case_err(shell, token);
 	i = 0;
 	while (i < num_pipes)
 	{
 		if (pipe(shell->pipes + (2 * i)) == -1)
-			free_parent_case_err(shell, token);
+			free_case_err(shell, token);
 		i++;
 	}
 }
 
-/* close all pipes. Useful when in parent process,
+/* close all pipes. Useful when in PARENT,
 NOT to be used in ANY child process !!! */
 
 void	close_all_pipes(t_shell *shell, int num_pipes)

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:51:38 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 17:00:32 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 21:28:03 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,6 @@
 // 	}
 // 	return (0);
 // }
-
-
-
 
 /* return 1 if quote is valid (i.e. is NOT unclosed),
 and 0 otherwise */
