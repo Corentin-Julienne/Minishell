@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 16:21:31 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/01 16:57:09 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@
 
 #define	S_QUOTES		1
 #define D_QUOTES		2
+
+#define SYNT_ERR		"minishell: syntax error near unexpected token `"
 
 typedef struct s_shell
 {
@@ -141,6 +143,8 @@ void		pipes_redirs_cmd(t_shell *shell, t_token *token, int iter);
 void		pipes_activation(t_shell *shell, int num_pipes, t_token *token);
 void		close_all_pipes(t_shell *shell, int num_pipes);
 void		redirect_to_pipe(t_shell *shell, int iter);
+/* syntax_errors.c */
+void		handle_syntax_errors(t_token *pb_token);	
 
 /* STRUCTS */
 
