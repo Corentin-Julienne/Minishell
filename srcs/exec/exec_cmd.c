@@ -6,39 +6,42 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 13:52:03 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/02 17:58:48 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// static void	exec_built_in(t_shell *shell, char **cmd_args)
+/* exec built in will execute a given builtin, then return its return code,
+to be implemented as an exit code for the last foreground pipeline */
+
+// static int	exec_built_in(t_shell *shell, char **cmd_args)
 // {
 // 	if (!ft_strncmp(cmd_args[0], "cd", 2) && ft_strlen(cmd_args[0]) == 2)
-// 		built_in_cd(shell, cmd_args);
+// 		return (built_in_cd(shell, cmd_args));
 // 	else if (!ft_strncmp(cmd_args[0], "echo", 4)
 // 		&& ft_strlen(cmd_args[0]) == 4)
-// 		built_in_echo(shell, cmd_args);
+// 		return (built_in_echo(shell, cmd_args));
 // 	else if (!ft_strncmp(cmd_args[0], "env", 3)
 // 		&& ft_strlen(cmd_args[0]) == 3)
-// 		built_in_env(shell, cmd_args);
+// 		return (built_in_env(shell, cmd_args));
 // 	else if (!ft_strncmp(cmd_args[0], "exit", 4)
 // 		&& ft_strlen(cmd_args[0]) == 4)
-// 		built_in_exit(shell, cmd_args);
+// 		return (built_in_exit(shell, cmd_args));
 // 	else if (!ft_strncmp(cmd_args[0], "export", 6)
 // 		&& ft_strlen(cmd_args[0]) == 6)
-// 		built_in_export(shell, cmd_args);
+// 		return (built_in_export(shell, cmd_args));
 // 	else if (!ft_strncmp(cmd_args[0], "pwd", 3)
 // 		&& ft_strlen(cmd_args[0]) == 3)
-// 		built_in_pwd(shell, cmd_args);
+// 		return (built_in_pwd(shell, cmd_args));
 // 	else if (!ft_strncmp(cmd_args[0], "unset", 5)
 // 		&& ft_strlen(cmd_args[0]) == 5)
-// 		built_in_unset(shell, cmd_args);
+// 		return (built_in_unset(shell, cmd_args));
 // }
 
 /* return 0 if cmd is not a builtin, 1 otherwise */
 
-static int	is_built_in(const char *cmd)
+int	is_built_in(const char *cmd)
 {
 	if (!ft_strncmp(cmd, "cd", 2) && ft_strlen(cmd) == 2)
 		return (1);
@@ -57,62 +60,54 @@ static int	is_built_in(const char *cmd)
 	return (0);
 }
 
-/* add a fork when in the case for a single command  */
+/* this function check if there is no cmd in the sequence
+if this is the case free the cmds_args and return an appropriate exit status
+triggered in a CHILD process only
+Otherwise, if a cmd is present, return and do nothing */
 
-static void	exec_single_cmd(t_shell *shell, char **cmd_args, t_token *token)
+static void	handle_no_cmd(char **cmd_args, t_shell *shell)
 {
-	pid_t		pid;
-	int			rtn_code;
-	int			waitpid_status;
-
-	pid = fork();
-	if (pid == 1)
-	{
-		perror("minishell: Fork");
-		free_case_err(shell, token);
-	}
-	else if (pid == 0)
-		path_cmd_exec(shell, cmd_args);
-	else
-	{
-		rtn_code = -1;
-		if (waitpid(pid, &waitpid_status, 0) == -1)
-		{
-			perror("minishell: Waitpid");
-			free_case_err(shell, token);
-		}
-		if (WIFEXITED(waitpid_status))
-			rtn_code = WEXITSTATUS(waitpid_status);
-		if (rtn_code != -1)
-			shell->exit_status = rtn_code;
-	}
+	if (cmd_args[0] != NULL)
+		return ;
+	free_split(cmd_args);
+	// free normally and return an exit value
 }
 
-/* if no pipes, the builtin will be exec on the main process, 
-and cmd that are not buildin would necessitate an additionnal fork,
-because this func will be used in the main process
-Otherwise, this func is launched from a child process, so 
-built in AND cmd are executed in the child process
-THEN, NO NEED TO FORK AGAIN !!!!*/
+/* if no pipes, the builtin will be exec on the main process
+(process will be equal to PARENT),
+otherwise in case there is pipes or a single sequences implying
+an external cmd, process will be equal to CHILD (the "else" path)
+1) in the PARENT case, we execute the built-in, reboot the fd if there
+were changes, then put the exit code to the rtn code of the triggered builtin
+2) in the CHILD case, we execute the builtin if the cmd is a builtin,
+otherwise we execute the external cmd  
+NB : if their is no cmd (aka cmd_args[0] = NULL), then we exit if in child process,
+and of course we free everything before */
 
-void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token)
-{	
-	if (is_built_in(cmd_args[0]) == 1 && shell->nb_pipes == 0)
+void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
+{
+	int			exit_code;
+	
+	exit_code = 0; // change this when builtin are implemented (change value to -1)
+	if (process == PARENT)
 	{
-		shell->fd_in =  dup(STDIN_FILENO);
-		shell->fd_out = dup(STDOUT_FILENO);
-		// exec_built_in(shell, cmd_args);
-		dup2(shell->fd_in, STDIN_FILENO);
-		close(shell->fd_in);
-		shell->fd_in = -1;
-		dup2(shell->fd_out, STDOUT_FILENO);
-		close(shell->fd_out);
-		shell->fd_out = -1;
+		// exit_code = exec_built_in(shell, cmds_args);
+		dprintf(STDERR_FILENO, "builtin line reached (implement later)\n"); // for debugging only, suppress after
+		if (exit_code != -1)
+			shell->exit_status = exit_code;
+		dup2(shell->std_fdin, STDIN_FILENO);
+		dup2(shell->std_fdout, STDOUT_FILENO);
 	}
-	else if (is_built_in(cmd_args[0]) == 1 && shell->nb_pipes != 0)
-		; // exec_built_in(shell, cmd_args);
-	else if (is_built_in(cmd_args[0]) == 0 && shell->nb_pipes == 0)
-		exec_single_cmd(shell, cmd_args, token);
 	else
-		path_cmd_exec(shell, cmd_args);
+	{
+		handle_no_cmd(cmd_args, shell);
+		if (is_built_in(cmd_args[0]) == 1)
+		{
+			// exit_code = exec_built_in(shell, cmd_args);
+			dprintf(STDERR_FILENO, "builtin line reached (implement later)\n"); // for debugging only, suppress after
+			exit(exit_code);
+		}
+		else
+			path_cmd_exec(shell, cmd_args);
+	}
 }

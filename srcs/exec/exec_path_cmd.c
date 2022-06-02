@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:02:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/29 15:19:36 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/02 18:09:39 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static char	*join_cmd_to_path(t_shell *shell, char **cmd_args, int i)
 	path = ft_strjoin(shell->paths[i], cmd_args[0]);
 	if (!path)
 	{
-		ft_putstr_fd("minishell : Unable to allocate memory\n", STDERR_FILENO);
+		ft_putstr_fd(MALLOC_ERR, STDERR_FILENO);
 		free_split(cmd_args);
 		// some cleaner for the child process case of malloc error
 	}

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/01 16:57:09 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/02 18:33:14 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,10 @@
 #define D_QUOTES		2
 
 #define SYNT_ERR		"minishell: syntax error near unexpected token `"
+#define	MALLOC_ERR		"minishell: failure to allocate memory\n"
+
+#define PARENT			0
+#define CHILD			1
 
 typedef struct s_shell
 {
@@ -52,8 +56,10 @@ typedef struct s_shell
 	char			*user_input;
 	int				fd_in;
 	int				fd_out;
-	int				nb_cmds;
-	int				cmds_used;
+	int				std_fdin;
+	int				std_fdout;
+	int				nb_seq;
+	int				seq_used;
 	int				nb_pipes;
 	int				*pipes;
 	pid_t			*pids_arr;
@@ -68,12 +74,6 @@ typedef struct s_token
 	struct s_token	*prev;
 	struct s_token	*next;
 }					t_token;
-
-typedef struct s_seq
-{
-	char			*cmd_with_args;
-	char			**fd_redirs;
-}					t_seq;
 
 /* BUILTINS */
 
@@ -95,7 +95,9 @@ char		**recup_paths(t_shell *shell);
 /* EXEC */
 
 /* exec_cmd.c*/
-void		cmd_exec(t_shell *shell, char **cmd_args, t_token *token);
+int			is_built_in(const char *cmd);
+void		cmd_exec(t_shell *shell, char **cmd_args,
+	t_token *token, int process);
 /* exec_errors.c */
 void		display_cmd_not_found(char **cmd_args, char **paths);
 void		handle_access_denied(char *path_with_cmd,
@@ -135,16 +137,18 @@ char		*isolate_item(char *user_input, t_shell *shell, t_token *token);
 /* REDIRS */
 
 /* fd_redirs.c */
-void		operate_redir(t_shell *shell, int type,
-	char *path, t_token *token);
+int			operate_redir(t_shell *shell, t_token *redir_tk,
+	t_token *token, int process);
+
 /* pipes_redirs_cmds.c */
-void		pipes_redirs_cmd(t_shell *shell, t_token *token, int iter);
+void		pipes_redirs_cmd(t_shell *shell, t_token *token,
+	int iter, int process);
 /* pipes.c */
 void		pipes_activation(t_shell *shell, int num_pipes, t_token *token);
 void		close_all_pipes(t_shell *shell, int num_pipes);
 void		redirect_to_pipe(t_shell *shell, int iter);
 /* syntax_errors.c */
-void		handle_syntax_errors(t_token *pb_token);	
+void		handle_syntax_errors(t_token *pb_token, int process);
 
 /* STRUCTS */
 
