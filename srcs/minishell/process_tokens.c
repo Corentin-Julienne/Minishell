@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:58:37 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 13:40:22 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/02 18:40:51 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static void	spawn_child_process(t_shell *shell, t_token *token, int iter)
 		free_case_err(shell, token);
 	}
 	else if (shell->pids_arr[iter] == 0)
-		pipes_redirs_cmd(shell, token, iter);
+		pipes_redirs_cmd(shell, token, iter, CHILD);
 }
 
 /* iterates on token to identificate the number of pipes and return it */
@@ -81,29 +81,29 @@ static void	count_pipes_num(t_token *token, t_shell *shell)
 2) if no pipes, launch redirection, then trigger exec cmd function
 3) if pipes, activates the pipe array, then spawn every child process needed
 4) close all pipes in the main process
-5) use calls to waitpid to wait children to finish and retrieve exti code */
+5) use calls to waitpid to wait children to finish and retrieve exit code */
 
 void	process_tokens(t_token *token, t_shell *shell)
 {
 	int			rtn_code;
-	
+
 	count_pipes_num(token, shell);
-	shell->nb_cmds = shell->nb_pipes + 1;
-	shell->cmds_used = 0;
-	if (shell->nb_pipes == 0)
-		pipes_redirs_cmd(shell, token, 0);
+	shell->nb_seq = shell->nb_pipes + 1;
+	shell->seq_used = 0;
+	if (is_forking_required(token, shell) == 0)
+		pipes_redirs_cmd(shell, token, 0, PARENT);
 	else
 	{
 		pipes_activation(shell, shell->nb_pipes, token);
-		init_pids_arr(shell, token, shell->nb_cmds);
-		while (shell->cmds_used < shell->nb_cmds)
+		init_pids_arr(shell, token, shell->nb_seq);
+		while (shell->seq_used < shell->nb_seq)
 		{
-			spawn_child_process(shell, token, shell->cmds_used);
-			shell->cmds_used++;
+			spawn_child_process(shell, token, shell->seq_used);
+			shell->seq_used++;
 		}
 		close_all_pipes(shell, shell->nb_pipes);
 		shell->i = -1;
-		while (++shell->i < shell->nb_cmds)
+		while (++shell->i < shell->nb_seq)
 			rtn_code = wait_process_and_exit_status(shell, token, shell->i);
 		if (rtn_code != -1)
 			shell->exit_status = rtn_code;

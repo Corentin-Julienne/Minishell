@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 18:36:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 21:20:22 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 16:27:39 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,12 @@ static void	child_process(char **envp)
 	char		**args;
 	const char	*path;
 
-	args = (char **)malloc(sizeof(char) * 4);
+	args = (char **)malloc(sizeof(char) * 2);
 	if (!args)
 		printf("oups\n");
-	path = "/bin/echo";
-	args[0] = "ec\"ho";
-	args[1] = "tr\"uc";
-	args[3] = NULL;
+	path = "../so_long";
+	args[0] = "so_long";
+	args[1] = NULL;
 	if (execve(path, args, envp) == -1)
 		printf("marche ap\n");
 }

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/01 16:57:09 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 15:55:16 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,10 @@
 #define D_QUOTES		2
 
 #define SYNT_ERR		"minishell: syntax error near unexpected token `"
+#define	MALLOC_ERR		"minishell: failure to allocate memory\n"
+
+#define PARENT			0
+#define CHILD			1
 
 typedef struct s_shell
 {
@@ -52,8 +56,10 @@ typedef struct s_shell
 	char			*user_input;
 	int				fd_in;
 	int				fd_out;
-	int				nb_cmds;
-	int				cmds_used;
+	int				std_fdin;
+	int				std_fdout;
+	int				nb_seq;
+	int				seq_used;
 	int				nb_pipes;
 	int				*pipes;
 	pid_t			*pids_arr;
@@ -69,20 +75,21 @@ typedef struct s_token
 	struct s_token	*next;
 }					t_token;
 
-typedef struct s_seq
-{
-	char			*cmd_with_args;
-	char			**fd_redirs;
-}					t_seq;
-
 /* BUILTINS */
 
+/* bt_cd.c */
 int			built_in_cd(t_shell *shell, char **cmd_args);
+/* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
+/* bt_env.c */
 int			built_in_env(t_shell *shell, char **cmd_args);
+/* bt_exit.c */
 int			built_in_exit(t_shell *shell, char **cmd_args);
+/* bt_export.c */
 int 		built_in_export(t_shell *shell, char **cmd_args);
+/* bt_pwd.c */
 int			built_in_pwd(t_shell *shell, char **cmd_args);
+/* bt_unset.c */
 int 		built_in_unset(t_shell *shell, char **cmd_args);
 
 /* ENV */
@@ -90,12 +97,14 @@ int 		built_in_unset(t_shell *shell, char **cmd_args);
 /*envdup.c*/
 char		**envdup(char **envp, int pass);
 /* paths.c */
-char		**recup_paths(t_shell *shell);
+char		**recup_paths(t_shell *shell, char **cmd_args);
 
 /* EXEC */
 
 /* exec_cmd.c*/
-void		cmd_exec(t_shell *shell, char **cmd_args, t_token *token);
+int			is_built_in(const char *cmd);
+void		cmd_exec(t_shell *shell, char **cmd_args,
+	t_token *token, int process);
 /* exec_errors.c */
 void		display_cmd_not_found(char **cmd_args, char **paths);
 void		handle_access_denied(char *path_with_cmd,
@@ -104,15 +113,6 @@ int			is_path_functionnal(char *path_with_cmd,
 	t_shell *shell, char **cmd_args);
 /* exec_path_cmd.c */
 void		path_cmd_exec(t_shell *shell, char **cmd_args);
-
-/* FREE */
-
-/* free_child.c */
-
-/* free_parent.c */
-void		free_case_err(t_shell *shell, t_token *token);
-void		free_problem_str_arr(char **split, int i);
-void		free_split(char **split);
 
 /* MINISHELL */
 
@@ -135,22 +135,31 @@ char		*isolate_item(char *user_input, t_shell *shell, t_token *token);
 /* REDIRS */
 
 /* fd_redirs.c */
-void		operate_redir(t_shell *shell, int type,
-	char *path, t_token *token);
+int			operate_redir(t_shell *shell, t_token *redir_tk,
+	t_token *token, int process);
+
 /* pipes_redirs_cmds.c */
-void		pipes_redirs_cmd(t_shell *shell, t_token *token, int iter);
+void		pipes_redirs_cmd(t_shell *shell, t_token *token,
+	int iter, int process);
 /* pipes.c */
 void		pipes_activation(t_shell *shell, int num_pipes, t_token *token);
 void		close_all_pipes(t_shell *shell, int num_pipes);
 void		redirect_to_pipe(t_shell *shell, int iter);
-/* syntax_errors.c */
-void		handle_syntax_errors(t_token *pb_token);	
 
-/* STRUCTS */
+/* UTILS */
 
+/* free.c */
+void		clean_child_process(t_shell *shell);
+void		free_case_err(t_shell *shell, t_token *token);
+void		free_problem_str_arr(char **split, int i);
+void		free_split(char **split);
 /* init_structs.c */
 void		reset_shell_struct(t_shell *shell);
 void		init_shell_struct(t_shell *shell, char **envp);
+/* redir_utils.c */
+int			is_forking_required(t_token *token, t_shell *shell);
+int			handle_syntax_errors(t_token *pb_token, int process,
+	t_shell *shell, t_token *token);
 /* token_utils_1.c */
 t_token		*token_new(char *item);
 t_token		*token_last(t_token *token);
@@ -160,13 +169,6 @@ void		token_delone(t_token **token);
 void		token_clear(t_token **token);
 void		token_add_front(t_token **token, t_token *new);
 void		token_add_back(t_token **token, t_token *new);
-
-/* UTILS */
-
-/* free.c */
-void		free_three_ptn(void *ptn_1, void *ptn_2, void *ptn_3);
-/* triple_join.c */
-char		*ft_triple_join(const char *s1, const char *s2, const char *s3);
 
 /* DEBUG */
 

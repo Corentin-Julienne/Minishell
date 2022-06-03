@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:31 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 13:56:33 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/02 13:29:08 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,15 @@ static void	close_useless_pipes(t_shell *shell, int iter)
 }
 
 /* pipes_activation return an array of activated pipes
-the size of the array is determined by the num of pipes multiplicated by 2 */
+the size of the array is determined by the num of pipes multiplicated by 2
+return and dont activate pipes if num_pipes is equal to 0 */
 
 void	pipes_activation(t_shell *shell, int num_pipes, t_token *token)
 {
 	int		i;
 
+	if (num_pipes == 0)
+		return ;
 	shell->pipes = (int *)malloc(sizeof(int) * (num_pipes * 2));
 	if (!shell->pipes)
 		free_case_err(shell, token);

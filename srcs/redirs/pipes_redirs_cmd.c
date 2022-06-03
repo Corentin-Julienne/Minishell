@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:33 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/01 16:57:58 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 15:57:45 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ or to the beginning of the tokens if iter == 0
 NB : case there is nothing between two pipes (no tokens),
 we throw an error (err msg AND exit code 258) */
 
-static t_token	*goto_relevant_token(t_token *token, int iter)
+static t_token	*goto_relevant_token(t_token *token, int iter, t_shell *shell)
 {
 	t_token		*gd_token;
 	int			i;
@@ -83,11 +83,11 @@ static t_token	*goto_relevant_token(t_token *token, int iter)
 		gd_token = gd_token->next;
 	}
 	if (gd_token->type == PIPE)
-		handle_syntax_errors(gd_token);
+		handle_syntax_errors(gd_token, CHILD, shell, token);
 	return (gd_token);
 }
 
-/* check if 1) token->type is a redirection metacharacter,
+/* check if token->type is a redirection metacharacter,
 return 0 otherwise
 if it is the case, it check if there is a next token
 OR there is a next token but not of REDIR_ARG type
@@ -115,31 +115,30 @@ otherwise, throw an error with exit status 258
 4) exec cmd if there is one, otherwise free cmd_arr and return
 */
 
-void	pipes_redirs_cmd(t_shell *shell, t_token *token, int iter)
+void	pipes_redirs_cmd(t_shell *shell, t_token *token, int iter, int process)
 {
 	t_token		*redir_tk;
 	t_token		*cmd_tk;
 	char		**cmd_arr;
+	int			res_redir;
 
-	redir_tk = goto_relevant_token(token, iter);
+	redir_tk = goto_relevant_token(token, iter, shell);
 	if (shell->nb_pipes != 0)
 		redirect_to_pipe(shell, iter);
 	cmd_tk = redir_tk;
+	res_redir = 0;
 	while (redir_tk && redir_tk->type != PIPE)
 	{
 		if (redir_status(redir_tk) == -1)
-			handle_syntax_errors(redir_tk);
+			res_redir = handle_syntax_errors(redir_tk, process, shell, token);
 		else if (redir_status(redir_tk) == 1)
-			operate_redir(shell, redir_tk->type, redir_tk->next->item, token);
+			res_redir = operate_redir(shell, redir_tk, token, process);
+		if (res_redir == -1)
+			return ;
 		redir_tk = redir_tk->next;
 	}
 	cmd_arr = rtn_cmd_arr(cmd_tk);
-	if (cmd_arr && cmd_arr[0] == NULL)
-	{
-		free_split(cmd_arr);
-		return ;
-	}
-	else if (!cmd_arr)
+	if (!cmd_arr)
 		free_case_err(shell, token);
-	cmd_exec(shell, cmd_arr, token);
+	cmd_exec(shell, cmd_arr, token, process);
 }

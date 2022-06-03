@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 16:10:59 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 16:02:23 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,14 +73,43 @@ static void	file_opener(t_shell *shell, int type, char *path)
 		shell->fd_out = open(path, O_RDWR | O_CREAT | O_APPEND, 0644);
 }
 
+/* when an input redir fail cause of a file is not actually existing,
+we want to stop the process to run (not execute other cmds),
+then return 1 as an exit code
+if within CHILD process, just return exit code of 1
+if in PARENT process, we want to go back to another loop of minishell */
+
+static void	handle_no_existing_file(t_shell *shell, t_token *token, int process)
+{
+	if (process == PARENT)
+		shell->exit_status = EXIT_FAILURE;
+	else
+	{
+		token_clear(&token);
+		clean_child_process(shell);
+		exit(EXIT_FAILURE);
+	}
+}
+
 /* operate_redir should take the parsing parameter and perform
 a SINGLE redir per call, based on the parameter */
 
-void	operate_redir(t_shell *shell, int type, char *path, t_token *token)
+int	operate_redir(t_shell *shell, t_token *redir_tk,
+	t_token *token, int process)
 {
+	int			type;
+	char		*path;
+
+	type = redir_tk->type;
+	path = redir_tk->next->item;
 	file_opener(shell, type, path);
 	if (type == REDIR_INPUT || type == HERE_DOC)
 	{
+		if (type == REDIR_INPUT && shell->fd_in == -1)
+		{
+			handle_no_existing_file(shell, token, process);
+			return (-1);
+		}
 		if (type == HERE_DOC)
 			handle_here_doc(shell, path, token);
 		dup2(shell->fd_in, STDIN_FILENO);
@@ -91,4 +120,5 @@ void	operate_redir(t_shell *shell, int type, char *path, t_token *token)
 		dup2(shell->fd_out, STDOUT_FILENO);
 		close(shell->fd_out);
 	}
+	return (0);
 }

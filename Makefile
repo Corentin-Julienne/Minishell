@@ -6,7 +6,7 @@
 #    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/24 16:57:50 by cjulienn          #+#    #+#              #
-#    Updated: 2022/06/01 16:55:44 by cjulienn         ###   ########.fr        #
+#    Updated: 2022/06/03 13:17:41 by cjulienn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,7 +49,6 @@ SRCS_TEST= \
 	  $(SRCS_PATH)exec/exec_cmd.c \
 	  $(SRCS_PATH)exec/exec_errors.c \
 	  $(SRCS_PATH)exec/exec_path_cmd.c \
-	  $(SRCS_PATH)free/free_tools.c \
 	  $(SRCS_PATH)minishell/minishell.c \
 	  $(SRCS_PATH)minishell/process_tokens.c \
 	  $(SRCS_PATH)parsing/parsing.c \
@@ -58,10 +57,11 @@ SRCS_TEST= \
 	  $(SRCS_PATH)redirs/fd_redirs.c \
 	  $(SRCS_PATH)redirs/pipes_redirs_cmd.c \
 	  $(SRCS_PATH)redirs/pipes.c \
-	  $(SRCS_PATH)redirs/syntax_errors.c \
-	  $(SRCS_PATH)structs/init_structs.c \
-	  $(SRCS_PATH)structs/token_utils_1.c \
-	  $(SRCS_PATH)structs/token_utils_2.c \
+	  $(SRCS_PATH)utils/free.c \
+	  $(SRCS_PATH)utils/init_structs.c \
+	  $(SRCS_PATH)utils/redir_utils.c \
+	  $(SRCS_PATH)utils/token_utils_1.c \
+	  $(SRCS_PATH)utils/token_utils_2.c
 
 # suppress in final repo
 OBJS_TEST = $(SRCS_TEST:.c=.o)

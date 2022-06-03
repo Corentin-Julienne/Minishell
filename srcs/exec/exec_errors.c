@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:24:47 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/30 18:26:37 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 15:50:23 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ void	handle_access_denied(char *path_with_cmd,
 	ft_putstr_fd(" : Permission denied\n", STDERR_FILENO);
 	free_split(cmd_args);
 	free(path_with_cmd);
-	// put some child cleaner there
-	free(shell); // not actually good, should clean everything
+	clean_child_process(shell);
 	exit(126);
 }
 

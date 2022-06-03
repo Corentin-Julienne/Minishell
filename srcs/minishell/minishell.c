@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 16:19:02 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 17:35:26 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,15 @@ static void	miniloop(t_shell *shell)
 	t_token		*token;
 
 	add_history(shell->user_input);
+	if (is_spaces_only(shell->user_input) == 1)
+		return ;
 	token = parse_user_input(shell);
 	display_every_token(token); // debug func
 	free(shell->user_input);
 	shell->user_input = NULL;
 	process_tokens(token, shell);
 	token_clear(&token);
+	reset_shell_struct(shell);
 }
 
 static int	minishell(t_shell *shell)
@@ -61,7 +64,7 @@ static int	minishell(t_shell *shell)
 		shell->user_input = readline("$> ");
 		if (!shell->user_input)
 			free_case_err(shell, NULL);
-		if (ft_strlen(shell->user_input) && !is_spaces_only(shell->user_input))
+		if (ft_strlen(shell->user_input) > 0)
 			miniloop(shell);
 		if (shell->user_input)
 		{
