@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 12:48:54 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 16:48:37 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static int	minishell(t_shell *shell)
 		shell->user_input = readline("$> ");
 		if (!shell->user_input)
 			free_case_err(shell, NULL);
-		if (ft_strlen(shell->user_input > 0))
+		if (ft_strlen(shell->user_input) > 0)
 			miniloop(shell);
 		if (shell->user_input)
 		{

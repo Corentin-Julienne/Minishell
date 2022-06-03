@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:02:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 16:40:19 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 16:48:04 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static char	*join_cmd_to_path(t_shell *shell, char **cmd_args, int i)
 	{
 		ft_putstr_fd(MALLOC_ERR, STDERR_FILENO);
 		free_split(cmd_args);
-		free_child_process(shell);
+		clean_child_process(shell);
 		exit(EXIT_FAILURE);
 	}
 	return (path);
@@ -69,7 +69,7 @@ static void	try_cmd_without_paths(t_shell *shell, char **cmd_args)
 	char		*first_arg;
 
 	first_arg = cmd_args[0];
-	if (is_path_functionnal(first_arg, cmd_args, shell->env) == 0)
+	if (is_path_functionnal(first_arg, shell, cmd_args) == 0)
 		execve(first_arg, cmd_args, shell->env);
 }
 

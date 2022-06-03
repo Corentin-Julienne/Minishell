@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 15:10:48 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 15:56:24 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 16:52:32 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ some buitin execution fail (such as cd) */
 
 int	is_forking_required(t_token *token, t_shell *shell)
 {
-	t_token			*cmd_token;
-	
 	if (shell->nb_pipes != 0)
 		return (1);
 	while (token && token->type != CMD)

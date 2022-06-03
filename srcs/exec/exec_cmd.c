@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 15:47:27 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 16:46:34 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ if this is the case free the cmds_args and return an appropriate exit status
 triggered in a CHILD process only
 Otherwise, if a cmd is present, return and do nothing */
 
-static void	handle_no_cmd(char **cmd_args, t_shell *shell, t_token *token)
+static void	handle_no_cmd(char **cmd_args, t_shell *shell)
 {
 	if (cmd_args[0] != NULL)
 		return ;
@@ -101,10 +101,10 @@ void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 	}
 	else
 	{
-		handle_no_cmd(cmd_args, shell, token);
+		token_clear(&token);
+		handle_no_cmd(cmd_args, shell);
 		if (is_built_in(cmd_args[0]) == 1)
 		{
-			token_clear(&token);
 			// exit_code = exec_built_in(shell, cmd_args);
 			dprintf(STDERR_FILENO, "builtin line reached (implement later)\n"); // for debugging only, suppress after
 			free_split(cmd_args);
