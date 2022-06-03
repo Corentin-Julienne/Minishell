@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/02 17:58:48 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 12:37:18 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ static void	handle_no_cmd(char **cmd_args, t_shell *shell)
 	if (cmd_args[0] != NULL)
 		return ;
 	free_split(cmd_args);
-	// free normally and return an exit value
+	// free process to avoid leaks
+	exit(EXIT_SUCCESS);
 }
 
 /* if no pipes, the builtin will be exec on the main process
@@ -97,6 +98,7 @@ void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 			shell->exit_status = exit_code;
 		dup2(shell->std_fdin, STDIN_FILENO);
 		dup2(shell->std_fdout, STDOUT_FILENO);
+		// kill leaks there
 	}
 	else
 	{
@@ -105,6 +107,7 @@ void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 		{
 			// exit_code = exec_built_in(shell, cmd_args);
 			dprintf(STDERR_FILENO, "builtin line reached (implement later)\n"); // for debugging only, suppress after
+			// kill leaks there
 			exit(exit_code);
 		}
 		else

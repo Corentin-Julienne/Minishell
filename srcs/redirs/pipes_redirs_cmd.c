@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:33 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/02 18:36:28 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 12:45:37 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	pipes_redirs_cmd(t_shell *shell, t_token *token, int iter, int process)
 	while (redir_tk && redir_tk->type != PIPE)
 	{
 		if (redir_status(redir_tk) == -1)
-			handle_syntax_errors(redir_tk, process);
+			res_redir = handle_syntax_errors(redir_tk, process);
 		else if (redir_status(redir_tk) == 1)
 			res_redir = operate_redir(shell, redir_tk, token, process);
 		if (res_redir == -1)

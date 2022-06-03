@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/02 18:33:14 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 13:04:56 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,19 @@ typedef struct s_token
 
 /* BUILTINS */
 
+/* bt_cd.c */
 int			built_in_cd(t_shell *shell, char **cmd_args);
+/* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
+/* bt_env.c */
 int			built_in_env(t_shell *shell, char **cmd_args);
+/* bt_exit.c */
 int			built_in_exit(t_shell *shell, char **cmd_args);
+/* bt_export.c */
 int 		built_in_export(t_shell *shell, char **cmd_args);
+/* bt_pwd.c */
 int			built_in_pwd(t_shell *shell, char **cmd_args);
+/* bt_unset.c */
 int 		built_in_unset(t_shell *shell, char **cmd_args);
 
 /* ENV */
@@ -106,15 +113,6 @@ int			is_path_functionnal(char *path_with_cmd,
 	t_shell *shell, char **cmd_args);
 /* exec_path_cmd.c */
 void		path_cmd_exec(t_shell *shell, char **cmd_args);
-
-/* FREE */
-
-/* free_child.c */
-
-/* free_parent.c */
-void		free_case_err(t_shell *shell, t_token *token);
-void		free_problem_str_arr(char **split, int i);
-void		free_split(char **split);
 
 /* MINISHELL */
 
@@ -147,14 +145,19 @@ void		pipes_redirs_cmd(t_shell *shell, t_token *token,
 void		pipes_activation(t_shell *shell, int num_pipes, t_token *token);
 void		close_all_pipes(t_shell *shell, int num_pipes);
 void		redirect_to_pipe(t_shell *shell, int iter);
-/* syntax_errors.c */
-void		handle_syntax_errors(t_token *pb_token, int process);
 
-/* STRUCTS */
+/* UTILS */
 
+/* free_tools.c */
+void		free_case_err(t_shell *shell, t_token *token);
+void		free_problem_str_arr(char **split, int i);
+void		free_split(char **split);
 /* init_structs.c */
 void		reset_shell_struct(t_shell *shell);
 void		init_shell_struct(t_shell *shell, char **envp);
+/* redir_utils.c */
+int			is_forking_required(t_token *token, t_shell *shell);
+int			handle_syntax_errors(t_token *pb_token, int process);
 /* token_utils_1.c */
 t_token		*token_new(char *item);
 t_token		*token_last(t_token *token);
@@ -164,13 +167,6 @@ void		token_delone(t_token **token);
 void		token_clear(t_token **token);
 void		token_add_front(t_token **token, t_token *new);
 void		token_add_back(t_token **token, t_token *new);
-
-/* UTILS */
-
-/* free.c */
-void		free_three_ptn(void *ptn_1, void *ptn_2, void *ptn_3);
-/* triple_join.c */
-char		*ft_triple_join(const char *s1, const char *s2, const char *s3);
 
 /* DEBUG */
 
