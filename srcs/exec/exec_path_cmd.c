@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:02:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/02 18:09:39 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 15:47:51 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,8 @@ static char	*join_cmd_to_path(t_shell *shell, char **cmd_args, int i)
 	{
 		ft_putstr_fd(MALLOC_ERR, STDERR_FILENO);
 		free_split(cmd_args);
-		// some cleaner for the child process case of malloc error
+		free_child_process(shell);
+		exit(EXIT_FAILURE);
 	}
 	return (path);
 }
@@ -48,10 +49,12 @@ void	path_cmd_exec(t_shell *shell, char **cmd_args)
 {
 	char		*path_with_cmd;
 
-	shell->paths = recup_paths(shell);
+	shell->paths = recup_paths(shell, cmd_args);
 	if (!shell->paths)
 	{
 		display_cmd_not_found(cmd_args, NULL);
+		free_split(cmd_args);
+		clean_child_process(shell);
 		exit(127);
 	}
 	shell->i = 0;
@@ -61,9 +64,11 @@ void	path_cmd_exec(t_shell *shell, char **cmd_args)
 		if (is_path_functionnal(path_with_cmd, shell, cmd_args) == 0)
 			execve(path_with_cmd, cmd_args, shell->env);
 		free(path_with_cmd);
+		path_with_cmd = NULL;
 		shell->i++;
 	}
 	display_cmd_not_found(cmd_args, shell->paths);
 	free_split(cmd_args);
+	free_child_process(shell);
 	exit(127);
 }

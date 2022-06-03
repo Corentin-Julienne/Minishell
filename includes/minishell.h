@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 13:04:56 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 15:55:16 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int 		built_in_unset(t_shell *shell, char **cmd_args);
 /*envdup.c*/
 char		**envdup(char **envp, int pass);
 /* paths.c */
-char		**recup_paths(t_shell *shell);
+char		**recup_paths(t_shell *shell, char **cmd_args);
 
 /* EXEC */
 
@@ -148,7 +148,8 @@ void		redirect_to_pipe(t_shell *shell, int iter);
 
 /* UTILS */
 
-/* free_tools.c */
+/* free.c */
+void		clean_child_process(t_shell *shell);
 void		free_case_err(t_shell *shell, t_token *token);
 void		free_problem_str_arr(char **split, int i);
 void		free_split(char **split);
@@ -157,7 +158,8 @@ void		reset_shell_struct(t_shell *shell);
 void		init_shell_struct(t_shell *shell, char **envp);
 /* redir_utils.c */
 int			is_forking_required(t_token *token, t_shell *shell);
-int			handle_syntax_errors(t_token *pb_token, int process);
+int			handle_syntax_errors(t_token *pb_token, int process,
+	t_shell *shell, t_token *token);
 /* token_utils_1.c */
 t_token		*token_new(char *item);
 t_token		*token_last(t_token *token);

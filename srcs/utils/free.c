@@ -1,16 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_parent.c                                      :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:36:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 13:39:24 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 16:03:17 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/* clean the content of a child process. Leaks unfriendly function :) */
+
+void	clean_child_process(t_shell *shell)
+{
+	if (shell->env)
+		free_split(shell->env);
+	if (shell->paths)
+		free_split(shell->paths);
+	close(shell->std_fdin);
+	close(shell->std_fdout);
+	if (shell->pipes)
+	{
+		free(shell->pipes);
+		shell->pipes = NULL;
+	}
+	if (shell->pids_arr)
+	{
+		free(shell->pids_arr);
+		shell->pids_arr = NULL;
+	}
+	free(shell);
+}
 
 /* this function avoid leaks and kill the main process when an error occurs */
 

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 15:10:48 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 12:44:44 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 15:56:24 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	is_forking_required(t_token *token, t_shell *shell)
 works in a bash-like way, throwing an error msg, then 
 cleaning the process and putting exit status to 258 */
 
-int	handle_syntax_errors(t_token *pb_token, int process)
+int	handle_syntax_errors(t_token *pb_token, int process,
+	t_shell *shell, t_token *token)
 {
 	char	*following_token;
 
@@ -48,9 +49,10 @@ int	handle_syntax_errors(t_token *pb_token, int process)
 	ft_putstr_fd("'\n", STDERR_FILENO);
 	if (process == CHILD)
 	{
-		// free everything in the child process
-		exit(258); // that directly ???
+		token_clear(&token);
+		clean_child_process(shell); 
+		exit(258);
 	}
-	// free everything case inside parent process (without exiting)
+	shell->exit_status = 258;
 	return (-1);
 }

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/02 18:34:28 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 16:02:23 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,14 +82,11 @@ if in PARENT process, we want to go back to another loop of minishell */
 static void	handle_no_existing_file(t_shell *shell, t_token *token, int process)
 {
 	if (process == PARENT)
-	{
-		// free to avoid leaks
 		shell->exit_status = EXIT_FAILURE;
-		// find a way to kill this iter ands move towards new minishell loop
-	}
 	else
 	{
-		// free to avoid leaks
+		token_clear(&token);
+		clean_child_process(shell);
 		exit(EXIT_FAILURE);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 12:37:18 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 15:47:27 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,12 @@ if this is the case free the cmds_args and return an appropriate exit status
 triggered in a CHILD process only
 Otherwise, if a cmd is present, return and do nothing */
 
-static void	handle_no_cmd(char **cmd_args, t_shell *shell)
+static void	handle_no_cmd(char **cmd_args, t_shell *shell, t_token *token)
 {
 	if (cmd_args[0] != NULL)
 		return ;
 	free_split(cmd_args);
-	// free process to avoid leaks
+	clean_child_process(shell);
 	exit(EXIT_SUCCESS);
 }
 
@@ -90,24 +90,25 @@ void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 	int			exit_code;
 	
 	exit_code = 0; // change this when builtin are implemented (change value to -1)
-	if (process == PARENT)
+	if (process == PARENT) // no leaks killing needed there (parent process)
 	{
 		// exit_code = exec_built_in(shell, cmds_args);
 		dprintf(STDERR_FILENO, "builtin line reached (implement later)\n"); // for debugging only, suppress after
-		if (exit_code != -1)
-			shell->exit_status = exit_code;
+		shell->exit_status = exit_code;
 		dup2(shell->std_fdin, STDIN_FILENO);
 		dup2(shell->std_fdout, STDOUT_FILENO);
-		// kill leaks there
+		free_split(cmd_args);
 	}
 	else
 	{
-		handle_no_cmd(cmd_args, shell);
+		handle_no_cmd(cmd_args, shell, token);
 		if (is_built_in(cmd_args[0]) == 1)
 		{
+			token_clear(&token);
 			// exit_code = exec_built_in(shell, cmd_args);
 			dprintf(STDERR_FILENO, "builtin line reached (implement later)\n"); // for debugging only, suppress after
-			// kill leaks there
+			free_split(cmd_args);
+			clean_child_process(shell);
 			exit(exit_code);
 		}
 		else

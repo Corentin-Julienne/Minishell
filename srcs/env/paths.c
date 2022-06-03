@@ -6,11 +6,19 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 17:48:27 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/24 13:47:50 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 15:46:30 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+static void	handle_path_err(t_shell *shell, char **cmd_args)
+{
+	ft_putstr_fd(MALLOC_ERR, STDERR_FILENO);
+	free_split(cmd_args);
+	clean_child_process(shell);	
+	exit(EXIT_FAILURE);
+}
 
 /* every time a CMD which is NOT a built-in is launched,
 check the env in order to find the PATH variable,
@@ -21,8 +29,7 @@ bash-like error msg at execution (bash : command not found))*/
 static void	handle_slashes_prbl(t_shell *shell, char **paths_ws)
 {
 	free_problem_str_arr(paths_ws, shell->i);
-	ft_putstr_fd("minishell : Unable to allocate memory\n", STDERR_FILENO);
-	// some cleaning function there
+	handle_path_err(shell, paths_ws);
 }
 
 static void	add_slashes(t_shell *shell, char **paths_ws, char**paths)
@@ -59,10 +66,7 @@ static char	**paths_with_slash(t_shell *shell, char **paths)
 		arr_len++;
 	paths_ws = (char **)malloc(sizeof(char *) * (arr_len + 1));
 	if (!paths_ws)
-	{
-		ft_putstr_fd("minishell: Unable to allocate memory\n", STDERR_FILENO);
-		// some cleaning function here
-	}
+		handle_path_err(shell, paths);
 	shell->i = 0;
 	add_slashes(shell, paths_ws, paths);
 	free_split(paths);
@@ -70,7 +74,7 @@ static char	**paths_with_slash(t_shell *shell, char **paths)
 	return (paths_ws);
 }
 
-char	**recup_paths(t_shell *shell)
+char	**recup_paths(t_shell *shell, char **cmd_args)
 {
 	char	**paths;
 	char	*path_str;
@@ -90,10 +94,7 @@ char	**recup_paths(t_shell *shell)
 		return (NULL);
 	paths = ft_split(path_str, ':');
 	if (!paths)
-	{
-		ft_putstr_fd("minishell: Unable to allocate memory\n", STDERR_FILENO);
-		// cleaning function to put there
-	}
+		handle_path_err(shell, cmd_args);
 	paths = paths_with_slash(shell, paths);
 	return (paths);
 }
