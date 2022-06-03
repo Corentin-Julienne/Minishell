@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:02:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 16:48:04 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 17:39:24 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,11 @@ static void	try_cmd_without_paths(t_shell *shell, char **cmd_args)
 
 	first_arg = cmd_args[0];
 	if (is_path_functionnal(first_arg, shell, cmd_args) == 0)
-		execve(first_arg, cmd_args, shell->env);
+	{
+		dprintf(STDERR_FILENO, "go to execve !\n"); // debug only
+		if (execve(first_arg, cmd_args, shell->env) == -1)
+			dprintf(STDERR_FILENO, "execve did not run as intended\n"); // debug only
+	}
 }
 
 /* split the arg str, then recuperating path in PATH cmd

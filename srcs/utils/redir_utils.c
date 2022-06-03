@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 15:10:48 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 16:52:32 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/03 16:56:37 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	handle_syntax_errors(t_token *pb_token, int process,
 	if (process == CHILD)
 	{
 		token_clear(&token);
-		clean_child_process(shell); 
+		clean_child_process(shell);
 		exit(258);
 	}
 	shell->exit_status = 258;
