@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 15:55:16 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/05 01:50:03 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,36 +15,38 @@
 
 # include "../libft/libft.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <limits.h>
-#include <signal.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <sys/wait.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <string.h>
+# include <unistd.h>
+# include <limits.h>
+# include <signal.h>
+# include <fcntl.h>
+# include <errno.h>
+# include <sys/wait.h>
 
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-#define PIPE			1
-#define REDIR_INPUT		2
-#define REDIR_OUTPUT	3
-#define HERE_DOC		4
-#define RO_APPEND		5
-#define	REDIR_ARG		6
-#define CMD				7
-#define	ARG				8
+# define MAX_PATH		4096
 
-#define	S_QUOTES		1
-#define D_QUOTES		2
+# define PIPE			1
+# define REDIR_INPUT	2
+# define REDIR_OUTPUT	3
+# define HERE_DOC		4
+# define RO_APPEND		5
+# define REDIR_ARG		6
+# define CMD			7
+# define ARG			8
 
-#define SYNT_ERR		"minishell: syntax error near unexpected token `"
-#define	MALLOC_ERR		"minishell: failure to allocate memory\n"
+# define S_QUOTES		1
+# define D_QUOTES		2
 
-#define PARENT			0
-#define CHILD			1
+# define SYNT_ERR		"minishell: syntax error near unexpected token `"
+# define MALLOC_ERR		"minishell: failure to allocate memory\n"
+
+# define PARENT			0
+# define CHILD			1
 
 typedef struct s_shell
 {
@@ -88,7 +90,7 @@ int			built_in_exit(t_shell *shell, char **cmd_args);
 /* bt_export.c */
 int 		built_in_export(t_shell *shell, char **cmd_args);
 /* bt_pwd.c */
-int			built_in_pwd(t_shell *shell, char **cmd_args);
+int			built_in_pwd(t_shell *shell, char *cmd_args);
 /* bt_unset.c */
 int 		built_in_unset(t_shell *shell, char **cmd_args);
 

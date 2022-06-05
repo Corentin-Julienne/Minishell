@@ -3,38 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 13:00:53 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/03 11:37:22 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/19 12:11:01 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*ft_strcpy(char *dest, const char *src)
+/*	duplicates a string into a new one, using malloc to assign memory */
+
+char	*ft_strdup(const char *s)
 {
-	int	i;
+	char	*str;
+	int		i;
 
 	i = 0;
-	while (src[i] != '\0')
+	str = (char *)malloc(sizeof(char) * ft_strlen(s) + 1);
+	if (!str)
+		return (NULL);
+	while (s[i] != '\0')
 	{
-		dest[i] = src[i];
+		str[i] = s[i];
 		i++;
 	}
-	dest[i] = '\0';
-	return (dest);
+	str[i] = '\0';
+	return (str);
 }
 
-char	*ft_strdup(const char *s1)
+/*
+int main()
 {
-	char				*copy;
-	unsigned long		sizer;
+	char	s[] = "bl";
+	char	*str;
+	int		i = 0;
 
-	sizer = ft_strlen(s1) + 1;
-	copy = malloc(sizer * (sizeof(char)));
-	if (!(copy))
-		return (NULL);
-	ft_strcpy(copy, s1);
-	return (copy);
+	str = ft_strdup((char *)s);
+	printf("%d\n%s\n%s\n", strcmp(s, str), s, str);
+	while (str[i] != '\0')
+	{
+		printf("%c &str[i] = %p, &s[i] = %p\n", str[i], &str[i], &s[i]);
+		i++;
+	}
+	return (0);
 }
+*/

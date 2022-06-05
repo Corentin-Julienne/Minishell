@@ -3,39 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 13:00:59 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/03 17:06:35 by xle-boul          #+#    #+#             */
+/*   Updated: 2022/06/05 00:18:59 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/* 	joins s2 after s1 in a new string
+	which memory is allocated with malloc */
+
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char			*copy;
-	size_t			i;
-	size_t			j;
+	int		i;
+	int		j;
+	char	*str;
 
-	if (!s1 || !s2)
-		return (NULL);
-	copy = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * (sizeof(char)));
-	if (!(copy))
-		return (NULL);
 	i = 0;
-	while (s1[i])
+	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!str)
+		return (NULL);
+	while (s1[i] != '\0')
 	{
-		copy[i] = s1[i];
+		str[i] = s1[i];
 		i++;
 	}
 	j = 0;
-	while (s2[j])
+	while (s2[j] != '\0')
 	{
-		copy[i] = s2[j];
-		i++;
+		str[i + j] = s2[j];
 		j++;
 	}
-	copy[i] = '\0';
-	return (copy);
+	str[i + j] = '\0';
+	return (str);
 }

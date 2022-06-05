@@ -3,36 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcmp.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 12:59:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/03 00:35:01 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/11 20:48:08 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/* 	compares n first elements of 2 strings.
+	returns 0 is they are the same,
+	returns the difference between the ascii value of the 2 different chars */
+
 int	ft_memcmp(const void *s1, const void *s2, size_t n)
 {
-	size_t					i;
-	size_t					stopper;
-	int						dif;
-	unsigned char			*ptr_s1;
-	unsigned char			*ptr_s2;
+	unsigned char	*a;
+	unsigned char	*b;
+	size_t			i;
 
-	ptr_s1 = (unsigned char *)s1;
-	ptr_s2 = (unsigned char *)s2;
+	a = (unsigned char *)s1;
+	b = (unsigned char *)s2;
+	if (n == 0)
+		return (0);
 	i = 0;
-	dif = 0;
-	stopper = 0;
-	while (i < n && stopper == 0)
+	while (++i < n && *a == *b)
 	{
-		if (ptr_s1[i] != ptr_s2[i])
-		{
-			dif = ptr_s1[i] - ptr_s2[i];
-			stopper++;
-		}
-		i++;
+		a++;
+		b++;
 	}
-	return (dif);
+	return (*a - *b);
 }
+
+/*
+int main()
+{
+	char a[] = "abcdefgh";
+	char b[] = "abcdwfyz";
+
+	printf("%d\n", memcmp(a, b, 5));	
+	printf("%d\n", ft_memcmp(a, b, 5));
+	return 0;
+}
+*/

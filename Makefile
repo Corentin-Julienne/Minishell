@@ -3,121 +3,81 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
+#    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2022/04/24 16:57:50 by cjulienn          #+#    #+#              #
-#    Updated: 2022/06/03 13:17:41 by cjulienn         ###   ########.fr        #
+#    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
+#    Updated: 2022/06/05 09:47:02 by xle-boul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME= minishell
+RED			= \033[1;31m
+GREEN		= \033[1;32m
+YELLOW		= \033[1;33m
+BLUE		= \033[1;34m
+MAGENTA		= \033[1;35m
+CYAN		= \033[1;36m
+WHITE		= \033[1;37m
+UNDERLINE	= \e[4m
+RESET		= \033[0m
+END			= \e[0m
 
-SRCS_PATH= ./srcs/
+NAME := minishell
+TEST_NAME := minishell_test
 
-SRCS= $(SRCS_PATH)builtins/bt_cd.c \
-	  $(SRCS_PATH)builtins/bt_echo.c \
-	  $(SRCS_PATH)builtins/bt_env.c \
-	  $(SRCS_PATH)builtins/bt_exit.c \
-	  $(SRCS_PATH)builtins/bt_export.c \
-	  $(SRCS_PATH)builtins/bt_pwd.c \
-	  $(SRCS_PATH)builtins/bt_unset.c \
-	  $(SRCS_PATH)debug/debug_utils.c \
-	  $(SRCS_PATH)env/envdup.c \
-	  $(SRCS_PATH)env/paths.c \
-	  $(SRCS_PATH)exec/exec_cmd.c \
-	  $(SRCS_PATH)exec/exec_errors.c \
-	  $(SRCS_PATH)exec/exec_path_cmd.c \
-	  $(SRCS_PATH)minishell/minishell.c \
-	  $(SRCS_PATH)parsing/expansions.c \
-	  $(SRCS_PATH)parsing/parsing.c \
-	  $(SRCS_PATH)parsing/quotes.c \
-	  $(SRCS_PATH)parsing/tokenisation.c \
-	  $(SRCS_PATH)redirs/fd_redirs.c \
-	  $(SRCS_PATH)redirs/pipes.c \
-	  $(SRCS_PATH)redirs/spawn_children.c \
-	  $(SRCS_PATH)utils/free.c \
-	  $(SRCS_PATH)structs/init_structs.c \
-	  $(SRCS_PATH)structs/token_utils_1.c \
-	  $(SRCS_PATH)structs/token_utils_2.c \
-	  $(SRCS_PATH)utils/ft_triple_join.c
+CC := gcc
+CFLAGS := -Werror -Wall -Wextra
+READLINE := -lreadline
+INCLUDES := -I includes
 
-# suppress in final repo	  
-SRCS_TEST= \
-	  $(SRCS_PATH)debug/debug_utils.c \
-	  $(SRCS_PATH)env/envdup.c \
-	  $(SRCS_PATH)env/paths.c \
-	  $(SRCS_PATH)exec/exec_cmd.c \
-	  $(SRCS_PATH)exec/exec_errors.c \
-	  $(SRCS_PATH)exec/exec_path_cmd.c \
-	  $(SRCS_PATH)minishell/minishell.c \
-	  $(SRCS_PATH)minishell/process_tokens.c \
-	  $(SRCS_PATH)parsing/parsing.c \
-	  $(SRCS_PATH)parsing/quotes.c \
-	  $(SRCS_PATH)parsing/tokenisation.c \
-	  $(SRCS_PATH)redirs/fd_redirs.c \
-	  $(SRCS_PATH)redirs/pipes_redirs_cmd.c \
-	  $(SRCS_PATH)redirs/pipes.c \
-	  $(SRCS_PATH)utils/free.c \
-	  $(SRCS_PATH)utils/init_structs.c \
-	  $(SRCS_PATH)utils/redir_utils.c \
-	  $(SRCS_PATH)utils/token_utils_1.c \
-	  $(SRCS_PATH)utils/token_utils_2.c
+SRC_DIR := srcs
+OBJ_DIR := objs
+SUB_DIRS := builtins debug env exec minishell parsing redirs utils
+SOURCEDIRS := $(foreach dir, $(SUB_DIRS), $(addprefix $(SRC_DIR)/, $(dir)))
 
-# suppress in final repo
-OBJS_TEST = $(SRCS_TEST:.c=.o)
+SRC_FILES := $(foreach dir,$(SOURCEDIRS),$(wildcard $(dir)/*.c))
+OBJ_FILES := $(addprefix $(OBJ_DIR)/,$(notdir $(SRC_FILES:.c=.o)))
 
-OBJS = $(SRCS:.c=.o)
+RM = rm -rf
+MKDIR = mkdir -p
 
-INCLUDE_PATH = ./includes/
+LIB_DIR := libft
+LIB_OBJ_DIR := libft/objs
+LIB := libft.a
 
-LIBFT_LIB = libft.a
-LIBFT_PATH = ./libft/
-
-RDL_PATH = -L/usr/local/opt/readline/lib/
-RDL_HISTORY_PATH = -L/usr/local/opt/readline/lib/
-
-RDL = -lreadline.8.1 $(RDL_PATH)
-RDL_HISTORY = -lhistory.8.1 $(RDL_HISTORY_PATH)
-
-CC= gcc
-CFLAGS= -Wall -Wextra -Werror -I$(INCLUDE_PATH)
-
-RM= rm -f
-
-$(NAME): $(OBJS)
-	$(MAKE) -C $(LIBFT_PATH)
-	$(CC) $(CFLAGS) $(OBJS) -Llibft -lft $(RDL) $(RDL_HISTORY) -o $(NAME)
-	cp /usr/local/opt/readline/lib/libreadline.8.1.dylib .
-	cp /usr/local/opt/readline/lib/libhistory.8.1.dylib .
-	@echo $(NAME) successfully made !!!
+VPATH = $(SOURCEDIRS)
 
 all: $(NAME)
 
+$(NAME): directories $(OBJ_FILES) $(LIB)
+	@printf "$(YELLOW)Compiling minishell...\n\n$(END)"
+	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIB) $(READLINE) -o $(NAME)
+	@printf "\n$(GREEN)minishell compiled.\n$(END)Simply type $(WHITE)./minishell$(END) to execute the program. Enjoy.\n\n"
+
+$(OBJ_DIR)/%.o : %.c
+	@printf "$(YELLOW)Compiling object:\n$(END)"
+	$(CC) $(CFALGS) $(INCLUDE) $(READLINE) -c -o $@ $<
+	@printf "$(GREEN)Object $(UNDERLINE)$(WHITE)$(notdir $@)$(END)$(GREEN) successfully compiled\n\n$(END)"
+
+directories:
+	@$(MKDIR) $(OBJ_DIR)
+
+$(LIB):
+	@printf "$(YELLOW)Compiling libft.a...\n$(END)"
+	@make $(LIB) -C $(LIB_DIR)
+	@mv $(LIB_DIR)/$(LIB) .
+	@printf "$(GREEN)libft.a compiled\n\n$(END)"
+
 clean:
-	$(MAKE) -C $(LIBFT_PATH) clean
-	$(RM) $(OBJS)
-	rm ./libreadline.8.1.dylib
-	rm ./libhistory.8.1.dylib
-	
-fclean:	clean
-	$(MAKE) -C $(LIBFT_PATH) fclean
+	@printf "$(YELLOW)Removing objects...\n$(END)"
+	$(RM) $(OBJ_DIR)
+	@printf "$(GREEN)Objects removed!\n\n$(END)"
+
+fclean: clean
+	@printf "$(YELLOW)Removing objects, libft and minishell executable...\n$(END)"
 	$(RM) $(NAME)
+	$(RM) $(LIB)
+	@printf "$(GREEN)All clean!\n\n$(END)"
 
-re:	fclean
-	$(MAKE)
+re: fclean all
 
-test: $(OBJS_TEST)
-	$(MAKE) -C $(LIBFT_PATH)
-	$(CC) $(CFLAGS) $(OBJS_TEST) -Llibft -lft $(RDL) $(RDL_HISTORY) -o $(NAME)
-	cp /usr/local/opt/readline/lib/libreadline.8.1.dylib .
-	cp /usr/local/opt/readline/lib/libhistory.8.1.dylib .
-	@echo $(NAME) successfully made !!!
-
-clean_test:
-	$(MAKE) -C $(LIBFT_PATH) fclean
-	$(RM) $(OBJS_TEST)
-	$(RM) $(NAME)
-	rm ./libreadline.8.1.dylib
-	rm ./libhistory.8.1.dylib
-
-.PHONY: all clean fclean re test clean_test
+.PHONY: directories clean fclean all re

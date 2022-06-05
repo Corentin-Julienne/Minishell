@@ -3,23 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 12:57:37 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/01 21:32:53 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/17 12:53:49 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/* check if char c is alphanumerical. Returns 1 if true */
+
 int	ft_isalnum(int c)
 {
-	if (c >= 65 && c <= 90)
+	if ((65 <= c && c <= 90)
+		|| (97 <= c && c <= 122)
+		|| (48 <= c && c <= 57))
 		return (1);
-	else if (c >= 97 && c <= 122)
-		return (1);
-	else if (c >= 48 && c <= 57)
-		return (1);
-	else
-		return (0);
+	return (0);
 }

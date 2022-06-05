@@ -3,76 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 12:55:55 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/01 13:21:38 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/26 16:28:46 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	ft_sizer(const char *ptn)
+#define LL_MAX 9223372036854775807
+
+typedef struct s_atoi
 {
-	char	*str;
-	size_t	i;
+	int						i;	
+	long long				lln;
+	char					*str_bis;
+}				t_atoi;
+/* converts a string to corresponding integer */
 
-	str = (char *)ptn;
-	i = 0;
-	while (str[i] && (str[i] >= 48 && str[i] <= 57))
-		i++;
-	return (i);
-}
-
-static char	*ft_trim_sign(const char *str)
+static char	*ft_trim_string(const char *str, t_atoi *n)
 {
-	char	*ptn;
-
-	ptn = (char *)str;
-	if (ptn[0] == '-' || ptn[0] == '+')
-		ptn++;
-	return (ptn);
-}
-
-static unsigned long long	ft_calc_res(const char *ptn)
-{
-	unsigned long long	res;
-	char				*str;
-
-	str = (char *)ptn;
-	res = 0;
-	while (str[0])
-	{
-		if (str[0] >= '0' && str[0] <= '9')
-			res = (res * 10) + (str[0] - '0');
-		else
-			break ;
+	n->i = 1;
+	if (!str)
+		return (0);
+	while (*str == '\t' || *str == '\n' || *str == '\v'
+		|| *str == '\r' || *str == '\f' || *str == ' ')
 		str++;
-	}
-	return (res);
+	if (*str == '-')
+		n->i = -1;
+	if (*str == '+' || *str == '-')
+		str++;
+	return ((char *)str);
 }
 
 int	ft_atoi(const char *str)
 {
-	char				*ptn;
-	unsigned long long	res;
-	int					sign;
+	t_atoi	n;
 
-	ptn = (char *)str;
-	sign = 1;
-	while (ptn[0] && (ptn[0] == ' ' || (ptn[0] >= 9 && ptn[0] <= 13)))
-		ptn++;
-	if (ptn[0] == '-')
-		sign = -1;
-	ptn = ft_trim_sign(ptn);
-	if (ft_sizer(ptn) > 19 && sign == 1)
-		return (-1);
-	if (ft_sizer(ptn) > 19 && sign == (-1))
+	n.lln = 0;
+	n.str_bis = ft_trim_string(str, &n);
+	if (!n.str_bis)
 		return (0);
-	res = ft_calc_res(ptn);
-	if (res >= 9223372036854775808ULL && sign == 1)
-		return (-1);
-	if (res >= 9223372036854775808ULL && sign == (-1))
-		return (0);
-	return (sign * res);
+	while (48 <= *n.str_bis && *n.str_bis <= 57)
+	{
+		if (n.i == 1 && (n.lln * 10 + (*n.str_bis - 48)) < n.lln)
+			return (-1);
+		if (n.i == -1 && (n.lln * 10 + (*n.str_bis - 48)) < n.lln)
+			return (0);
+		n.lln = n.lln * 10 + (*n.str_bis - 48);
+		if (n.i == 1 && n.lln > LL_MAX)
+			return (-1);
+		else if (n.i == -1 && (unsigned long long)n.lln > (LL_MAX))
+			return (0);
+		n.str_bis++;
+	}
+	return ((int)n.lln * n.i);
 }
+
+// int main()
+// {
+// 	char s[] = "9223372036854775809";
+// 	printf("%d\n", ft_atoi(s));
+// 	printf("%d\n", atoi(s));
+// 	return 0;
+// }

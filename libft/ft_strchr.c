@@ -3,34 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 13:00:46 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/02 23:39:54 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/11 23:11:57 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/* 	finds the first occurence of char c in a string
+	returns the remaining part of the string from c */
+
 char	*ft_strchr(const char *s, int c)
 {
-	char			*new_ptr;
-	char			d;
-	size_t			iter;
-
-	iter = 0;
-	d = (char)c;
-	new_ptr = (char *)s;
-	while (s[iter])
+	while (*s != '\0')
 	{
-		if (s[iter] != d)
-			new_ptr++;
-		else
-			return (new_ptr);
-		iter++;
+		if (*s == (char)c)
+			return ((char *)s);
+		s++;
 	}
-	if (s[iter] == d)
-		return (new_ptr);
-	else
-		return (NULL);
+	if (c == '\0')
+		return ((char *)s);
+	return (NULL);
 }

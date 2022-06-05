@@ -3,84 +3,71 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 12:58:49 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/03 21:41:51 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/19 12:09:49 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static long long	ft_int_sizer(int n)
+/* converts an int to its char representation */
+
+static int	ft_find_amount_of_digits(int n)
 {
-	long long	size;
-	long long	long_n;
-
-	size = 1;
-	long_n = n;
-	if (long_n < 0)
-	{
-		size++;
-		long_n = (long_n * (-1));
-	}
-	while (long_n >= 10)
-	{
-		size++;
-		long_n = long_n / 10;
-	}
-	return (size);
-}
-
-static long long	ft_power(long long len_integer, long long i)
-{
-	long long	multiplicator;
-
-	multiplicator = 1;
-	len_integer = len_integer - i;
-	while (len_integer > 1)
-	{
-		multiplicator = multiplicator * 10;
-		len_integer--;
-	}
-	return (multiplicator);
-}
-
-static char	*ft_string_fulfiller(char *str, long long long_n, long long len)
-{
-	long long	i;
-	long long	multiplicator;
+	int	i;
 
 	i = 0;
-	if (long_n < 0)
+	if (n < 0)
+		i++;
+	if (n == 0)
+		i++;
+	while (n != 0)
 	{
-		str[0] = '-';
-		long_n = long_n * (-1);
+		n /= 10;
 		i++;
 	}
-	str[len] = '\0';
-	multiplicator = ft_power(len, i);
-	while (len > i)
-	{
-		str[i] = ((long_n / multiplicator) + '0');
-		long_n = long_n % multiplicator;
-		multiplicator = (multiplicator / 10);
-		i++;
-	}
-	return (str);
+	return (i);
 }
 
 char	*ft_itoa(int n)
 {
-	char			*int_string;
-	long long int	long_n;
-	long long int	len_integer;
+	char			*str;
+	int				i;
+	unsigned int	nb;
 
-	long_n = n;
-	len_integer = ft_int_sizer(n);
-	int_string = malloc((len_integer + 1) * (sizeof(char)));
-	if (!(int_string))
+	str = (char *)malloc(sizeof(char) * (ft_find_amount_of_digits(n) + 1));
+	if (!str)
 		return (NULL);
-	int_string = ft_string_fulfiller(int_string, long_n, len_integer);
-	return (int_string);
+	i = ft_find_amount_of_digits(n);
+	str[i] = '\0';
+	i--;
+	if (n < 0)
+	{
+		str[0] = '-';
+		n *= -1;
+	}
+	if (n == 0)
+		str[0] = '0';
+	nb = n;
+	while (nb > 0)
+	{
+		str[i] = (nb % 10) + 48;
+		nb /= 10;
+		i--;
+	}
+	return (str);
 }
+
+/*
+int main()
+{
+	int		i = -2147483648;
+	char	*s = ft_itoa(i);
+	
+	printf("%s\n", s);
+	free(s);
+	return (0);
+}
+*/

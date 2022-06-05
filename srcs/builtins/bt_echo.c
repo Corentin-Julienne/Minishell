@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bt_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:04 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/25 13:44:31 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/04 22:35:42 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,14 +64,14 @@ int	built_in_echo(t_shell *shell, char **cmd_args)
 	int		n_flag;
 	char	*output;
 
-	n_flag = is_flag_n(args);
+	n_flag = is_flag_n(cmd_args);
 	if (n_flag == -1)
 	{
-		printf("");
+		printf("meh");
 		return (0);
 	}
-	size = echo_num_args(args) - n_flag;
-	output = store_echo_output(args, n_flag, size);
+	size = echo_num_args(cmd_args) - n_flag;
+	output = store_echo_output(cmd_args, n_flag, size);
 	if (!output)
 		return (1);
 	if (n_flag == 0)
