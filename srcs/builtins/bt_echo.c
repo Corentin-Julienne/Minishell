@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:04 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/05 11:21:43 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/05 14:41:52 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,19 +26,22 @@ int	built_in_echo(t_shell *shell, char **cmd_args)
 	bool	n_flag;
 
 	n_flag = false;
-	if (!cmd_args[0])
-		return (0);
 	i = 1;
+	if (!cmd_args[i])
+	{
+		printf("\n");
+		return (0);
+	}
 	if (check_n_flag(cmd_args[i]) == true)
 	{
 		n_flag = true;
 		i++;
 	}
-	while (cmd_args[i] != NULL)
-	{
-		printf("%s ", cmd_args[i]);
-		i++;
-	}
+	if (!cmd_args[i])
+		return (0);
+	while (cmd_args[i + 1] != NULL)
+		printf("%s ", cmd_args[i++]);
+	printf("%s", cmd_args[i]);
 	if (n_flag == false)
 		printf("\n");
 	return (0);
