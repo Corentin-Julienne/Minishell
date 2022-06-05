@@ -3,29 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 13:00:07 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/05 12:44:24 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/10 22:25:47 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/* write given string followed by \n */
+
 void	ft_putendl_fd(char *s, int fd)
 {
-	int		i;
-	char	line_return;
+	int	i;
 
 	i = 0;
-	line_return = '\n';
-	if (s != NULL)
+	while (s[i] != '\0')
 	{
-		while (s[i])
-		{
-			ft_putchar_fd(s[i], fd);
-			i++;
-		}
-		ft_putchar_fd(line_return, fd);
+		ft_putchar_fd(s[i], fd);
+		i++;
 	}
+	ft_putchar_fd('\n', fd);
 }

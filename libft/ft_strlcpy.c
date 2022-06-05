@@ -3,28 +3,49 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 13:01:12 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/01 23:17:34 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/11 22:53:53 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	size_t	src_size;
+/* 	copies n elements of source to dest.
+	returns the amount of elements copied */
 
-	src_size = ft_strlen(src);
-	if (dstsize == 0)
-		return (src_size);
-	if (src_size + 1 < dstsize)
-		ft_memcpy(dst, src, src_size + 1);
-	else
+size_t	ft_strlcpy(char *dst, const char *src, size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	if (size == 0)
 	{
-		ft_memcpy(dst, src, dstsize - 1);
-		dst[dstsize - 1] = '\0';
+		while (src[i])
+			i++;
+		return (i);
 	}
-	return (src_size);
+	while (i < size - 1 && src[i] != '\0')
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	if (i < size)
+		dst[i] = '\0';
+	while (src[i] != '\0')
+		i++;
+	return (i);
 }
+
+/*
+int main()
+{
+	char d[18] = "trucmachin";
+	char s[] = "12345fkopkdcowefdsf";
+
+	printf("%ld\n", ft_strlcpy(d, s, 18));
+	printf("%s\n", d);
+	return (0);
+}
+*/

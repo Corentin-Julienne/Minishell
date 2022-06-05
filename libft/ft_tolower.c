@@ -3,18 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   ft_tolower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 13:04:01 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:45:17 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/02 23:36:59 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/17 15:47:43 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/*	converts a capital letter to its lowercase counterpart */
+
 int	ft_tolower(int c)
 {
-	if (c >= 65 && c <= 90)
-		c = c + 32;
-	return (c);
+	if ('A' <= c && c <= 'Z')
+		return (c + 32);
+	else
+		return (c);
 }

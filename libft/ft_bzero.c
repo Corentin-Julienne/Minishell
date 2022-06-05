@@ -3,25 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 12:56:56 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/01 21:59:40 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/03 23:34:47 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/* fills the first n elements of a string with '\0' */
+
 void	ft_bzero(void *s, size_t n)
 {
-	unsigned long	i;
-	unsigned char	*ptr;
+	char	*str;
+	char	x;
 
-	ptr = (unsigned char *)s;
-	i = 0;
-	while (i < n)
+	str = (char *)s;
+	x = '\0';
+	while (n)
 	{
-		ptr[i] = 0;
-		i++;
+		*str = x;
+		str++;
+		n--;
 	}
 }

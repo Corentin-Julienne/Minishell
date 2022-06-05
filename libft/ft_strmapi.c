@@ -3,44 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 13:01:26 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:13 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/05 15:15:07 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/24 11:33:53 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static char	*ft_malloc_char(size_t len)
-{
-	char	*rtn_ptr;
-
-	rtn_ptr = malloc(((len + 1) * sizeof(char)));
-	if (!(rtn_ptr))
-		return (NULL);
-	return (rtn_ptr);
-}
+/* just like striteri but applied on a copy of the string */
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
-	char	*rtn_ptr;
-	size_t	i;
+	int		i;
+	char	*str;
 
+	i = 0;
 	if (!s || !f)
 		return (NULL);
-	rtn_ptr = ft_malloc_char(ft_strlen(s));
-	i = 0;
-	if (!(rtn_ptr))
+	str = (char *)malloc(sizeof(char) * (ft_strlen(s) + 1));
+	if (!str)
 		return (NULL);
-	else
+	while (s[i] != '\0')
 	{
-		while (s[i])
-		{
-			rtn_ptr[i] = f(i, s[i]);
-			i++;
-		}
-		rtn_ptr[i] = '\0';
+		str[i] = f(i, s[i]);
+		i++;
 	}
-	return (rtn_ptr);
+	str[i] = '\0';
+	return (str);
 }

@@ -3,40 +3,54 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 13:03:23 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:45:20 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/03 14:57:55 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/17 21:43:54 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+/* 	creates a new string (memory assigned with malloc)
+	start in the string
+	returns the n elements following start */
+
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char			*copy;
-	size_t			len_copy;
-	size_t			iter;
+	char		*new;
+	size_t		i;
 
-	len_copy = 0;
-	if (!s)
+	i = 0;
+	if (len < ft_strlen(s))
+		new = (char *)malloc(sizeof(char) * len + 1);
+	else
+		new = (char *)malloc(sizeof(char) * ft_strlen(s) + 1);
+	if (!new)
 		return (NULL);
-	if (ft_strlen(s) > start)
-		len_copy = (ft_strlen(s) - start);
-	if (len < len_copy && ft_strlen(s) > start)
-		len_copy = len;
-	len_copy++;
-	copy = malloc(len_copy * (sizeof(char)));
-	if (!(copy))
-		return (NULL);
-	iter = 0;
-	while (len_copy > 1 && s[start] && len > 0)
+	if (start > ft_strlen(s))
 	{
-		copy[iter] = s[start];
-		iter++;
-		start++;
-		len--;
+		new[i] = '\0';
+		return (new);
 	}
-	copy[iter] = '\0';
-	return (copy);
+	while (i <= len - 1 && s[i + start] != '\0' && len > 0)
+	{
+		new[i] = s[i + start];
+		i++;
+	}
+	new[i] = '\0';
+	return (new);
 }
+
+/*
+int main()
+{
+	char s[] = "un bazar a ajouter";
+	char *d;
+
+	d = ft_substr(s, 0, 20);
+	printf("%s\n", d);
+	free(d);
+	return (0);
+}
+*/

@@ -3,93 +3,63 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
+#    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/08/09 18:00:27 by cjulienn          #+#    #+#              #
-#    Updated: 2022/05/06 13:34:15 by cjulienn         ###   ########.fr        #
+#    Created: 2021/10/10 21:26:49 by xle-boul          #+#    #+#              #
+#    Updated: 2022/06/05 00:47:29 by xle-boul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = libft.a
 
-SRCS =	./get_next_line.c \
-		./gnl_utils/gnl_utils.c \
-		./ft_printf.c \
-		./printf_utils/conversions_1.c \
-		./printf_utils/conversions_2.c \
-		./ft_atoi.c \
-		./ft_bzero.c \
-		./ft_calloc.c \
-		./ft_free_and_return.c \
-		./ft_intlen_base.c \
-		./ft_isalnum.c \
-		./ft_isalpha.c \
-		./ft_isascii.c \
-		./ft_isdigit.c \
-		./ft_isprint.c \
-		./ft_itoa.c \
-		./ft_lltoa.c \
-		./ft_memccpy.c \
-		./ft_memchr.c \
-		./ft_memcmp.c \
-		./ft_memcpy.c \
-		./ft_memmove.c \
-		./ft_memset.c \
-		./ft_protec_strdup.c \
-		./ft_putchar_fd.c \
-		./ft_putendl_fd.c \
-		./ft_putlnbr_base.c \
-		./ft_putlnbr_fd.c \
-		./ft_putnbr_fd.c \
-		./ft_putstr_fd.c \
-		./ft_split.c \
-		./ft_strchr.c \
-		./ft_strdup.c \
-		./ft_strjoin_and_free.c \
-		./ft_strjoin.c \
-		./ft_strlcat.c \
-		./ft_strlcpy.c \
-		./ft_strlen.c \
-		./ft_strmapi.c \
-		./ft_strncmp.c \
-		./ft_strnstr.c \
-		./ft_strtrim.c \
-		./ft_strrchr.c \
-		./ft_substr.c \
-		./ft_tolower.c \
-		./ft_toupper.c \
-		./ft_lstadd_back.c \
-		./ft_lstadd_front.c \
-		./ft_lstnew.c \
-		./ft_lstsize.c \
-		./ft_lstlast.c \
-		./ft_lstdelone.c \
-		./ft_lstclear.c \
-		./ft_lstiter.c \
-		./ft_lstmap.c
+SRC_DIR := .
+SRC_DIR_BONUS := bonus
 
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror -I.
+SRC := $(wildcard $(SRC_DIR)/*.c)
+SRC_BONUS := $(SRC) $(wildcard $(SRC_DIR_BONUS)/*.c)
 
-RM = rm -f
+OBJ_DIR := obj
+OBJ_DIR_BONUS := obj_bonus
+OBJ := $(SRC:.c=.o)
+OBJECTS_PREFIXED := $(addprefix $(OBJ_DIR)/, $(notdir $(OBJ)))
 
-OBJS = $(SRCS:.c=.o)
+OBJ_BONUS := $(SRC_BONUS:.c=.o)
+OBJECTS_BONUS_PREFIXED := $(addprefix $(OBJ_DIR_BONUS)/, $(notdir $(OBJ_BONUS)))
 
-$(NAME): $(OBJS)	
-	ar -rc $(NAME) $(OBJS)
-	ranlib $(NAME)
-	@echo libft.a successfully made !!!
+INCLUDE := .
 
-all: 
-	$(NAME)
+CC := gcc
+CC_FLAGS := -Wall -Wextra -Werror
+
+VPATH = $(SRC_DIR_BONUS)
+
+all: $(NAME)
+
+$(OBJ_DIR)/%.o : %.c libft.h
+	@mkdir -p $(OBJ_DIR)
+	@echo "Compiling: $<"
+	@$(CC) $(CC_FLAGS) -c $< -o $@
+
+$(OBJ_DIR_BONUS)/%.o : %.c libft.h
+	@mkdir -p $(OBJ_DIR_BONUS)
+	@echo "Compiling: $<"
+	@$(CC) $(CC_FLAGS) -c $< -o $@
+
+$(NAME): $(OBJECTS_PREFIXED)
+	@ar r $(NAME) $(OBJECTS_PREFIXED)
+	@echo "$(NAME), created!"
 
 clean:
-	$(RM) $(OBJS)
+	@rm -rf $(OBJ_DIR)
+	@rm -rd $(OBJ_DIR_BONUS)
 
-fclean:	clean
-	$(RM) $(NAME)
-	
-re:		fclean 
-	$(NAME)
+fclean: clean
+	@rm -f $(NAME)
 
-.PHONY: all clean fclean re
+re: fclean all
+
+bonus: $(OBJECTS_BONUS_PREFIXED)
+	@ar r $(NAME) $(OBJECTS_BONUS_PREFIXED)
+	@echo "$(NAME) Bonus, created!"
+
+.PHONY: directory directory_bonus clean fclean bonus all re

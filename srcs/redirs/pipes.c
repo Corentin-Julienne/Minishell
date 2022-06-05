@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:31 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/02 13:29:08 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/04 13:06:08 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ void	redirect_to_pipe(t_shell *shell, int iter)
 	else if (iter == 0)
 	{
 		if (dup2(shell->pipes[1], STDOUT_FILENO) == -1)
-			; // handle correctly
+			return ; // handle correctly
 		if (close(shell->pipes[1]) == -1)
 			dprintf(2, "pipe closing problem [close_useless_pipes]\n");
 	}

@@ -3,28 +3,38 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memset.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/10 12:59:53 by cjulienn          #+#    #+#             */
-/*   Updated: 2021/08/23 19:46:25 by cjulienn         ###   ########.fr       */
+/*   Created: 2021/10/10 21:42:03 by xle-boul          #+#    #+#             */
+/*   Updated: 2021/10/11 11:14:13 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memset(void *b, int c, size_t len)
-{
-	unsigned long	i;
-	unsigned char	chr;
-	unsigned char	*ptr;
+/* sets the n first elements of a string to a given char */
 
-	chr = (unsigned char)c;
-	ptr = (unsigned char *)b;
-	i = 0;
-	while (i < len)
+void	*ft_memset(void *s, int c, size_t n)
+{
+	unsigned char	*str;
+
+	str = (unsigned char *)s;
+	while (n)
 	{
-		ptr[i] = chr;
-		i++;
+		*str = (const char)c;
+		str++;
+		n--;
 	}
-	return (b);
+	return (s);
 }
+
+/*
+int main()
+{
+	char s[] = "blablabla";
+
+	ft_memset(s, 'A', 5);
+	printf("%s\n", s);
+	return 0;
+}
+*/
