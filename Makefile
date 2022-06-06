@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
+#    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
-#    Updated: 2022/06/05 09:47:02 by xle-boul         ###   ########.fr        #
+#    Updated: 2022/06/06 19:43:38 by cjulienn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,12 +21,27 @@ UNDERLINE	= \e[4m
 RESET		= \033[0m
 END			= \e[0m
 
+OS = $(shell uname -s)
+
 NAME := minishell
 TEST_NAME := minishell_test
 
 CC := gcc
 CFLAGS := -Werror -Wall -Wextra
-READLINE := -lreadline
+
+# little if / else statement to assign the proper flags for compilation
+# depending on the OS
+
+ifeq ($(OS),Linux)
+	READLINE := -lreadline
+else
+	RDL_PATH := -L/usr/local/opt/readline/lib/
+	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
+	RDL := -lreadline.8.1 $(RDL_PATH)
+	RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
+	READLINE := $(RDL) $(RDL_HISTORY)
+endif
+
 INCLUDES := -I includes
 
 SRC_DIR := srcs
@@ -41,35 +56,34 @@ RM = rm -rf
 MKDIR = mkdir -p
 
 LIB_DIR := libft
-LIB_OBJ_DIR := libft/objs
+LIB_OBJ_DIR := libft/obj
 LIB := libft.a
 
 VPATH = $(SOURCEDIRS)
 
 all: $(NAME)
 
-$(NAME): directories $(OBJ_FILES) $(LIB)
-	@printf "$(YELLOW)Compiling minishell...\n\n$(END)"
+$(NAME): $(OBJ_FILES) $(LIB)
+	@printf "$(YELLOW)Linking minishell...\n\n$(END)"
 	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIB) $(READLINE) -o $(NAME)
 	@printf "\n$(GREEN)minishell compiled.\n$(END)Simply type $(WHITE)./minishell$(END) to execute the program. Enjoy.\n\n"
 
 $(OBJ_DIR)/%.o : %.c
+	@$(MKDIR) $(OBJ_DIR)
 	@printf "$(YELLOW)Compiling object:\n$(END)"
 	$(CC) $(CFALGS) $(INCLUDE) $(READLINE) -c -o $@ $<
 	@printf "$(GREEN)Object $(UNDERLINE)$(WHITE)$(notdir $@)$(END)$(GREEN) successfully compiled\n\n$(END)"
 
-directories:
-	@$(MKDIR) $(OBJ_DIR)
-
 $(LIB):
 	@printf "$(YELLOW)Compiling libft.a...\n$(END)"
-	@make $(LIB) -C $(LIB_DIR)
+	@make --no-print-directory $(LIB) -C $(LIB_DIR)
 	@mv $(LIB_DIR)/$(LIB) .
 	@printf "$(GREEN)libft.a compiled\n\n$(END)"
 
 clean:
 	@printf "$(YELLOW)Removing objects...\n$(END)"
 	$(RM) $(OBJ_DIR)
+	$(RM) $(LIB_OBJ_DIR)
 	@printf "$(GREEN)Objects removed!\n\n$(END)"
 
 fclean: clean
@@ -80,4 +94,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: directories clean fclean all re
+.PHONY: clean fclean all re
