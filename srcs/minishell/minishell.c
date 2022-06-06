@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/05 14:55:47 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/06 17:40:56 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	main(int argc, char **argv, char **envp)
 
 	(void)argc;
 	(void)argv;
+	
 	action.sa_sigaction = signal_handler;
 	if (sigaction(SIGINT, &action, NULL) == -1
 		|| sigaction(SIGQUIT, &action, NULL))
