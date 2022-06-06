@@ -6,7 +6,7 @@
 #    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/06 12:54:17 by cjulienn          #+#    #+#              #
-#    Updated: 2022/06/06 18:50:38 by cjulienn         ###   ########.fr        #
+#    Updated: 2022/06/06 19:04:58 by cjulienn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ function test_and_compare()
 	fi
 	echo "$BLUE------------------------------------------------------------------------$RESET"
 	echo
-	# find a way to exit minishell ?
+	killall minishell # find a way to exit minishell ?
 	sleep 1 # is that really useful ?
 }
 
