@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/06 17:40:56 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/07 16:35:02 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	miniloop(t_shell *shell)
 	if (is_spaces_only(shell->user_input) == 1)
 		return ;
 	token = parse_user_input(shell);
-	display_every_token(token); // debug func
+	// display_every_token(token); // debug func
 	free(shell->user_input);
 	shell->user_input = NULL;
 	process_tokens(token, shell);

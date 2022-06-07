@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:59:00 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 12:57:14 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/07 20:45:35 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,4 +63,5 @@ void	init_shell_struct(t_shell *shell, char **envp)
 	shell->nb_pipes = -1;
 	shell->pipes = NULL;
 	shell->pids_arr = NULL;
+	shell->old_pwd = NULL;		//added this variable to the init function for "cd -"
 }
