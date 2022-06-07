@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/05 01:27:40 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/05 11:08:12 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ static int	exec_built_in(t_shell *shell, char **cmd_args)
 {
 	// if (!ft_strncmp(cmd_args[0], "cd", 2) && ft_strlen(cmd_args[0]) == 2)
 	// 	return (built_in_cd(shell, cmd_args));
-	// else if (!ft_strncmp(cmd_args[0], "echo", 4)
-	// 	&& ft_strlen(cmd_args[0]) == 4)
-	// 	return (built_in_echo(shell, cmd_args));
+	if (!ft_strncmp(cmd_args[0], "echo", 4)
+		&& ft_strlen(cmd_args[0]) == 4)
+		return (built_in_echo(shell, cmd_args));
 	// else if (!ft_strncmp(cmd_args[0], "env", 3)
 	// 	&& ft_strlen(cmd_args[0]) == 3)
 	// 	return (built_in_env(shell, cmd_args));
@@ -31,7 +31,7 @@ static int	exec_built_in(t_shell *shell, char **cmd_args)
 	// else if (!ft_strncmp(cmd_args[0], "export", 6)
 	// 	&& ft_strlen(cmd_args[0]) == 6)
 	// 	return (built_in_export(shell, cmd_args));
-	if (!ft_strncmp(cmd_args[0], "pwd", 3)
+	else if (!ft_strncmp(cmd_args[0], "pwd", 3)
 		&& ft_strlen(cmd_args[0]) == 3)
 		return (built_in_pwd(shell, cmd_args[0]));
 	// else if (!ft_strncmp(cmd_args[0], "unset", 5)

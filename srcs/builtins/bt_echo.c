@@ -6,77 +6,43 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:04 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/04 22:35:42 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/05 14:41:52 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+#include <stdbool.h>
 
-static char	*store_echo_output(char **args, int n_flag, size_t size)
+bool	check_n_flag(char *arg)
 {
-	char	*output;
-	int		i;
-
-	if (n_flag == 1)
-		i = 2;
-	else
-		i = 1;
-	output = ft_strdup("");
-	if (!output)
-		return (NULL);
-	while (args && args[i])
-	{
-		output = ft_strjoin_and_free(output, args[i]);
-		if (size != (i - n_flag - 1))
-			output = ft_strjoin_and_free(output, " ");
-		i++;
-	}
-	return (output);
-}
-
-static size_t	echo_num_args(char **args)
-{
-	size_t	size;
-
-	size = 0;
-	while (args && args[size])
-		size++;
-	size--;
-	return (size);
-}
-
-static int	is_flag_n(char **args)
-{
-	int	flag_num;
-
-	if (!args[1])
-		return (-1);
-	flag_num = 0;
-	if (!ft_strncmp(args[1], "-n", ft_strlen(args[1])) 
-&& ft_strlen(args[1]) == ft_strlen("-n"))
-		flag_num = 1;
-	return (flag_num);
+	if (!arg || !(ft_strncmp(arg, "-n", 2) == 0 && ft_strlen (arg) == 2))
+		return (false);
+	return (true);
 }
 
 int	built_in_echo(t_shell *shell, char **cmd_args)
 {
-	size_t	size;
-	int		n_flag;
-	char	*output;
+	int		i;
+	bool	n_flag;
 
-	n_flag = is_flag_n(cmd_args);
-	if (n_flag == -1)
+	n_flag = false;
+	i = 1;
+	if (!cmd_args[i])
 	{
-		printf("meh");
+		printf("\n");
 		return (0);
 	}
-	size = echo_num_args(cmd_args) - n_flag;
-	output = store_echo_output(cmd_args, n_flag, size);
-	if (!output)
-		return (1);
-	if (n_flag == 0)
-		printf("%s\n", output);
-	else
-		printf("%s", output);
+	if (check_n_flag(cmd_args[i]) == true)
+	{
+		n_flag = true;
+		i++;
+	}
+	if (!cmd_args[i])
+		return (0);
+	while (cmd_args[i + 1] != NULL)
+		printf("%s ", cmd_args[i++]);
+	printf("%s", cmd_args[i]);
+	if (n_flag == false)
+		printf("\n");
 	return (0);
 }
