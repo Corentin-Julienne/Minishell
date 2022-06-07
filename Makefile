@@ -3,7 +3,7 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
+#    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
 #    Updated: 2022/06/06 22:19:02 by xle-boul         ###   ########.fr        #
@@ -31,6 +31,7 @@ CFLAGS := -Werror -Wall -Wextra
 
 # little if / else statement to assign the proper flags for compilation
 # depending on the OS
+
 ifeq ($(OS),Linux)
 	READLINE := -lreadline
 else
@@ -55,7 +56,7 @@ RM = rm -rf
 MKDIR = mkdir -p
 
 LIB_DIR := libft
-LIB_OBJ_DIR := libft/objs
+LIB_OBJ_DIR := libft/obj
 LIB := libft.a
 
 VPATH = $(SOURCEDIRS)
