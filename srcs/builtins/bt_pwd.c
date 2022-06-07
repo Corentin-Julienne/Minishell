@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/05 01:26:32 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/05 14:48:42 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,10 @@ int	built_in_pwd(t_shell *shell, char *cmd_args)
 
 	cwd = (char *)malloc(sizeof(char) * MAX_PATH);
 	if (!cwd)
-		return (-1); // change that
+		return (ENOMEM);
 	cwd = getcwd(cwd, MAX_PATH);
 	if (!cwd)
-		return (-1); // change that
+		return (ENAMETOOLONG);
 	printf("%s\n", cwd);
 	free(cwd);
 	return (0);
