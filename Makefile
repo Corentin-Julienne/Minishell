@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
+#    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
-#    Updated: 2022/06/06 22:19:02 by xle-boul         ###   ########.fr        #
+#    Updated: 2022/06/07 22:14:57 by xle-boul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,6 +57,7 @@ MKDIR = mkdir -p
 
 LIB_DIR := libft
 LIB_OBJ_DIR := libft/obj
+LIB_OBJ_DIR_BONUS := libft/obj_bonus
 LIB := libft.a
 
 VPATH = $(SOURCEDIRS)
@@ -84,6 +85,7 @@ clean:
 	@printf "$(YELLOW)Removing objects...\n$(END)"
 	$(RM) $(OBJ_DIR)
 	$(RM) $(LIB_OBJ_DIR)
+	$(RM) $(LIB_OBJ_DIR_BONUS)
 	@printf "$(GREEN)Objects removed!\n\n$(END)"
 
 fclean: clean

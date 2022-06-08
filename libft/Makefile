@@ -6,7 +6,7 @@
 #    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/10/10 21:26:49 by xle-boul          #+#    #+#              #
-#    Updated: 2022/06/05 00:47:29 by xle-boul         ###   ########.fr        #
+#    Updated: 2022/06/07 22:13:49 by xle-boul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,7 +51,7 @@ $(NAME): $(OBJECTS_PREFIXED)
 
 clean:
 	@rm -rf $(OBJ_DIR)
-	@rm -rd $(OBJ_DIR_BONUS)
+	@rm -rf $(OBJ_DIR_BONUS)
 
 fclean: clean
 	@rm -f $(NAME)
