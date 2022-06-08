@@ -1,0 +1,102 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    test_battery.txt                                   :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/06/08 12:05:00 by cjulienn          #+#    #+#              #
+#    Updated: 2022/06/08 12:11:18 by cjulienn         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+# bank of test to be used for testing minishell features (will compare it to bash)
+
+// main findings
+
+1) the redirection can be after or before the cmd, it does not matter at all in bash
+2) first the pipes redirections are to be made, then the redirection, then the commands
+3) therefore, redirections supersedes (erase) the pipes redirections
+4) therefore, the pipe will redirect with an empty input !!! (does not return an error msg normally)
+
+// the goal of this file is to test different cases in bash regarding to intricating commands,
+pipes and redirections
+
+// 1) standard case : pipex-like case scenario
+
+cat  < infile.txt | grep truc | wc -l > outfile.txt
+exit status : 0
+
+// 2) standard case : redirection, no pipes and single cmd
+<infile.txt cat
+cat <infile.txt
+exit status : 0
+
+// 3) standard case : no redirection, single cmd
+wc -l
+freeze
+
+// 4) standard case : no redirections, multiple pipes
+echo truc | grep t | wc -l
+exit status : 0
+
+// 5) tricky case : input redirections between pipes
+echo truc | <infile.txt cat | wc -l
+exit status : 0
+
+// 6) tricky case : output redirections between pipes
+cat <infile.txt | grep test >outfile.txt | wc -l
+exit status : 0
+
+// 7) tricky case : redirection between cmd and argument
+echo >outfile.txt truc
+exit status : 0
+
+// 8 ) tricky case : nothing between two pipes
+cat <infile.txt || wc -l
+exit status : 0
+
+// 9 ) tricky case : only redirection, no cmd, no pipes
+<infile.txt
+>outfile.txt
+exit status : 0
+
+// 10 ) tricky case : only redirection, no cmd between two pipes
+cat <infile.txt | >outfile.txt | wc -l
+exit status : 0 
+
+// 11 ) tricky case : redirection without target, between two pipes
+cat <infile.txt | grep test > | wc -l
+exit status : 258 bash: syntax error near unexpected token `|'
+cat <infile.txt | grep test < | wc -l
+exit status : 258 bash: syntax error near unexpected token `|'
+
+// 12 ) tricky case : redirection without target, only
+<
+exit status : 258 bash: syntax error near unexpected token `newline'
+>
+exit status : 258 bash: syntax error near unexpected token `newline'
+
+// 13 ) tricky case : redirection without target, followed by other pipes and commands
+< | echo truc | wc -l
+> | echo truc | wc -l
+
+// 14 ) tricky case : only a pipe, nothing else
+|
+
+// 15 ) tricky case : only multiple pipes, nothing else
+|||||||||||||||||||||||
+
+
+// minishell should be able to 
+
+1) execute normal cmds without redirections or pipes
+2) execute cmds with redirections
+3) execute every combinations of pipes, cmds and redirections
+4) execute cmd even if args of cmds are separated by redirections
+5) if there is nothing between two pipes, it should NOT work (|| is a metacharacter not implemented in minishell) !!!
+6) if there is no cmd but redirections only, it should work !!!
+7) case there is only pipes AND/OR redirs without args, we throw : 
+bash: syntax error near unexpected token `[next token, newline if it was last token]'
+exit status : 258
+
