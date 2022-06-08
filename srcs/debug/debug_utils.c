@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:54:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/08 12:10:22 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/27 18:04:00 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,4 @@ void	inspect_char_arr(char **arr)
 		dprintf(STDERR_FILENO, "[%i] = [%s]\n", i, arr[i]);
 		i++;
 	}
-}
-
-// to be used in a PARENT process only !!!
-
-void	inspect_exit_status(t_shell *shell)
-{
-	dprintf(STDERR_FILENO, "the current exit code is : %i\n", shell->exit_status);
 }
