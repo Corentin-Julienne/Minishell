@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:36:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 16:03:17 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/07 21:49:58 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	clean_child_process(t_shell *shell)
 
 /* this function avoid leaks and kill the main process when an error occurs */
 
+// modified the function to add another free to the lot. Removed the =NULL part
+// for norminette's sake, for now.
 void	free_case_err(t_shell *shell, t_token *token)
 {
 	if (shell->env)
@@ -44,20 +46,13 @@ void	free_case_err(t_shell *shell, t_token *token)
 	if (shell->paths)
 		free_split(shell->paths);
 	if (shell->user_input)
-	{
 		free(shell->user_input);
-		shell->user_input = NULL;
-	}
 	if (shell->pipes)
-	{
 		free(shell->pipes);
-		shell->pipes = NULL;
-	}
 	if (shell->pids_arr)
-	{
 		free(shell->pids_arr);
-		shell->pids_arr = NULL;
-	}
+	if (shell->old_pwd)
+		free(shell->old_pwd);
 	free(shell);
 	shell = NULL;
 	if (token)
@@ -100,4 +95,24 @@ void	free_split(char **split)
 	}
 	free(split);
 	split = NULL;
+}
+
+// in case of voluntary exit from minishell, this function frees every
+// allocated item before closing the program
+void	free_case_exit(t_shell *shell)
+{
+	if (shell->env)
+		free_split(shell->env);
+	if (shell->paths)
+		free_split(shell->paths);
+	if (shell->user_input)
+		free(shell->user_input);
+	if (shell->pipes)
+		free(shell->pipes);
+	if (shell->pids_arr)
+		free(shell->pids_arr);
+	if (shell->old_pwd)
+		free(shell->old_pwd);
+	free(shell);
+	shell = NULL;
 }

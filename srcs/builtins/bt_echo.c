@@ -6,13 +6,15 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:04 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/05 14:41:52 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/07 20:41:14 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <stdbool.h>
 
+// a little boolean tool to detect if the -n flag is present.
+// returns true if it is, false if not
 bool	check_n_flag(char *arg)
 {
 	if (!arg || !(ft_strncmp(arg, "-n", 2) == 0 && ft_strlen (arg) == 2))
@@ -20,6 +22,9 @@ bool	check_n_flag(char *arg)
 	return (true);
 }
 
+// simple printing function that will print whatever argument follows
+// the command. as is, it is followed by a new line. the flag -n cancels
+// that new line.
 int	built_in_echo(t_shell *shell, char **cmd_args)
 {
 	int		i;

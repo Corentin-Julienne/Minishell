@@ -28,7 +28,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define MAX_PATH		4096
+# define MAX_PATH		4096 //assigned the value, since PATH_MAX doesn't work on my distro
 
 # define PIPE			1
 # define REDIR_INPUT	2
@@ -65,6 +65,7 @@ typedef struct s_shell
 	int				nb_pipes;
 	int				*pipes;
 	pid_t			*pids_arr;
+	char			*old_pwd;	//added this variable to the struct to keep a track of old pwd for "cd -"
 }					t_shell;
 
 typedef struct s_token
@@ -81,12 +82,17 @@ typedef struct s_token
 
 /* bt_cd.c */
 int			built_in_cd(t_shell *shell, char **cmd_args);
+char		*expand_tilde(char *home, char *arg);
+char		*find_pwd(void);
+void		assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd);
+
 /* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
 /* bt_env.c */
 int			built_in_env(t_shell *shell, char **cmd_args);
 /* bt_exit.c */
-int			built_in_exit(t_shell *shell, char **cmd_args);
+void		built_in_exit(t_shell *shell, char **cmd_args);
+void		free_case_exit(t_shell *shell);
 /* bt_export.c */
 int 		built_in_export(t_shell *shell, char **cmd_args);
 /* bt_pwd.c */
