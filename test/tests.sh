@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
@@ -6,7 +8,7 @@
 #    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/06 12:54:17 by cjulienn          #+#    #+#              #
-#    Updated: 2022/06/06 19:04:58 by cjulienn         ###   ########.fr        #
+#    Updated: 2022/06/06 20:57:57 by cjulienn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,32 +39,58 @@ chmod 777 minishell # make sure we are not bother by access restrictions
 
 function test_and_compare()
 {
-	TEST_MINI=$(echo $@ | ./minishell >> test_output.txt) # execute minishell with provided args
-	EXIT_MINI=$? # minishell exit status
-	TEST_BASH=$(echo $@"; exit" | bash >> test_output.txt) # execute bash with provided args
-	EXIT_BASH=$? # bash exit status
-	
-	printf "$CYAN%s$RESET" "$@" # print args of the current test
-	if ["$TEST_MINI" == "$TEST_BASH"] && ["$EXIT_MINI" == "$EXIT_BASH"]; then # we check if results are the same, giving feedback
-		printf "$GREEN%s\n$RESET" "   [✅]"
+	TEST1=$(echo $@ | ./minishell)
+	ES_1=$?
+	TEST2=$(echo $@ | bash |  >outfile_bash)
+	ES_2=$?
+	if [ "$TEST1" == "$TEST2" ] && [ "$ES_1" == "$ES_2" ]; then
+		printf " $BOLDGREEN%s$RESET" "✓ "
 	else
-		printf "$RED%s\n$RESET" "   [❌]"
+		printf " $BOLDRED%s$RESET" "✗ "
 	fi
-
-	if ["$TEST_MINI" != "$TEST_BASH"]; then # printf expected vs current minishell result
-		echo "$RED------------------------------------------------------------------------$RESET"
-		printf "${RED}your output is        : %s\n$RESET" "$TEST_MINI"
-		printf "${GREEN}your output should be : %s\n$RESET" "$TEST_BASH"
+	printf "$CYAN \"$@\" $RESET"
+	if [ "$TEST1" != "$TEST2" ]; then
+		echo
+		echo
+		printf $BOLDRED"Your output : \n%.20s\n$BOLDRED$TEST1\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
+		printf $BOLDGREEN"Expected output : \n%.20s\n$BOLDGREEN$TEST2\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
 	fi
-	if ["$EXIT_MINI" != "$EXIT_BASH"]; then # printf expected vs current minishell exit code
-		echo "$RED------------------------------------------------------------------------$RESET"
-		printf "${RED}your exit code is        : %s\n$RESET" "$EXIT_MINI"
-		printf "${GREEN}your exit code should be : %s\n$RESET" "$EXIT_BASH"
+	if [ "$ES_1" != "$ES_2" ]; then
+		echo
+		echo
+		printf $BOLDRED"Your exit status : $BOLDRED$ES_1$RESET\n"
+		printf $BOLDGREEN"Expected exit status : $BOLDGREEN$ES_2$RESET\n"
 	fi
-	echo "$BLUE------------------------------------------------------------------------$RESET"
 	echo
-	killall minishell # find a way to exit minishell ?
-	sleep 1 # is that really useful ?
+	sleep 0.1
+	# RES_MINI="echo $@ | ./minishell" # execute minishell with provided args
+	# EXIT_MINI=$? # minishell exit status
+	# echo "$EXIT_MINI"
+	# RES_BASH="echo $@ | bash" # execute bash with provided args
+	# EXIT_BASH=$? # bash exit status
+	# echo "$EXIT_BASH"
+	
+	# printf "$CYAN%s\n$RESET" "$@" # print args of the current test
+	
+	# # if [diff outfile_mini.txt outfile_bash.txt] && [$EXIT_MINI == $EXIT_BASH]; then
+	# # 	printf "$GREEN%s\n$RESET" "result = [✅]"
+	# # else
+	# # 	printf "$RED%s\n$RESET"   "result = [❌]"
+
+	# # # if [$TEST_MINI != $TEST_BASH]; then # printf expected vs current minishell result
+	# # # 	echo "$RED------------------------------------------------------------------------$RESET"
+	# # # 	printf "${RED}your output is        : %s\n$RESET" "$TEST_MINI"
+	# # # 	printf "${GREEN}your output should be : %s\n$RESET" "$TEST_BASH"
+	# # # fi
+
+	# if ["$EXIT_MINI" != "$EXIT_BASH"]; then # printf expected vs current minishell exit code
+	# 	echo "$RED------------------------------------------------------------------------$RESET"
+	# 	printf "${RED}your exit code is        : %s\n$RESET" "$EXIT_MINI"
+	# 	printf "${GREEN}your exit code should be : %s\n$RESET" "$EXIT_BASH"
+	# fi
+	# echo "$BLUE------------------------------------------------------------------------$RESET"
+	# echo
+	# sleep 1 # is that really useful ?
 }
 
 # WELCOMING MESSAGE
@@ -78,7 +106,7 @@ echo   "------------------------------------------------------------------------
 
 # basic test to test the script
 
-
+test_and_compare '<infile.txt cat | grep test | wc -l >outfile.txt'
 
 # [BASIC ONE COMMAND INPUT TESTS]
 
@@ -102,5 +130,5 @@ echo   "------------------------------------------------------------------------
 
 # CLEANING MINISHELL USING MAKE FCLEAN
 
-make -C fclean ../ # trigger minishell make fclean
-rm ./minishell     # rm minishell program
+make -C ../ fclean  # trigger minishell make fclean
+rm minishell        # rm minishell program
