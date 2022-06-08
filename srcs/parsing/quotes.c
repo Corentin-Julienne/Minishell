@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:51:38 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/07 19:23:07 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/05/30 21:28:03 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,7 +135,8 @@ int	is_quote_valid(char *item, char sep)
 return -1 if unclosed quote,
 the length of the quote otherwise
 [!!!! include the quotes in the length !!!!]
-e.g : "truc" = 6, "" = 2, "y" = 3 */
+e.g : "truc" = 6, "" = 2, "y" = 3
+*/
 
 size_t	calc_quote_length(char *str, size_t i)
 {

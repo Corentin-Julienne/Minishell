@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/08 12:10:35 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/07 21:49:15 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,6 +183,5 @@ void		token_add_back(t_token **token, t_token *new);
 /* debug_utils.c */
 void		display_every_token(t_token *token);
 void		inspect_char_arr(char **arr);
-void		inspect_exit_status(t_shell *shell);
 
 #endif

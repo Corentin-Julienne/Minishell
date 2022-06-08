@@ -39,64 +39,30 @@ chmod 777 minishell # make sure we are not bother by access restrictions
 
 function test_and_compare()
 {
-	TEST_BASH=$(echo $@ | bash 2>>err_log.txt 1> bash_output.txt)
-	TEST_BASH_EXIT=$(echo "exit" | bash)
-	ES_BASH=$? # exit should give the last exit code
-	TEST_MINI=$(echo $@ | ./minishell 2>>err_log.txt 1> mini_output.txt)
-	TEST_MINI_EXIT=$(echo "exit" | ./minishell)
-	ES_MINI=$? # exit should give the last exit code
-	
-	echo $BLUE"-----------------------------------------------------------------\n"$RESET
-	printf "$CYAN ==> input tested : [$@]$RESET\n"
-	echo $BLUE"comparing exit status..."$RESET
-	if ! [ "$ES_MINI" -eq "$ES_BASH" ]; then # check if exit status is the same
-		printf $RED"Your exit status     : $ES_MINI$RESET\n"
-		printf $GREEN"Expected exit status : $ES_BASH$RESET\n"
+	TEST1=$(echo $@ | ./minishell)
+	ES_1=$?
+	TEST2=$(echo $@ | bash |  >outfile_bash)
+	ES_2=$?
+	if [ "$TEST1" == "$TEST2" ] && [ "$ES_1" == "$ES_2" ]; then
+		printf " $BOLDGREEN%s$RESET" "✓ "
 	else
-		printf $GREEN"Minishell exit status OK !\n"$RESET
+		printf " $BOLDRED%s$RESET" "✗ "
 	fi
-	echo $BLUE"comparing error messages (if any)..."$RESET
-
-	echo $BLUE"comparing outputs..."$RESET
-
-	if [diff bash_output.txt mini_output.txt]; then
-		echo $RED"Output of minishell and bash are different"$RESET
-	else
-		echo $GREEN"Output of minishell is equal to bash"$RESET
+	printf "$CYAN \"$@\" $RESET"
+	if [ "$TEST1" != "$TEST2" ]; then
+		echo
+		echo
+		printf $BOLDRED"Your output : \n%.20s\n$BOLDRED$TEST1\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
+		printf $BOLDGREEN"Expected output : \n%.20s\n$BOLDGREEN$TEST2\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
 	fi
-	
-	# echo $BLUE"Summary of results..."$RESET
-	# if ! [ "$ES_MINI" -eq "$ES_BASH" ]; then
-	# 	printf "" ""
-	# else
-	# 	printf "" ""
-	# fi
-	echo $BLUE"Testing procedure finished for this input"$RESET
-	
-	# rm ./err_log.txt # remove err_log file when not needed
-
-
-
-	# if [ "$TEST1" == "$TEST2" ] && [ "$ES_1" == "$ES_2" ]; then
-	# 	printf " $BOLDGREEN%s$RESET" "✓ "
-	# else
-	# 	printf " $BOLDRED%s$RESET" "✗ "
-	# fi
-	# printf "$CYAN \"$@\" $RESET"
-	# if [ "$TEST1" != "$TEST2" ]; then
-	# 	echo
-	# 	echo
-	# 	printf $BOLDRED"Your output : \n%.20s\n$BOLDRED$TEST1\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
-	# 	printf $BOLDGREEN"Expected output : \n%.20s\n$BOLDGREEN$TEST2\n%.20s$RESET\n" "-----------------------------------------" "-----------------------------------------"
-	# fi
-	# if [ "$ES_1" != "$ES_2" ]; then
-	# 	echo
-	# 	echo
-	# 	printf $BOLDRED"Your exit status : $BOLDRED$ES_1$RESET\n"
-	# 	printf $BOLDGREEN"Expected exit status : $BOLDGREEN$ES_2$RESET\n"
-	# fi
-	# echo
-	# sleep 0.1
+	if [ "$ES_1" != "$ES_2" ]; then
+		echo
+		echo
+		printf $BOLDRED"Your exit status : $BOLDRED$ES_1$RESET\n"
+		printf $BOLDGREEN"Expected exit status : $BOLDGREEN$ES_2$RESET\n"
+	fi
+	echo
+	sleep 0.1
 	# RES_MINI="echo $@ | ./minishell" # execute minishell with provided args
 	# EXIT_MINI=$? # minishell exit status
 	# echo "$EXIT_MINI"
@@ -140,7 +106,7 @@ echo   "------------------------------------------------------------------------
 
 # basic test to test the script
 
-test_and_compare 'stub cred'
+test_and_compare '<infile.txt cat | grep test | wc -l >outfile.txt'
 
 # [BASIC ONE COMMAND INPUT TESTS]
 
