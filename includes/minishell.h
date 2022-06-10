@@ -93,15 +93,21 @@ void		assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd);
 
 /* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
+
 /* bt_env.c */
 int			built_in_env(t_shell *shell, char **cmd_args);
+void		change_env_var(t_shell **shell, char *var, char *new_var);
+
 /* bt_exit.c */
 void		built_in_exit(t_shell *shell, char **cmd_args);
 void		free_case_exit(t_shell *shell);
+
 /* bt_export.c */
 int 		built_in_export(t_shell *shell, char **cmd_args);
+
 /* bt_pwd.c */
 int			built_in_pwd(t_shell *shell, char *cmd_args);
+
 /* bt_unset.c */
 int 		built_in_unset(t_shell *shell, char **cmd_args);
 

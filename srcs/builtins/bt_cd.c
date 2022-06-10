@@ -6,40 +6,45 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/07 21:23:44 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/09 12:46:14 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// handles the arguments prefixed by a ~
-int	handle_tilde(char *arg, char *home)
+// second part of handling the tilde
+int	handle_tilde_else(t_shell *shell, char *arg, char *home)
 {
 	char	*final_arg;
 	int		success_code;
 
-	if (ft_strlen(arg) == 1)
+	final_arg = expand_tilde(home, arg);
+	success_code = chdir(final_arg);
+	if (success_code != 0)
 	{
-		chdir(home);
-		printf("%s\n", home);
-		return (0);
+		printf("bash: cd: %s: No such file or directory\n", final_arg);
+		free(final_arg);
+		return (1);
 	}
 	else
 	{
-		final_arg = expand_tilde(home, arg);
-		success_code = chdir(final_arg);
-		if (success_code != 0)
-		{
-			printf("bash: cd: %s: No such file or directory\n", final_arg);
-			free(final_arg);
-			return (1);
-		}
-		else
-		{
-			printf("%s\n", final_arg);
-			free(final_arg);
-		}
+		change_env_var(&shell, "PWD=", final_arg);
+		printf("%s\n", shell->env[19]);
+		free(final_arg);
 	}
+}
+
+// handles the arguments prefixed by a ~
+int	handle_tilde(t_shell *shell, char *arg, char *home)
+{
+	if (ft_strlen(arg) == 1)
+	{
+		chdir(home);
+		change_env_var(&shell, "PWD=", home);
+		printf("%s\n", shell->env[19]);
+	}
+	else
+		handle_tilde_else(shell, arg, home);
 	return (0);
 }
 
@@ -53,13 +58,15 @@ int	handle_dash(t_shell *shell, char *arg, char *home)
 		else
 		{
 			chdir(shell->old_pwd);
-			printf("%s\n", shell->old_pwd);
+			change_env_var(&shell, "PWD=", shell->old_pwd);
+			printf("%s\n", shell->env[19]);
 		}
 	}
 	else if (ft_strlen(arg) == 2 && ft_strncmp(arg, "--", 2) == 0)
 	{
 		chdir(home);
-		printf("%s\n", home);
+		change_env_var(&shell, "PWD=", home);
+		printf("%s\n", shell->env[19]);
 	}
 	else
 	{
@@ -72,13 +79,13 @@ int	handle_dash(t_shell *shell, char *arg, char *home)
 // executes the change of directory according to the constraints
 int	change_directory(t_shell *shell, char *arg, char *home)
 {
-	int	success_code;
+	int		success_code;
 	char	*new_pwd;
 
 	if (arg[0] == '-')
 		success_code = handle_dash(shell, arg, home);
 	else if (arg[0] == '~')
-		success_code = handle_tilde(arg, home);
+		success_code = handle_tilde(shell, arg, home);
 	else
 	{
 		success_code = chdir(arg);
@@ -87,7 +94,8 @@ int	change_directory(t_shell *shell, char *arg, char *home)
 		else
 		{
 			new_pwd = find_pwd();
-			printf("%s\n", new_pwd);
+			change_env_var(&shell, "PWD=", new_pwd);
+			printf("%s\n", shell->env[19]);
 			free(new_pwd);
 		}
 	}
@@ -113,7 +121,8 @@ int	built_in_cd(t_shell *shell, char **cmd_args)
 	if (!cmd_args[1])
 	{
 		success_code = chdir(home);
-		printf("%s\n", home);
+		change_env_var(&shell, "PWD=", home);
+		printf("%s\n", shell->env[19]);
 		assign_old_pwd(shell, home, success_code, pwd);
 	}
 	else if (cmd_args[2])
