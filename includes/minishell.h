@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 16:33:55 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:21:49 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ typedef struct s_token
 int			built_in_cd(t_shell *shell, char **cmd_args);
 char		*expand_tilde(char *home, char *arg);
 char		*find_pwd(void);
-void		assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd);
+void		assign_old_pwd(t_shell *shell, char *arg,
+				int success_code, char *pwd);
 
 /* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
@@ -103,13 +104,13 @@ void		built_in_exit(t_shell *shell, char **cmd_args);
 void		free_case_exit(t_shell *shell);
 
 /* bt_export.c */
-int 		built_in_export(t_shell *shell, char **cmd_args);
+int			built_in_export(t_shell *shell, char **cmd_args);
 
 /* bt_pwd.c */
 int			built_in_pwd(t_shell *shell, char *cmd_args);
 
 /* bt_unset.c */
-int 		built_in_unset(t_shell *shell, char **cmd_args);
+int			built_in_unset(t_shell *shell, char **cmd_args);
 
 /* ENV */
 
@@ -123,13 +124,13 @@ char		**recup_paths(t_shell *shell, char **cmd_args);
 /* exec_cmd.c*/
 int			is_built_in(const char *cmd);
 void		cmd_exec(t_shell *shell, char **cmd_args,
-	t_token *token, int process);
+				t_token *token, int process);
 /* exec_errors.c */
 void		display_cmd_not_found(char **cmd_args, char **paths);
 void		handle_access_denied(char *path_with_cmd,
-	t_shell *shell, char **cmd_args);
+				t_shell *shell, char **cmd_args);
 int			is_path_functionnal(char *path_with_cmd,
-	t_shell *shell, char **cmd_args);
+				t_shell *shell, char **cmd_args);
 /* exec_path_cmd.c */
 void		path_cmd_exec(t_shell *shell, char **cmd_args);
 
@@ -155,12 +156,12 @@ char		*isolate_item(char *user_input, t_shell *shell, t_token *token);
 
 /* fd_redirs.c */
 int			operate_redir(t_shell *shell, t_token *redir_tk,
-	t_token *token, int process);
+				t_token *token, int process);
 
 /* pipes_redirs_cmds.c */
 int			is_forking_required(t_token *token, t_shell *shell);
 void		pipes_redirs_cmd(t_shell *shell, t_token *token,
-	int iter, int process);
+				int iter, int process);
 /* pipes.c */
 void		pipes_activation(t_shell *shell, int num_pipes, t_token *token);
 void		close_all_pipes(t_shell *shell, int num_pipes);
@@ -188,7 +189,7 @@ void		token_clear(t_token **token);
 void		token_add_front(t_token **token, t_token *new);
 void		token_add_back(t_token **token, t_token *new);
 
-/* DEBUG */
+/* DEBUG */  // NOT TO BE INCLUDED IN FINAL REPO !!!!!
 
 /* debug_utils.c */
 void		display_every_token(t_token *token);
