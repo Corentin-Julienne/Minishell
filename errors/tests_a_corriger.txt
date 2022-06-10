@@ -7,4 +7,3 @@ echo -n blablabla >test.txt
 si faute de frappe: cd../../..
 	minishell: Command not found: �H�=oU
 	double free or corruption (fasttop)cd..
-

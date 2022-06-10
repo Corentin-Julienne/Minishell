@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:31 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/04 13:06:08 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/10 13:45:17 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,29 +71,21 @@ dup2 the stdin, stdout or both , then close the used pipes */
 void	redirect_to_pipe(t_shell *shell, int iter)
 {
 	close_useless_pipes(shell, iter);
-	if (iter == shell->nb_pipes) // check that
+	if (iter == shell->nb_pipes)
 	{
-		if (dup2(shell->pipes[(iter * 2) - 2], STDIN_FILENO) == -1)
-			ft_putstr_fd("redir to STDIN failed\n", 2); // handle correctly
-		if (close(shell->pipes[(iter * 2) - 2]) == -1)
-			dprintf(2, "pipe closing problem [close_useless_pipes]\n");
+		dup2(shell->pipes[(iter * 2) - 2], STDIN_FILENO);
+		close(shell->pipes[(iter * 2) - 2]);
 	}
 	else if (iter == 0)
 	{
-		if (dup2(shell->pipes[1], STDOUT_FILENO) == -1)
-			return ; // handle correctly
-		if (close(shell->pipes[1]) == -1)
-			dprintf(2, "pipe closing problem [close_useless_pipes]\n");
+		dup2(shell->pipes[1], STDOUT_FILENO);
+		close(shell->pipes[1]);
 	}
 	else
 	{
-		if (dup2(shell->pipes[(iter * 2) - 2], STDIN_FILENO) == -1)
-			ft_putstr_fd("intermediate STDIN pipe redir failed\n", 2); // handle correctly
-		if (close(shell->pipes[(iter * 2) - 2]) == -1)
-			dprintf(2, "pipe closing problem [close_useless_pipes]\n");
-		if (dup2(shell->pipes[(iter * 2) + 1], STDOUT_FILENO) == -1)
-			ft_putstr_fd("intermediate STDOUT pipe redir failed\n", 2); // handle correctly
-		if (close(shell->pipes[(iter * 2) + 1]) == -1)
-			dprintf(2, "pipe closing problem [close_useless_pipes]\n");
+		dup2(shell->pipes[(iter * 2) - 2], STDIN_FILENO);
+		close(shell->pipes[(iter * 2) - 2]);
+		dup2(shell->pipes[(iter * 2) + 1], STDOUT_FILENO);
+		close(shell->pipes[(iter * 2) + 1]);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:54:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/27 18:04:00 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 17:18:22 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	display_every_token(t_token *token)
 	i = 0;
 	while (token)
 	{
-		printf("token [%i] = [%s] | type = %d\n", i, token->item, token->type);
+		dprintf(STDERR_FILENO, "token [%i] = [%s] | type = %d\n", i, token->item, token->type);
 		token = token->next;
 		i++;
 	}
@@ -40,4 +40,9 @@ void	inspect_char_arr(char **arr)
 		dprintf(STDERR_FILENO, "[%i] = [%s]\n", i, arr[i]);
 		i++;
 	}
+}
+
+void	inspect_exit_code(t_shell *shell)
+{
+	dprintf(STDERR_FILENO, "current exit code : %d\n", shell->exit_status);
 }

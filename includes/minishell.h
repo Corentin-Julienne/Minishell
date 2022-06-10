@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/08 21:48:34 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/10 16:33:55 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,30 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define MAX_PATH		4096 //assigned the value, since PATH_MAX doesn't work on my distro
+# define MAX_PATH			4096 //assigned the value, since PATH_MAX doesn't work on my distro
 
-# define PIPE			1
-# define REDIR_INPUT	2
-# define REDIR_OUTPUT	3
-# define HERE_DOC		4
-# define RO_APPEND		5
-# define REDIR_ARG		6
-# define CMD			7
-# define ARG			8
+# define PIPE				1
+# define REDIR_INPUT		2
+# define REDIR_OUTPUT		3
+# define HERE_DOC			4
+# define RO_APPEND			5
+# define REDIR_ARG			6
+# define CMD				7
+# define ARG				8
 
-# define S_QUOTES		1
-# define D_QUOTES		2
+# define S_QUOTES			1
+# define D_QUOTES			2
 
-# define SYNT_ERR		"minishell: syntax error near unexpected token `"
-# define MALLOC_ERR		"minishell: failure to allocate memory\n"
+# define SYNT_ERR_MSG		"minishell: syntax error near unexpected token `"
+# define MALLOC_ERR_MSG		"minishell: failure to allocate memory\n"
 
-# define PARENT			0
-# define CHILD			1
+# define CMD_MISUSAGE		2
+# define CMD_ACCESS_DENIED	126
+# define CMD_NOT_FOUND		127
+# define SYNTAX_ERR			258
+
+# define PARENT				0
+# define CHILD				1
 
 typedef struct s_shell
 {
@@ -153,6 +158,7 @@ int			operate_redir(t_shell *shell, t_token *redir_tk,
 	t_token *token, int process);
 
 /* pipes_redirs_cmds.c */
+int			is_forking_required(t_token *token, t_shell *shell);
 void		pipes_redirs_cmd(t_shell *shell, t_token *token,
 	int iter, int process);
 /* pipes.c */
@@ -170,10 +176,8 @@ void		free_split(char **split);
 /* init_structs.c */
 void		reset_shell_struct(t_shell *shell);
 void		init_shell_struct(t_shell *shell, char **envp);
-/* redir_utils.c */
-int			is_forking_required(t_token *token, t_shell *shell);
-int			handle_syntax_errors(t_token *pb_token, int process,
-	t_shell *shell, t_token *token);
+/* syntax_err.c */
+int			is_syntax_err(t_token *token, t_shell *shell);
 /* token_utils_1.c */
 t_token		*token_new(char *item);
 t_token		*token_last(t_token *token);
@@ -189,5 +193,6 @@ void		token_add_back(t_token **token, t_token *new);
 /* debug_utils.c */
 void		display_every_token(t_token *token);
 void		inspect_char_arr(char **arr);
+void		inspect_exit_code(t_shell *shell);
 
 #endif

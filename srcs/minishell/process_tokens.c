@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:58:37 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/02 18:40:51 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 17:13:43 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,11 @@ static int	wait_process_and_exit_status(t_shell *shell, t_token *token, int iter
 Therefore, this function return an array of pid_t (one for every cmd)
 not to be used for one builtin cmd without pipes !!!! */
 
-static void	init_pids_arr(t_shell *shell, t_token *token, int nb_cmds)
+static void	init_pids_arr(t_shell *shell, t_token *token, int nb_seqs)
 {
 	pid_t	*pids;
 
-	pids = (pid_t *)malloc(sizeof(pid_t) * nb_cmds);
+	pids = (pid_t *)malloc(sizeof(pid_t) * nb_seqs);
 	if (!pids)
 	{
 		ft_putstr_fd("minishell : Unable to allocate memory\n", STDERR_FILENO);
@@ -90,6 +90,8 @@ void	process_tokens(t_token *token, t_shell *shell)
 	count_pipes_num(token, shell);
 	shell->nb_seq = shell->nb_pipes + 1;
 	shell->seq_used = 0;
+	if (is_syntax_err(token, shell) == 1)
+		return ;
 	if (is_forking_required(token, shell) == 0)
 		pipes_redirs_cmd(shell, token, 0, PARENT);
 	else
