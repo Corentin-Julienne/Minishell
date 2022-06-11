@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 17:48:27 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 13:14:51 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:06:44 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	handle_path_err(t_shell *shell, char **cmd_args)
 {
 	ft_putstr_fd(MALLOC_ERR_MSG, STDERR_FILENO);
 	free_split(cmd_args);
-	clean_child_process(shell);	
+	clean_child_process(shell);
 	exit(EXIT_FAILURE);
 }
 

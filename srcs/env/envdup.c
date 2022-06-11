@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 17:16:09 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 16:07:20 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:06:28 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char	**envdup(char **envp, int pass)
 {
 	char		**dup_env;
 	int			i;
-	
+
 	i = 0;
 	while (envp[i])
 		i++;

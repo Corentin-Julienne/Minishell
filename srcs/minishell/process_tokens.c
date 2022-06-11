@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 15:58:37 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 17:13:43 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:13:40 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 /* use the waitpid func to wait for every process to exit
 used to return the exit code of the process */
 
-static int	wait_process_and_exit_status(t_shell *shell, t_token *token, int iter)
+static int	wait_process_and_exit_status(t_shell *shell, t_token *token,
+	int iter)
 {
 	int		waitpid_status;
 	int		rtn_code;

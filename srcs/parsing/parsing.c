@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:49:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 17:35:31 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:14:38 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ e.g echo will works but also Echo or eChO */
 // 	}
 // }
 
-// /* as asked by the subject, we need to expand the env variables (preceeded by $)*/
+/* as asked by the subject, we need to expand the env variables
+(preceeded by $) */
 
 // int	modify_tokens(t_token *token)
 // {

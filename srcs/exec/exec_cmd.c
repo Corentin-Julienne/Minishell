@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 15:34:33 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:08:14 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	is_built_in(const char *cmd)
 	if (!ft_strncmp(cmd, "cd", 2) && ft_strlen(cmd) == 2)
 		return (1);
 	else if (!ft_strncmp(cmd, "echo", 4) && ft_strlen(cmd) == 4)
-		return (1);	
+		return (1);
 	else if (!ft_strncmp(cmd, "env", 3) && ft_strlen(cmd) == 3)
 		return (1);
 	else if (!ft_strncmp(cmd, "exit", 4) && ft_strlen(cmd) == 4)
@@ -83,15 +83,16 @@ an external cmd, process will be equal to CHILD (the "else" path)
 were changes, then put the exit code to the rtn code of the triggered builtin
 2) in the CHILD case, we execute the builtin if the cmd is a builtin,
 otherwise we execute the external cmd  
-NB : if their is no cmd (aka cmd_args[0] = NULL), then we exit if in child process,
+NB : if their is no cmd (aka cmd_args[0] = NULL),
+then we exit if in child process,
 and of course we free everything before */
 
 void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 {
 	int			exit_code;
-	
+
 	exit_code = 0;
-	if (process == PARENT) // no leaks killing needed there (parent process)
+	if (process == PARENT)
 	{
 		shell->exit_status = exec_built_in(shell, cmd_args);
 		dup2(shell->std_fdin, STDIN_FILENO);

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:59:00 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 13:15:31 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:18:09 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,5 +63,5 @@ void	init_shell_struct(t_shell *shell, char **envp)
 	shell->nb_pipes = -1;
 	shell->pipes = NULL;
 	shell->pids_arr = NULL;
-	shell->old_pwd = NULL;		//added this variable to the init function for "cd -"
+	shell->old_pwd = NULL; //added this variable to the init function for "cd -"
 }

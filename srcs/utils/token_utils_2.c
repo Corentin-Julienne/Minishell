@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:09:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/25 16:18:39 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:17:34 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	token_delone(t_token **token)
 void	token_clear(t_token **token)
 {
 	t_token			*tmp;
-	
+
 	while (*token)
 	{
 		tmp = (*token)->next;

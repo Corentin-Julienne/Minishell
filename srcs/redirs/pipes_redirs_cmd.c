@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:33 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 15:54:03 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:15:23 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static char	**rtn_cmd_arr(t_token *cmd_token)
 	i = 0;
 	while (i < cmd_len)
 	{
-		if(cmd_token->type == CMD || cmd_token->type == ARG)
+		if (cmd_token->type == CMD || cmd_token->type == ARG)
 		{
 			cmd_arr[i] = ft_strdup(cmd_token->item);
 			if (!cmd_arr[i])

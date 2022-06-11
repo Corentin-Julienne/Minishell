@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 16:02:23 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:15:40 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	handle_here_doc(t_shell *shell, char *delimiter, t_token *token)
 	char		*user_input;
 	char		*prompt;
 	// char		*formatted_del;
-	
+
 	prompt = "> ";
 	user_input = NULL;
 	while (42)

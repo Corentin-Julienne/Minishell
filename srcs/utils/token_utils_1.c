@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:09:27 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/28 17:07:06 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:17:43 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_token	*token_new(char *item)
 {
 	t_token		*new;
-	
+
 	new = (t_token *)malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);

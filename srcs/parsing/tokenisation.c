@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:04:56 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 16:30:13 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:14:56 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static size_t	manage_chevrons_length(char *user_input, size_t i)
 {
 	char	*cutted_str;
 	size_t	len;
-	
+
 	cutted_str = &user_input[i];
 	len = ft_strlen(cutted_str);
 	if (user_input[i] == '<' && len > 1)
