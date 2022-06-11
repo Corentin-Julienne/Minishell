@@ -6,12 +6,11 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:47:54 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/09 12:38:28 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/09 17:26:17 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-#include <stdbool.h>
 
 // checks if the argument is numeric. Takes into account the - or + that can
 // prefix the argument. it will return true if the argument is numeric and

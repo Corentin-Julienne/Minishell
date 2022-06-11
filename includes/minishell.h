@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/08 21:48:34 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/11 13:19:32 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <sys/wait.h>
+# include <stdbool.h>
 
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -48,6 +49,13 @@
 # define PARENT			0
 # define CHILD			1
 
+typedef struct s_env
+{
+	char			*data;
+	struct s_env	*next;
+	struct s_env	*prev;
+}				t_env;
+
 typedef struct s_shell
 {
 	int				i;
@@ -65,7 +73,7 @@ typedef struct s_shell
 	int				nb_pipes;
 	int				*pipes;
 	pid_t			*pids_arr;
-	char			*old_pwd;	//added this variable to the struct to keep a track of old pwd for "cd -"
+	t_env			*env_list;
 }					t_shell;
 
 typedef struct s_token
@@ -83,15 +91,17 @@ typedef struct s_token
 /* bt_cd.c */
 int			built_in_cd(t_shell *shell, char **cmd_args);
 char		*expand_tilde(char *home, char *arg);
-char		*find_pwd(void);
 void		assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd);
+char		*expand_double_dot(char *arg, t_env *head);
 
 /* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
 
 /* bt_env.c */
 int			built_in_env(t_shell *shell, char **cmd_args);
-void		change_env_var(t_shell **shell, char *var, char *new_var);
+void		change_env_var(t_env *head, char *name, char *value);
+void		create_env_var(t_env *head, char *name, char *value);
+char		*spot_env_var(t_env *head, char *var);
 
 /* bt_exit.c */
 void		built_in_exit(t_shell *shell, char **cmd_args);
@@ -102,6 +112,7 @@ int 		built_in_export(t_shell *shell, char **cmd_args);
 
 /* bt_pwd.c */
 int			built_in_pwd(t_shell *shell, char *cmd_args);
+char		*find_pwd_path(t_env *head, char *var);
 
 /* bt_unset.c */
 int 		built_in_unset(t_shell *shell, char **cmd_args);
@@ -112,6 +123,12 @@ int 		built_in_unset(t_shell *shell, char **cmd_args);
 char		**envdup(char **envp, int pass);
 /* paths.c */
 char		**recup_paths(t_shell *shell, char **cmd_args);
+/* create_list.c */
+t_env		*ft_arg_to_chained_list(char **env);
+t_env		*ft_create_new_node(char *line);
+void		ft_add_at_tail(t_env **head, t_env *new);
+t_env		*last_node(t_env **head);
+void		ft_delete_list_node(t_env **head, t_env *del);
 
 /* EXEC */
 
@@ -167,6 +184,8 @@ void		clean_child_process(t_shell *shell);
 void		free_case_err(t_shell *shell, t_token *token);
 void		free_problem_str_arr(char **split, int i);
 void		free_split(char **split);
+void		free_env(char **env);
+
 /* init_structs.c */
 void		reset_shell_struct(t_shell *shell);
 void		init_shell_struct(t_shell *shell, char **envp);
