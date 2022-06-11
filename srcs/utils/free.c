@@ -6,7 +6,11 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:36:30 by cjulienn          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/06/10 18:17:15 by cjulienn         ###   ########.fr       */
+=======
+/*   Updated: 2022/06/09 22:40:48 by xle-boul         ###   ########.fr       */
+>>>>>>> cb0ecb90d46ebee7ee10fd079c7656f218699d81
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +55,6 @@ void	free_case_err(t_shell *shell, t_token *token)
 		free(shell->pipes);
 	if (shell->pids_arr)
 		free(shell->pids_arr);
-	if (shell->old_pwd)
-		free(shell->old_pwd);
 	free(shell);
 	shell = NULL;
 	if (token)
@@ -111,8 +113,6 @@ void	free_case_exit(t_shell *shell)
 		free(shell->pipes);
 	if (shell->pids_arr)
 		free(shell->pids_arr);
-	if (shell->old_pwd)
-		free(shell->old_pwd);
 	free(shell);
 	shell = NULL;
 }
