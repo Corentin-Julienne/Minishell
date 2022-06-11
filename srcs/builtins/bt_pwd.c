@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 11:33:10 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/11 15:00:13 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,6 @@ int	built_in_pwd(t_shell *shell, char *cmd_args)
 		printf("bash: pwd: PWD not set\n");
 		return (1);
 	}
-	printf("PWD %s\n", find_pwd_path(shell->env_list, "PWD"));
+	printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
 	return (0);
 }

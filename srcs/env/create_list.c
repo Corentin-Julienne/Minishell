@@ -6,11 +6,60 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:48:13 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/11 13:21:21 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/11 20:11:34 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int	list_length(t_env *head)
+{
+	t_env	*tmp;
+	int		len;
+
+	tmp = head;
+	len = 0;
+	while (tmp)
+	{
+		len++;
+		tmp = tmp->next;
+	}
+	return (len);
+}
+
+void	free_list(t_env *head)
+{
+	t_env	*tmp;
+
+	if (!head)
+		return ;
+	while (head->next)
+	{
+		tmp = head->next;
+		free(head->data);
+		free(head);
+		head = tmp;
+	}
+	free(head->data);
+	free(head);
+	head = NULL;
+}
+
+t_env	*target_node(t_env **head, char *var)
+{
+	t_env	*tmp;
+
+	tmp = *head;
+	if (!tmp)
+		return (NULL);
+	while (tmp->next)
+	{
+		if (ft_strncmp((*head)->data, var, ft_strlen(var)) == 0)
+			return (tmp);
+		tmp = tmp->next;
+	}
+	return (NULL);
+}
 
 t_env	*last_node(t_env **head)
 {
@@ -28,7 +77,7 @@ t_env	*last_node(t_env **head)
 
 void	ft_delete_list_node(t_env **head, t_env *del)
 {
-	if (!head || !del)
+	if (!(*head) || !del)
 		return ;
 	if (*head == del)
 		*head = del->next;
