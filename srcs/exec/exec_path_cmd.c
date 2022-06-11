@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:02:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 17:39:24 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 13:22:37 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static char	*join_cmd_to_path(t_shell *shell, char **cmd_args, int i)
 	path = ft_strjoin(shell->paths[i], cmd_args[0]);
 	if (!path)
 	{
-		ft_putstr_fd(MALLOC_ERR, STDERR_FILENO);
+		ft_putstr_fd(MALLOC_ERR_MSG, STDERR_FILENO);
 		free_split(cmd_args);
 		clean_child_process(shell);
 		exit(EXIT_FAILURE);
@@ -57,7 +57,7 @@ static void	case_cmd_not_found(t_shell *shell, char **cmd_args)
 	display_cmd_not_found(cmd_args, shell->paths);
 	free_split(cmd_args);
 	clean_child_process(shell);
-	exit(127);
+	exit(CMD_NOT_FOUND);
 }
 
 /* try to execut a command without the paths, in case the programm
