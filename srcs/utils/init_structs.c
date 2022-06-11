@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:59:00 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 13:15:31 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 22:47:21 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	init_shell_struct(t_shell *shell, char **envp)
 	shell->item_length = 0;
 	shell->exit_status = 0;
 	shell->env = envdup(envp, -1);
+	shell->env_list = ft_arg_to_chained_list(shell->env);
 	if (!shell->env)
 	{
 		free(shell);
@@ -63,5 +64,4 @@ void	init_shell_struct(t_shell *shell, char **envp)
 	shell->nb_pipes = -1;
 	shell->pipes = NULL;
 	shell->pids_arr = NULL;
-	shell->old_pwd = NULL;		//added this variable to the init function for "cd -"
 }

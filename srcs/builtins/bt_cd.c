@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/09 12:46:14 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/11 11:56:27 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int	handle_tilde_else(t_shell *shell, char *arg, char *home)
 	}
 	else
 	{
-		change_env_var(&shell, "PWD=", final_arg);
-		printf("%s\n", shell->env[19]);
+		change_env_var(shell->env_list, "PWD", final_arg);
+		printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
 		free(final_arg);
 	}
 }
@@ -40,8 +40,8 @@ int	handle_tilde(t_shell *shell, char *arg, char *home)
 	if (ft_strlen(arg) == 1)
 	{
 		chdir(home);
-		change_env_var(&shell, "PWD=", home);
-		printf("%s\n", shell->env[19]);
+		change_env_var(shell->env_list, "PWD", home);
+		printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
 	}
 	else
 		handle_tilde_else(shell, arg, home);
@@ -53,20 +53,20 @@ int	handle_dash(t_shell *shell, char *arg, char *home)
 {
 	if (ft_strlen(arg) == 1)
 	{
-		if (shell->old_pwd == NULL)
+		if (spot_env_var(shell->env_list, "OLDPWD") == NULL)
 			printf("bash: cd: OLDPWD not set\n");
 		else
 		{
-			chdir(shell->old_pwd);
-			change_env_var(&shell, "PWD=", shell->old_pwd);
-			printf("%s\n", shell->env[19]);
+			chdir(find_pwd_path(shell->env_list, "OLDPWD"));
+			change_env_var(shell->env_list, "PWD", find_pwd_path(shell->env_list, "OLDPWD"));
+			printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
 		}
 	}
 	else if (ft_strlen(arg) == 2 && ft_strncmp(arg, "--", 2) == 0)
 	{
 		chdir(home);
-		change_env_var(&shell, "PWD=", home);
-		printf("%s\n", shell->env[19]);
+		change_env_var(shell->env_list, "PWD", home);
+		printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
 	}
 	else
 	{
@@ -80,23 +80,28 @@ int	handle_dash(t_shell *shell, char *arg, char *home)
 int	change_directory(t_shell *shell, char *arg, char *home)
 {
 	int		success_code;
-	char	*new_pwd;
+	char	*final_arg;
 
 	if (arg[0] == '-')
 		success_code = handle_dash(shell, arg, home);
 	else if (arg[0] == '~')
 		success_code = handle_tilde(shell, arg, home);
-	else
+	else if (arg[0] == '.')
 	{
 		success_code = chdir(arg);
 		if (success_code != 0)
 			printf("bash: cd: %s: No such file or directory\n", arg);
 		else
 		{
-			new_pwd = find_pwd();
-			change_env_var(&shell, "PWD=", new_pwd);
-			printf("%s\n", shell->env[19]);
-			free(new_pwd);
+			if (ft_strncmp(arg, "..", 2) == 0)
+			{
+				final_arg = expand_double_dot(arg, shell->env_list);
+				return (0);
+			}
+			change_env_var(shell->env_list, "PWD", arg);
+			printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
+			if (ft_strncmp(arg, "..", 2) == 0)
+				free(final_arg);
 		}
 	}
 	return (success_code);
@@ -113,17 +118,17 @@ int	change_directory(t_shell *shell, char *arg, char *home)
 int	built_in_cd(t_shell *shell, char **cmd_args)
 {
 	char		*home;
-	int			success_code;
 	char		*pwd;
+	int			success_code;
 
-	home = getenv("HOME");
-	pwd = find_pwd();
+	pwd = ft_strdup(find_pwd_path(shell->env_list, "PWD"));
+	home = find_pwd_path(shell->env_list, "HOME");
 	if (!cmd_args[1])
 	{
 		success_code = chdir(home);
-		change_env_var(&shell, "PWD=", home);
-		printf("%s\n", shell->env[19]);
-		assign_old_pwd(shell, home, success_code, pwd);
+		change_env_var(shell->env_list, "PWD", home);
+		printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
+		assign_old_pwd(shell, cmd_args[1], success_code, pwd);
 	}
 	else if (cmd_args[2])
 	{
