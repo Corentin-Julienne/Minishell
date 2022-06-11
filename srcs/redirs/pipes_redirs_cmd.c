@@ -6,11 +6,28 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:33 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 15:57:45 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/10 15:54:03 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+/* this function check wether the user want to exec
+only a builtin without any pipes
+this is important to know because it is the only case where
+spawning a child process is not required and can indeed make
+some buitin execution fail (such as cd) */
+
+int	is_forking_required(t_token *token, t_shell *shell)
+{
+	if (shell->nb_pipes != 0)
+		return (1);
+	while (token && token->type != CMD)
+		token = token->next;
+	if (!token || is_built_in(token->item) == 0)
+		return (1);
+	return (0);
+}
 
 /* calculate the len of the cmd_arr
 iterate througth token until the end or when a pipe is encountered
@@ -30,7 +47,7 @@ static size_t	calc_cmd_len(t_token *cmd_token)
 	return (cmd_len);
 }
 
-/* use cacl_cmd_len to calculate the size of the str array,
+/* use calc_cmd_len to calculate the size of the str array,
 then malloc it and return the array with the cmd at index 0
 and the args at the following indexes, and terminate by NULL */
 
@@ -82,27 +99,7 @@ static t_token	*goto_relevant_token(t_token *token, int iter, t_shell *shell)
 			i++;
 		gd_token = gd_token->next;
 	}
-	if (gd_token->type == PIPE)
-		handle_syntax_errors(gd_token, CHILD, shell, token);
 	return (gd_token);
-}
-
-/* check if token->type is a redirection metacharacter,
-return 0 otherwise
-if it is the case, it check if there is a next token
-OR there is a next token but not of REDIR_ARG type
-if that assumption is true (i.e syntax error), it return -1
-and 1 otherwise (redirection, with correct syntax) */
-
-static int	redir_status(t_token *redir_tk)
-{
-	if (redir_tk->type < REDIR_INPUT || redir_tk->type > RO_APPEND)
-		return (0);
-	if (!redir_tk->next || (redir_tk->next
-		&& redir_tk->next->type != REDIR_ARG))
-		return (-1);
-	else
-		return (1);
 }
 
 /* based on parsing result, this function should take care of redirections,
@@ -129,9 +126,7 @@ void	pipes_redirs_cmd(t_shell *shell, t_token *token, int iter, int process)
 	res_redir = 0;
 	while (redir_tk && redir_tk->type != PIPE)
 	{
-		if (redir_status(redir_tk) == -1)
-			res_redir = handle_syntax_errors(redir_tk, process, shell, token);
-		else if (redir_status(redir_tk) == 1)
+		if (redir_tk->type <= RO_APPEND && redir_tk->type >= REDIR_INPUT)
 			res_redir = operate_redir(shell, redir_tk, token, process);
 		if (res_redir == -1)
 			return ;

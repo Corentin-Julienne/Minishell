@@ -6,7 +6,7 @@
 #    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 16:28:56 by cjulienn          #+#    #+#              #
-#    Updated: 2022/06/01 15:40:44 by cjulienn         ###   ########.fr        #
+#    Updated: 2022/06/10 17:38:32 by cjulienn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,38 +20,46 @@
 // the goal of this file is to test different cases in bash regarding to intricating commands,
 pipes and redirections
 
-// 1) standard case : pipex-like case scenario
+// 1) standard case : pipex-like case scenario [OK]
 
 cat  < infile.txt | grep truc | wc -l > outfile.txt
 exit status : 0
 
-// 2) standard case : redirection, no pipes and single cmd
-<infile.txt cat
-cat <infile.txt
+cat<infile.txt|grep truc|wc -l>outfile.txt
 exit status : 0
 
-// 3) standard case : no redirection, single cmd
-wc -l
-freeze
+// 2) standard case : redirection, no pipes and single cmd [OK]
+<infile.txt cat
+cat <infile.txt
+cat<infile.txt
+exit status : 0
 
-// 4) standard case : no redirections, multiple pipes
+<infile.txtcat
+exit status : 1
+
+// 3) standard case : no redirection, single cmd [OK pour le freeze MAIS reste à implementer le signal]
+wc -l
+freeze (kill with signal)
+exit status : 130
+
+// 4) standard case : no redirections, multiple pipes [OK]
 echo truc | grep t | wc -l
 exit status : 0
 
-// 5) tricky case : input redirections between pipes
-echo truc | <infile.txt cat | wc -l
+// 5) tricky case : input redirections between pipes [OK]
+echo truc | <infile.txt cat | wc -l  
 exit status : 0
 
-// 6) tricky case : output redirections between pipes
+// 6) tricky case : output redirections between pipes [OK]
 cat <infile.txt | grep test >outfile.txt | wc -l
 exit status : 0
 
-// 7) tricky case : redirection between cmd and argument
+// 7) tricky case : redirection between cmd and argument [OK]
 echo >outfile.txt truc
 exit status : 0
 
-// 8 ) tricky case : nothing between two pipes
-cat <infile.txt || wc -l
+// 8 ) tricky case : nothing between two pipes [KO : exit status AND err msg non fonctionnals]
+cat <infile.txt | | wc -l
 exit status : 0
 
 // 9 ) tricky case : only redirection, no cmd, no pipes
@@ -59,17 +67,17 @@ exit status : 0
 >outfile.txt
 exit status : 0
 
-// 10 ) tricky case : only redirection, no cmd between two pipes
+// 10 ) tricky case : only redirection, no cmd between two pipes [OK]
 cat <infile.txt | >outfile.txt | wc -l
 exit status : 0 
 
-// 11 ) tricky case : redirection without target, between two pipes
+// 11 ) tricky case : redirection without target, between two pipes [KO : exit code are differents]
 cat <infile.txt | grep test > | wc -l
 exit status : 258 bash: syntax error near unexpected token `|'
 cat <infile.txt | grep test < | wc -l
 exit status : 258 bash: syntax error near unexpected token `|'
 
-// 12 ) tricky case : redirection without target, only
+// 12 ) tricky case : redirection without target, only [KO : exit code = 2, not 258]
 <
 exit status : 258 bash: syntax error near unexpected token `newline'
 >
@@ -82,7 +90,7 @@ exit status : 258 bash: syntax error near unexpected token `newline'
 // 14 ) tricky case : only a pipe, nothing else
 |
 
-// 15 ) tricky case : only multiple pipes, nothing else
+// 15 ) tricky case : only multiple pipes, nothing else [KO : multiple syntax error msgs]
 |||||||||||||||||||||||
 
 
@@ -97,4 +105,10 @@ exit status : 258 bash: syntax error near unexpected token `newline'
 7) case there is only pipes AND/OR redirs without args, we throw : 
 bash: syntax error near unexpected token `[next token, newline if it was last token]'
 exit status : 258
+
+CURRENT PROBLEMS TO ADDRESS : 
+
+1) exit (258) return exit 2 (258 % 256 ???)
+2) syntax errors are written multiple times when mutiple syntax errors (should have only 1 syntax error msg)
+3) children process are sitill running when there is a syntax error
 

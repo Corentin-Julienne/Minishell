@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:59:00 by cjulienn          #+#    #+#             */
 /*   Updated: 2022/06/10 22:47:21 by xle-boul         ###   ########.fr       */
@@ -50,7 +50,7 @@ void	init_shell_struct(t_shell *shell, char **envp)
 	{
 		free(shell);
 		shell = NULL;
-		ft_putstr_fd(MALLOC_ERR, STDERR_FILENO);
+		ft_putstr_fd(MALLOC_ERR_MSG, STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
 	shell->paths = NULL;
