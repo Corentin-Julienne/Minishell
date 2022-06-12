@@ -100,7 +100,6 @@ void		assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd);
 char		*expand_double_dot(char *arg, t_env *head);
 char		*double_dot_convert_to_lists(char **pwd, char **final_arg);
 
-
 /* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
 
@@ -218,5 +217,6 @@ void		token_add_back(t_token **token, t_token *new);
 void		display_every_token(t_token *token);
 void		inspect_char_arr(char **arr);
 void		inspect_exit_code(t_shell *shell);
+void		inspect_main_env(char **envp);
 
 #endif
