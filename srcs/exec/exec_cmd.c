@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 19:59:19 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/11 22:11:26 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,10 @@ void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 {
 	int			exit_code;
 	
-	exit_code = 0; // change this when builtin are implemented (change value to -1)
+	exit_code = 0;
 	if (process == PARENT) // no leaks killing needed there (parent process)
 	{
-		// exit_code = exec_built_in(shell, cmds_args);
-		exec_built_in(shell, cmd_args);
-		shell->exit_status = exit_code;
+		shell->exit_status = exec_built_in(shell, cmd_args);
 		dup2(shell->std_fdin, STDIN_FILENO);
 		dup2(shell->std_fdout, STDOUT_FILENO);
 		free_split(cmd_args);
@@ -105,8 +103,7 @@ void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 		handle_no_cmd(cmd_args, shell);
 		if (is_built_in(cmd_args[0]) == 1)
 		{
-			// exit_code = exec_built_in(shell, cmd_args);
-			exec_built_in(shell, cmd_args);
+			exit_code = exec_built_in(shell, cmd_args);
 			free_split(cmd_args);
 			clean_child_process(shell);
 			exit(exit_code);

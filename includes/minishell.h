@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
 /*   Updated: 2022/06/11 20:12:04 by xle-boul         ###   ########.fr       */
@@ -29,25 +29,30 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define MAX_PATH		4096 //assigned the value, since PATH_MAX doesn't work on my distro
+# define MAX_PATH			4096 //assigned the value, since PATH_MAX doesn't work on my distro
 
-# define PIPE			1
-# define REDIR_INPUT	2
-# define REDIR_OUTPUT	3
-# define HERE_DOC		4
-# define RO_APPEND		5
-# define REDIR_ARG		6
-# define CMD			7
-# define ARG			8
+# define PIPE				1
+# define REDIR_INPUT		2
+# define REDIR_OUTPUT		3
+# define HERE_DOC			4
+# define RO_APPEND			5
+# define REDIR_ARG			6
+# define CMD				7
+# define ARG				8
 
-# define S_QUOTES		1
-# define D_QUOTES		2
+# define S_QUOTES			1
+# define D_QUOTES			2
 
-# define SYNT_ERR		"minishell: syntax error near unexpected token `"
-# define MALLOC_ERR		"minishell: failure to allocate memory\n"
+# define SYNT_ERR_MSG		"minishell: syntax error near unexpected token `"
+# define MALLOC_ERR_MSG		"minishell: failure to allocate memory\n"
 
-# define PARENT			0
-# define CHILD			1
+# define CMD_MISUSAGE		2
+# define CMD_ACCESS_DENIED	126
+# define CMD_NOT_FOUND		127
+# define SYNTAX_ERR			258
+
+# define PARENT				0
+# define CHILD				1
 
 typedef struct s_env
 {
@@ -95,6 +100,7 @@ void		assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd);
 char		*expand_double_dot(char *arg, t_env *head);
 char		*double_dot_convert_to_lists(char **pwd, char **final_arg);
 
+
 /* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
 
@@ -109,14 +115,14 @@ void		built_in_exit(t_shell *shell, char **cmd_args);
 void		free_case_exit(t_shell *shell);
 
 /* bt_export.c */
-int 		built_in_export(t_shell *shell, char **cmd_args);
+int			built_in_export(t_shell *shell, char **cmd_args);
 
 /* bt_pwd.c */
 int			built_in_pwd(t_shell *shell, char *cmd_args);
 char		*find_pwd_path(t_env *head, char *var);
 
 /* bt_unset.c */
-int 		built_in_unset(t_shell *shell, char **cmd_args);
+int			built_in_unset(t_shell *shell, char **cmd_args);
 
 /* ENV */
 
@@ -139,13 +145,13 @@ int			list_length(t_env *head);
 /* exec_cmd.c*/
 int			is_built_in(const char *cmd);
 void		cmd_exec(t_shell *shell, char **cmd_args,
-	t_token *token, int process);
+				t_token *token, int process);
 /* exec_errors.c */
 void		display_cmd_not_found(char **cmd_args, char **paths);
 void		handle_access_denied(char *path_with_cmd,
-	t_shell *shell, char **cmd_args);
+				t_shell *shell, char **cmd_args);
 int			is_path_functionnal(char *path_with_cmd,
-	t_shell *shell, char **cmd_args);
+				t_shell *shell, char **cmd_args);
 /* exec_path_cmd.c */
 void		path_cmd_exec(t_shell *shell, char **cmd_args);
 
@@ -171,11 +177,12 @@ char		*isolate_item(char *user_input, t_shell *shell, t_token *token);
 
 /* fd_redirs.c */
 int			operate_redir(t_shell *shell, t_token *redir_tk,
-	t_token *token, int process);
+				t_token *token, int process);
 
 /* pipes_redirs_cmds.c */
+int			is_forking_required(t_token *token, t_shell *shell);
 void		pipes_redirs_cmd(t_shell *shell, t_token *token,
-	int iter, int process);
+				int iter, int process);
 /* pipes.c */
 void		pipes_activation(t_shell *shell, int num_pipes, t_token *token);
 void		close_all_pipes(t_shell *shell, int num_pipes);
@@ -193,10 +200,8 @@ void		free_env(char **env);
 /* init_structs.c */
 void		reset_shell_struct(t_shell *shell);
 void		init_shell_struct(t_shell *shell, char **envp);
-/* redir_utils.c */
-int			is_forking_required(t_token *token, t_shell *shell);
-int			handle_syntax_errors(t_token *pb_token, int process,
-	t_shell *shell, t_token *token);
+/* syntax_err.c */
+int			is_syntax_err(t_token *token, t_shell *shell);
 /* token_utils_1.c */
 t_token		*token_new(char *item);
 t_token		*token_last(t_token *token);
@@ -207,10 +212,11 @@ void		token_clear(t_token **token);
 void		token_add_front(t_token **token, t_token *new);
 void		token_add_back(t_token **token, t_token *new);
 
-/* DEBUG */
+/* DEBUG */  // NOT TO BE INCLUDED IN FINAL REPO !!!!!
 
 /* debug_utils.c */
 void		display_every_token(t_token *token);
 void		inspect_char_arr(char **arr);
+void		inspect_exit_code(t_shell *shell);
 
 #endif

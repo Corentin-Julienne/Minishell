@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:55:23 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/11 22:06:16 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/12 12:58:15 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,15 @@ void	print_env_export(t_env *head)
 
 int built_in_export(t_shell *shell, char **cmd_args)
 {
+	
 	if (!cmd_args[1])
 		print_env_export(shell->env_list);
+	// if (check_argument == 1)
+	// {
+		
+	// 	create_env_var(shell->env_list, )
+	// }
+	else
+		return (0);
 	return (0);
 }
