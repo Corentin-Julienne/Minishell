@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 16:35:40 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/11 20:12:04 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ int			built_in_cd(t_shell *shell, char **cmd_args);
 char		*expand_tilde(char *home, char *arg);
 void		assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd);
 char		*expand_double_dot(char *arg, t_env *head);
+char		*double_dot_convert_to_lists(char **pwd, char **final_arg);
 
 /* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
@@ -134,6 +135,9 @@ t_env		*ft_create_new_node(char *line);
 void		ft_add_at_tail(t_env **head, t_env *new);
 t_env		*last_node(t_env **head);
 void		ft_delete_list_node(t_env **head, t_env *del);
+void		free_list(t_env *head);
+t_env		*target_node(t_env **head, char *var);
+int			list_length(t_env *head);
 
 /* EXEC */
 
