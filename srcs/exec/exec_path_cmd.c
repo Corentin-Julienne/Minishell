@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:02:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 13:22:37 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/11 18:22:42 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,23 +60,6 @@ static void	case_cmd_not_found(t_shell *shell, char **cmd_args)
 	exit(CMD_NOT_FOUND);
 }
 
-/* try to execut a command without the paths, in case the programm
-path is specified by the user directly or
-is within the current working directory */
-
-static void	try_cmd_without_paths(t_shell *shell, char **cmd_args)
-{
-	char		*first_arg;
-
-	first_arg = cmd_args[0];
-	if (is_path_functionnal(first_arg, shell, cmd_args) == 0)
-	{
-		dprintf(STDERR_FILENO, "go to execve !\n"); // debug only
-		if (execve(first_arg, cmd_args, shell->env) == -1)
-			dprintf(STDERR_FILENO, "execve did not run as intended\n"); // debug only
-	}
-}
-
 /* split the arg str, then recuperating path in PATH cmd
 if no path provided, because the env variable path was suppressed,
 display a cmd not found bash-like msg and exit with code 127
@@ -90,7 +73,8 @@ void	path_cmd_exec(t_shell *shell, char **cmd_args)
 {
 	char		*path_with_cmd;
 
-	try_cmd_without_paths(shell, cmd_args);
+	if (is_path_functionnal(cmd_args[0], shell, cmd_args) == 0)
+		execve(cmd_args[0], cmd_args, shell->env); // put instead the conversion function from list
 	shell->paths = recup_paths(shell, cmd_args);
 	if (!shell->paths)
 		case_cmd_not_found(shell, cmd_args);

@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 17:48:27 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 13:14:51 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/11 16:22:07 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,17 +78,18 @@ char	**recup_paths(t_shell *shell, char **cmd_args)
 {
 	char	**paths;
 	char	*path_str;
+	t_env	*env_vars;
 
-	shell->i = 0;
 	path_str = NULL;
-	while (shell->env[shell->i])
+	env_vars = shell->env_list;
+	while (env_vars)
 	{
-		if (!ft_strncmp(shell->env[shell->i], "PATH=", 5))
+		if (!ft_strncmp(env_vars->data, "PATH=", 5))
 		{
-			path_str = shell->env[shell->i] + 5;
+			path_str = env_vars->data + 5;
 			break ;
 		}
-		shell->i++;
+		env_vars = env_vars->next;
 	}
 	if (!path_str)
 		return (NULL);

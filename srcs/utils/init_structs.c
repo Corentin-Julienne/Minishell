@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:59:00 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 22:47:21 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/11 16:28:21 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ void	init_shell_struct(t_shell *shell, char **envp)
 	shell->item_length = 0;
 	shell->exit_status = 0;
 	shell->env = envdup(envp, -1);
-	shell->env_list = ft_arg_to_chained_list(shell->env);
 	if (!shell->env)
 	{
 		free(shell);
@@ -53,6 +52,7 @@ void	init_shell_struct(t_shell *shell, char **envp)
 		ft_putstr_fd(MALLOC_ERR_MSG, STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
+	shell->env_list = ft_arg_to_chained_list(shell->env);
 	shell->paths = NULL;
 	shell->user_input = NULL;
 	shell->fd_in = -1;

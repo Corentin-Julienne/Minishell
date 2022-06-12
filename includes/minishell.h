@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 13:19:32 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/11 16:35:40 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ int			built_in_cd(t_shell *shell, char **cmd_args);
 char		*expand_tilde(char *home, char *arg);
 void		assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd);
 char		*expand_double_dot(char *arg, t_env *head);
-
 
 /* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
@@ -214,5 +213,6 @@ void		token_add_back(t_token **token, t_token *new);
 void		display_every_token(t_token *token);
 void		inspect_char_arr(char **arr);
 void		inspect_exit_code(t_shell *shell);
+void		inspect_main_env(char **envp);
 
 #endif
