@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:30:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/11 13:46:14 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/11 18:24:39 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,19 @@ char	*expand_tilde(char *home, char *arg)
 	return (final_arg);
 }
 
-void	double_dot_convert_to_lists(char **pwd, char **final_arg)
+char	*double_dot_convert_to_lists(char **pwd, char **final_arg)
 {
 	t_env	*arg;
 	t_env	*path;
 	t_env	*tmp_path;
 	t_env	*tmp_arg;
 	t_env	*new;
+	char	*final_pwd;
 
 	arg = ft_arg_to_chained_list(final_arg);
 	path = ft_arg_to_chained_list(pwd);
 	tmp_path = path;
+	tmp_arg = arg;
 	while (arg != NULL)
 	{
 		if (ft_strncmp(arg->data, "..", ft_strlen(arg->data)) == 0)
@@ -69,24 +71,29 @@ void	double_dot_convert_to_lists(char **pwd, char **final_arg)
 			arg = arg->next;
 		}
 	}
+	final_pwd = ft_strdup("/");
+	path = tmp_path;
 	while (tmp_path != NULL)
 	{
-		if (tmp_path != NULL)
-		{
-			printf("finished_work = %s\n", tmp_path->data);
-			tmp_path = tmp_path->next;
-		}
+		final_pwd = ft_strjoin_and_free(final_pwd, tmp_path->data);
+		final_pwd = ft_strjoin_and_free(final_pwd, "/");
+		tmp_path = tmp_path->next;
 	}
+	free_list(path);
+	free_list(tmp_arg);
+	return (final_pwd);
 }
 
 char	*expand_double_dot(char *arg, t_env *head)
 {
 	char	**pwd;
 	char	**final_arg;
+	char	*final_pwd;
 
 	final_arg = ft_split(arg, '/');
 	pwd = ft_split(find_pwd_path(head, "PWD"), '/');
-	double_dot_convert_to_lists(pwd, final_arg);
+	final_pwd = double_dot_convert_to_lists(pwd, final_arg);
 	free_split(pwd);
 	free_split(final_arg);
+	return (final_pwd);
 }
