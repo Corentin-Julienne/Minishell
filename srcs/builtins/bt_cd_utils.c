@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:30:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/11 18:24:39 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/12 23:08:27 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,9 @@ char	*expand_tilde(char *home, char *arg)
 	return (final_arg);
 }
 
+// this whole mess has to be normalized. It basically finds out if
+// there is a ../ or ./ in the path and converts the path to a format
+// that will fit into the variable pwd
 char	*double_dot_convert_to_lists(char **pwd, char **final_arg)
 {
 	t_env	*arg;
@@ -84,6 +87,7 @@ char	*double_dot_convert_to_lists(char **pwd, char **final_arg)
 	return (final_pwd);
 }
 
+// handles the path given in argument and treats the ../ and ./ accordingly
 char	*expand_double_dot(char *arg, t_env *head)
 {
 	char	**pwd;

@@ -6,12 +6,13 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:48:13 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/11 20:11:34 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/12 22:57:27 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+// returns the length (as in how many elements) of a linked list
 int	list_length(t_env *head)
 {
 	t_env	*tmp;
@@ -27,6 +28,8 @@ int	list_length(t_env *head)
 	return (len);
 }
 
+// frees memory allocated to a linked list. Receives a pointer to
+// the first element of that list
 void	free_list(t_env *head)
 {
 	t_env	*tmp;
@@ -45,6 +48,9 @@ void	free_list(t_env *head)
 	head = NULL;
 }
 
+// finds target element from a string passed in argument. Compares it
+// with ft_strncmp for safety and returns a pointer to the element
+// that has data that matches it
 t_env	*target_node(t_env **head, char *var)
 {
 	t_env	*tmp;
@@ -52,15 +58,16 @@ t_env	*target_node(t_env **head, char *var)
 	tmp = *head;
 	if (!tmp)
 		return (NULL);
-	while (tmp->next)
+	while (tmp != NULL)
 	{
-		if (ft_strncmp((*head)->data, var, ft_strlen(var)) == 0)
+		if (ft_strncmp(tmp->data, var, ft_strlen(var)) == 0)
 			return (tmp);
 		tmp = tmp->next;
 	}
 	return (NULL);
 }
 
+// returns a pointer to the last element of a linked list
 t_env	*last_node(t_env **head)
 {
 	t_env	*tmp;
@@ -75,6 +82,9 @@ t_env	*last_node(t_env **head)
 	return (tmp);
 }
 
+// deletes target element of the linked list and reconnects previous
+// element with next element, if they exist
+// frees the allocated memory of the content and the node itself
 void	ft_delete_list_node(t_env **head, t_env *del)
 {
 	if (!(*head) || !del)
@@ -85,11 +95,12 @@ void	ft_delete_list_node(t_env **head, t_env *del)
 		del->next->prev = del->prev;
 	if (del->prev != NULL)
 		del->prev->next = del->next;
+	free(del->data);
 	free(del);
 }
 
-// cree un element de la liste chainee avec son numero
-// correspondant
+// create a new element of a linked list. So far, this element isn't
+// pointing to or pointed from a linked list.
 t_env	*ft_create_new_node(char *line)
 {
 	t_env	*node;
@@ -105,7 +116,8 @@ t_env	*ft_create_new_node(char *line)
 	return (node);
 }
 
-// place l'element de la liste chainee au bout de la liste
+// appends the new element at the tail of the linked list pointed to by
+// head
 void	ft_add_at_tail(t_env **head, t_env *new)
 {
 	t_env	*tmp;
@@ -127,7 +139,8 @@ void	ft_add_at_tail(t_env **head, t_env *new)
 	}
 }
 
-// transforme les arguments en une liste chainee
+// copies content of the array of strings into a linked list containing
+// those strings
 t_env	*ft_arg_to_chained_list(char **env)
 {
 	int		i;
