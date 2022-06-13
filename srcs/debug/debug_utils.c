@@ -6,7 +6,7 @@
 /*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:54:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 17:18:22 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/11 16:35:23 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,16 @@ void	inspect_char_arr(char **arr)
 void	inspect_exit_code(t_shell *shell)
 {
 	dprintf(STDERR_FILENO, "current exit code : %d\n", shell->exit_status);
+}
+
+void	inspect_main_env(char **envp)
+{
+	int			i;
+	
+	i = 0;
+	while (envp && envp[i])
+	{
+		dprintf(STDERR_FILENO, "var %i : %s\n", i, envp[i]);
+		i++;
+	}
 }

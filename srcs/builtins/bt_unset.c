@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   bt_unset.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 16:20:12 by xle-boul          #+#    #+#             */
 /*   Updated: 2022/06/13 11:26:22 by xle-boul         ###   ########.fr       */
