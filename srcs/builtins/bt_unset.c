@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 16:20:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/12 23:40:02 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/13 11:26:22 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 // finds the element of the linked list env that contains (if any does)
 // the array of arguments passed. if they are found, they are destroyed
 // and freed
-int built_in_unset(t_shell *shell, char **cmd_args)
+int	built_in_unset(t_shell *shell, char **cmd_args)
 {
 	int		i;
 	t_env	*tmp;

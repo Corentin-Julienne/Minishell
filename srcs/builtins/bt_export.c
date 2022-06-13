@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:55:23 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/12 23:18:53 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/13 11:29:40 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ char	*find_minimum_string(t_env *head, int i, char *min, char **env)
 		if (i == 0 && ft_strncmp(tmp->data, min, ft_strlen(tmp->data)) < 0)
 			min = tmp->data;
 		else if (i > 0 && ft_strncmp(tmp->data, min,
-					ft_strlen(tmp->data)) < 0
-					&& ft_strncmp(env[i - 1], tmp->data,
-					ft_strlen(env[i - 1])) < 0)
+				ft_strlen(tmp->data)) < 0
+			&& ft_strncmp(env[i - 1], tmp->data,
+				ft_strlen(env[i - 1])) < 0)
 			min = tmp->data;
 		tmp = tmp->next;
 	}
@@ -91,7 +91,7 @@ void	print_env_export(t_env *head)
 // 		alphabetically sorted.
 // 	- if export gets 1 or more arguments: if the format is x=y, it will
 // 		create a variable x of value y into the env.
-int built_in_export(t_shell *shell, char **cmd_args)
+int	built_in_export(t_shell *shell, char **cmd_args)
 {
 	char	**args;
 	int		i;

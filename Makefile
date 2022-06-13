@@ -6,7 +6,7 @@
 #    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
-#    Updated: 2022/06/07 22:14:57 by xle-boul         ###   ########.fr        #
+#    Updated: 2022/06/13 11:49:55 by xle-boul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ UNDERLINE	= \e[4m
 RESET		= \033[0m
 END			= \e[0m
 
-OS = $(shell uname -s)
+OS := $(shell uname -s)
 
 NAME := minishell
 TEST_NAME := minishell_test
@@ -52,15 +52,15 @@ SOURCEDIRS := $(foreach dir, $(SUB_DIRS), $(addprefix $(SRC_DIR)/, $(dir)))
 SRC_FILES := $(foreach dir,$(SOURCEDIRS),$(wildcard $(dir)/*.c))
 OBJ_FILES := $(addprefix $(OBJ_DIR)/,$(notdir $(SRC_FILES:.c=.o)))
 
-RM = rm -rf
-MKDIR = mkdir -p
+RM := rm -rf
+MKDIR := mkdir -p
 
 LIB_DIR := libft
 LIB_OBJ_DIR := libft/obj
 LIB_OBJ_DIR_BONUS := libft/obj_bonus
 LIB := libft.a
 
-VPATH = $(SOURCEDIRS)
+VPATH := $(SOURCEDIRS)
 
 all: $(NAME)
 

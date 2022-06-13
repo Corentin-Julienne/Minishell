@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:04 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/12 23:45:07 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/13 20:51:19 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,11 @@ void	print_echo(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] != '\\')
-			write(1, &line[i], 1);
+		// if (line[i] == '\\' && line[i + 1] == '\0')
+		// 	break ;
+		// if (line[i] == '\\' && line[i + 1] != '\0')
+		// 	i++;
+		write(1, &line[i], 1);
 		i++;
 	}
 	write(1, " ", 1);
@@ -46,22 +49,15 @@ void	print_echo_end(char *line)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == '\\' && line[i + 1] != '\0' && line[i + 1] == '\\')
-		{
-			write (1, "\\", 1);
-			i++;
-		}
-		// inserer ici les cas heredoc:
-			// - si un ' ou un " est ouvert mais pas ferme
-					// fonction qui retourne le nombre de ' dans les arg
-					// fonction qui retourne le nombre de " dans les arg
-					// fonction qui regarder si la derniere lettre est \
-			// - si le dernier char est \
-		else if (line[i] != '\\')
-			write(1, &line[i], 1);
+		// if (line[i] == '\\' && line[i + 1] == '\0')
+		// 	break ;
+		// if (line[i] == '\\' && line[i + 1] != '\0')
+		// 	i++;
+		write(1, &line[i], 1);
 		i++;
 	}
 }
+
 // simple printing function that will print whatever argument follows
 // the command. as is, it is followed by a new line. the flag -n cancels
 // that new line.

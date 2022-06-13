@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 20:12:04 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:44:20 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int			built_in_cd(t_shell *shell, char **cmd_args);
 char		*expand_tilde(char *home, char *arg);
 void		assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd);
 char		*expand_double_dot(char *arg, t_env *head);
-char		*double_dot_convert_to_lists(char **pwd, char **final_arg);
+char		*double_dot_convert_to_lists(t_env *path, char **final_arg);
 
 
 /* bt_echo.c */

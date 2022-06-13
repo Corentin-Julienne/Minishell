@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:30:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/12 23:08:27 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:43:33 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 void	assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd)
 {
 	if ((arg && arg[0] == '-' && ft_strlen(arg) == 1
-		&& spot_env_var(shell->env_list, "OLDPWD") == NULL)
+			&& spot_env_var(shell->env_list, "OLDPWD") == NULL)
 		|| success_code != 0)
 		return ;
 	else if (spot_env_var(shell->env_list, "OLDPWD") == NULL)
@@ -42,22 +42,10 @@ char	*expand_tilde(char *home, char *arg)
 	return (final_arg);
 }
 
-// this whole mess has to be normalized. It basically finds out if
-// there is a ../ or ./ in the path and converts the path to a format
-// that will fit into the variable pwd
-char	*double_dot_convert_to_lists(char **pwd, char **final_arg)
+void	double_dot_loop(t_env *arg, t_env *path)
 {
-	t_env	*arg;
-	t_env	*path;
-	t_env	*tmp_path;
-	t_env	*tmp_arg;
 	t_env	*new;
-	char	*final_pwd;
 
-	arg = ft_arg_to_chained_list(final_arg);
-	path = ft_arg_to_chained_list(pwd);
-	tmp_path = path;
-	tmp_arg = arg;
 	while (arg != NULL)
 	{
 		if (ft_strncmp(arg->data, "..", ft_strlen(arg->data)) == 0)
@@ -65,7 +53,8 @@ char	*double_dot_convert_to_lists(char **pwd, char **final_arg)
 			ft_delete_list_node(&path, last_node(&path));
 			arg = arg->next;
 		}
-		else if (arg->next && ft_strncmp(arg->data, ".", ft_strlen(arg->data)) == 0)
+		else if (arg->next && ft_strncmp(arg->data, ".",
+				ft_strlen(arg->data)) == 0)
 			arg = arg->next;
 		else
 		{
@@ -74,6 +63,24 @@ char	*double_dot_convert_to_lists(char **pwd, char **final_arg)
 			arg = arg->next;
 		}
 	}
+}
+
+// this whole mess has to be normalized. It basically finds out if
+// there is a ../ or ./ in the path and converts the path to a format
+// that will fit into the variable pwd
+char	*double_dot_convert_to_lists(t_env *path, char **final_arg)
+{
+	t_env	*arg;
+	t_env	*tmp_path;
+	t_env	*tmp_arg;
+	char	*final_pwd;
+
+	arg = ft_arg_to_chained_list(final_arg);
+	if (ft_strncmp(arg->data, "~", 1) == 0)
+		ft_delete_list_node(&arg, arg);
+	tmp_path = path;
+	tmp_arg = arg;
+	double_dot_loop(arg, path);
 	final_pwd = ft_strdup("/");
 	path = tmp_path;
 	while (tmp_path != NULL)
@@ -91,12 +98,17 @@ char	*double_dot_convert_to_lists(char **pwd, char **final_arg)
 char	*expand_double_dot(char *arg, t_env *head)
 {
 	char	**pwd;
+	t_env	*path;
 	char	**final_arg;
 	char	*final_pwd;
 
 	final_arg = ft_split(arg, '/');
-	pwd = ft_split(find_pwd_path(head, "PWD"), '/');
-	final_pwd = double_dot_convert_to_lists(pwd, final_arg);
+	if (ft_strncmp(final_arg[0], "~", 1) == 0)
+		pwd = ft_split(find_pwd_path(head, "HOME"), '/');
+	else
+		pwd = ft_split(find_pwd_path(head, "PWD"), '/');
+	path = ft_arg_to_chained_list(pwd);
+	final_pwd = double_dot_convert_to_lists(path, final_arg);
 	free_split(pwd);
 	free_split(final_arg);
 	return (final_pwd);
