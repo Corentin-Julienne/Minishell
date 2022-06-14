@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/14 15:09:20 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:59:32 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int	exec_built_in(t_shell *shell, char **cmd_args)
 	else if (!ft_strncmp(cmd_args[0], "unset", 5)
 		&& ft_strlen(cmd_args[0]) == 5)
 		return (built_in_unset(shell, cmd_args));
+	return (0);
 }
 
 /* return 0 if cmd is not a builtin, 1 otherwise */

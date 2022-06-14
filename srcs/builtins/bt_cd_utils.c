@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:30:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 14:38:23 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:54:47 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd)
 // replaces the ~ by home path
 char	*expand_tilde(char *home, char *arg)
 {
-	size_t	final_len_arg;
 	char	*final_arg;
 
 	final_arg = ft_strdup(home);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   manipulate_list.c                                  :+:      :+:    :+:   */
+/*   list_manipulatations.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 14:26:38 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 14:29:57 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:58:56 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,10 @@ t_env	*target_node(t_env **head, char *var)
 		return (NULL);
 	while (tmp != NULL)
 	{
-		if (ft_strncmp(tmp->data, var, ft_strlen(var)) == 0
-			&& tmp->data[ft_strlen(var)] == '='
-			|| ft_strncmp(tmp->data, var, ft_strlen(var)) == 0
-			&& tmp->data[ft_strlen(var)] == '\0')
+		if ((ft_strncmp(tmp->data, var, ft_strlen(var)) == 0
+			&& tmp->data[ft_strlen(var)] == '=')
+			|| (ft_strncmp(tmp->data, var, ft_strlen(var)) == 0
+			&& tmp->data[ft_strlen(var)] == '\0'))
 			return (tmp);
 		tmp = tmp->next;
 	}
