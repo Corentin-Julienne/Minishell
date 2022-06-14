@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_structs.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:59:00 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 16:28:21 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/13 20:53:53 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	init_shell_struct(t_shell *shell, char **envp)
 		ft_putstr_fd(MALLOC_ERR_MSG, STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
-	shell->env_list = ft_arg_to_chained_list(shell->env);
+	shell->env_list = ft_arg_to_chained_list(envp);
 	shell->paths = NULL;
 	shell->user_input = NULL;
 	shell->fd_in = -1;

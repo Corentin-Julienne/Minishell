@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:30:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/13 14:43:33 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 14:38:23 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,14 +48,13 @@ void	double_dot_loop(t_env *arg, t_env *path)
 
 	while (arg != NULL)
 	{
-		if (ft_strncmp(arg->data, "..", ft_strlen(arg->data)) == 0)
+		if (arg->next && ft_strncmp(arg->data, ".", ft_strlen(arg->data)) == 0)
+			arg = arg->next;
+		else if (ft_strncmp(arg->data, "..", ft_strlen(arg->data)) == 0)
 		{
 			ft_delete_list_node(&path, last_node(&path));
 			arg = arg->next;
 		}
-		else if (arg->next && ft_strncmp(arg->data, ".",
-				ft_strlen(arg->data)) == 0)
-			arg = arg->next;
 		else
 		{
 			new = ft_create_new_node(arg->data);

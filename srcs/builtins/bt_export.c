@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:55:23 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/13 11:29:40 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 13:46:48 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	print_env_export(t_env *head)
 	i = 0;
 	while (i < list_length(head))
 	{
-		printf("declare -x %s\n", sorted_env[i]);
+		print_export(sorted_env[i]);
 		free(sorted_env[i]);
 		i++;
 	}
@@ -93,22 +93,17 @@ void	print_env_export(t_env *head)
 // 		create a variable x of value y into the env.
 int	built_in_export(t_shell *shell, char **cmd_args)
 {
-	char	**args;
 	int		i;
 
-	i = 0;
-	if (!cmd_args[1])
+	i = 1;
+	if (!cmd_args[i])
 		print_env_export(shell->env_list);
 	else
 	{
 		while (cmd_args[i])
 		{
-			args = ft_split(cmd_args[1], '=');
-			while (args[i] != NULL)
-			{
-				printf("%s\n", args[i]);
-				i++;
-			}
+			add_env_variable(cmd_args[i], shell->env_list);
+			i++;
 		}
 	}
 	return (0);
