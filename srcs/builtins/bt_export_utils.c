@@ -20,11 +20,9 @@ void	add_env_variable(char *arg, t_env *env)
 	tmp = env;
 	while (tmp != NULL)
 	{
-		printf("len arg %ld len env %ld\n", ft_strlen_export(tmp->data), ft_strlen_export(tmp->data));
 		if (ft_strncmp(arg, tmp->data, ft_strlen_export(arg)) == 0
 			&& ft_strlen_export(tmp->data) == ft_strlen_export(arg))
 		{
-			printf("printing %s\n", tmp->data);
 			ft_delete_list_node(&env, tmp);
 			break ;
 		}
