@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 21:39:46 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/11 11:31:49 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 14:30:38 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ void	create_env_var(t_env *head, char *name, char *value)
 	ft_add_at_tail(&head, new);
 }
 
-
 // utility to check if a variable exists within the env
 // returns the string if it does and NULL if not
 char	*spot_env_var(t_env *head, char *var)
@@ -53,7 +52,7 @@ char	*spot_env_var(t_env *head, char *var)
 // string new_var.
 void	change_env_var(t_env *head, char *name, char *value)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	tmp = head;
 	while (tmp != NULL)

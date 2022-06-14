@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/11 15:25:38 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/13 14:53:08 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ int	handle_dash(t_shell *shell, char *arg, char *home)
 		else
 		{
 			chdir(find_pwd_path(shell->env_list, "OLDPWD"));
-			change_env_var(shell->env_list, "PWD", find_pwd_path(shell->env_list, "OLDPWD"));
+			change_env_var(shell->env_list, "PWD",
+				find_pwd_path(shell->env_list, "OLDPWD"));
 			printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
 		}
 	}
@@ -80,6 +81,19 @@ int	change_directory(t_shell *shell, char *arg, char *home)
 	return (success_code);
 }
 
+// simply the rest of the if/else statements of builtin cd. Norminette issues
+void	built_in_cd_next(t_shell *shell, char **cmd_args, int code, char *pwd)
+{
+	char	*home;
+
+	home = find_pwd_path(shell->env_list, "HOME");
+	if (!(ft_strlen(cmd_args[1]) == 1
+			&& ft_strncmp(cmd_args[1], "-", 1) == 0))
+		cmd_args[1] = expand_double_dot(cmd_args[1], shell->env_list);
+	code = change_directory(shell, cmd_args[1], home);
+	assign_old_pwd(shell, cmd_args[1], code, pwd);
+}
+
 // fonction to handle the built in cd
 // a few mentions:
 	// cd without any argument will drive to home if home is in the env
@@ -96,8 +110,9 @@ int	built_in_cd(t_shell *shell, char **cmd_args)
 
 	pwd = ft_strdup(find_pwd_path(shell->env_list, "PWD"));
 	home = find_pwd_path(shell->env_list, "HOME");
-	if (!cmd_args[1] || ft_strlen(cmd_args[1]) == 2 && ft_strncmp(cmd_args[1], "--", 2) == 0
-		|| ft_strlen(cmd_args[1]) == 2 && ft_strncmp(cmd_args[1], "~", 2) == 0)
+	if (!cmd_args[1] || ft_strlen(cmd_args[1]) == 2
+		&& ft_strncmp(cmd_args[1], "--", 2) == 0
+		|| ft_strlen(cmd_args[1]) == 1 && ft_strncmp(cmd_args[1], "~", 1) == 0)
 	{
 		success_code = chdir(home);
 		change_env_var(shell->env_list, "PWD", home);
@@ -110,11 +125,6 @@ int	built_in_cd(t_shell *shell, char **cmd_args)
 		return (1);
 	}
 	else
-	{
-		if (!(ft_strlen(cmd_args[1]) == 1 && ft_strncmp(cmd_args[1], "-", 1) == 0))
-			cmd_args[1] = expand_double_dot(cmd_args[1], shell->env_list);
-		success_code = change_directory(shell, cmd_args[1], home);
-		assign_old_pwd(shell, cmd_args[1], success_code, pwd);
-	}
+		built_in_cd_next(shell, cmd_args, success_code, pwd);
 	return (0);
 }

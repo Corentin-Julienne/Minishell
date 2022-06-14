@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 15:42:59 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/12 23:19:13 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/13 11:34:09 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@
 // 		and their value to the stdin. each will be followed by a \n
 int	built_in_env(t_shell *shell, char **cmd_args)
 {
-	t_env	*tmp;
-	int		status;
-    struct stat stats;
+	t_env			*tmp;
+	int				status;
+	struct stat		stats;
 
 	if (cmd_args[1])
 	{

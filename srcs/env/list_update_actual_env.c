@@ -1,38 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   bt_unset.c                                         :+:      :+:    :+:   */
+/*   list_update_actual_env.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/11 16:20:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 14:25:20 by xle-boul         ###   ########.fr       */
+/*   Created: 2022/06/14 14:19:56 by xle-boul          #+#    #+#             */
+/*   Updated: 2022/06/14 15:08:26 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// finds the element of the linked list env that contains (if any does)
-// the array of arguments passed. if they are found, they are destroyed
-// and freed
-int	built_in_unset(t_shell *shell, char **cmd_args)
+char	**update_env(t_env *head, char **old_env)
 {
 	int		i;
 	t_env	*tmp;
-	t_env	*head;
+	char	**new_env;
 
-	i = 1;
-	head = shell->env_list;
-	if (!cmd_args[1])
-		return (0);
-	while (cmd_args[i] != NULL)
+	i = 0;
+	new_env = malloc(sizeof(char *) * (list_length(head) + 1));
+	if (!new_env || !head)
+		return (NULL); //a changer pour une sortie gracieuse
+	tmp = head;
+	while (tmp != NULL)
 	{
-		if (target_node(&head, cmd_args[i]) != NULL)
-		{
-			tmp = target_node(&head, cmd_args[i]);
-			ft_delete_list_node(&head, tmp);
-		}
+		new_env[i] = ft_strdup(tmp->data);
 		i++;
+		tmp = tmp->next;
 	}
-	return (0);
+	new_env[i] = NULL;
+	free_split(old_env);
+	return (new_env);
 }
