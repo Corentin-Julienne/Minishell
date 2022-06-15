@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:09:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/25 16:18:39 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/14 22:38:40 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ void	token_delone(t_token **token)
 void	token_clear(t_token **token)
 {
 	t_token			*tmp;
-	
+
 	while (*token)
 	{
 		tmp = (*token)->next;

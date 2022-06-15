@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bt_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:47:54 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/09 17:26:17 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:57:03 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,10 @@ void	handle_valid_arg(t_shell *shell, char *arg)
 
 	code = ft_atoi(arg);
 	if (0 <= code)
+	{
 		if (code > 255)
 			code %= 256;
+	}
 	else
 	{
 		code *= -1;

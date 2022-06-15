@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_path_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:02:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 18:22:42 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/14 23:18:10 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	path_cmd_exec(t_shell *shell, char **cmd_args)
 	char		*path_with_cmd;
 
 	if (is_path_functionnal(cmd_args[0], shell, cmd_args) == 0)
-		execve(cmd_args[0], cmd_args, shell->env); // put instead the conversion function from list
+		execve(cmd_args[0], cmd_args, update_env(shell->env_list));
 	shell->paths = recup_paths(shell, cmd_args);
 	if (!shell->paths)
 		case_cmd_not_found(shell, cmd_args);

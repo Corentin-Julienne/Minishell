@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:55:23 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 13:46:48 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:57:52 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 // actual function to compares strings to one another and find the lowest ascii
 // score
-char	*find_minimum_string(t_env *head, int i, char *min, char **env)
+void	find_minimum_string(t_env *head, int i, char *min, char **env)
 {
 	t_env	*tmp;
 
@@ -38,14 +38,11 @@ char	*find_minimum_string(t_env *head, int i, char *min, char **env)
 char	**sort_env(t_env *head, char *highest, char **env)
 {
 	int		i;
-	t_env	*tmp;
 	char	*min;
 
-	tmp = head;
 	i = 0;
 	while (i < list_length(head))
 	{
-		tmp = head;
 		min = highest;
 		find_minimum_string(head, i, min, env);
 		i++;
@@ -94,17 +91,21 @@ void	print_env_export(t_env *head)
 int	built_in_export(t_shell *shell, char **cmd_args)
 {
 	int		i;
+	int		exit_code;
 
 	i = 1;
+	exit_code = 0;
 	if (!cmd_args[i])
 		print_env_export(shell->env_list);
 	else
 	{
 		while (cmd_args[i])
 		{
-			add_env_variable(cmd_args[i], shell->env_list);
+			exit_code += add_env_variable(cmd_args[i], shell->env_list);
 			i++;
 		}
 	}
+	if (exit_code > 0)
+		return (1);
 	return (0);
 }

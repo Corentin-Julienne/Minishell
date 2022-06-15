@@ -6,13 +6,13 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 21:43:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 14:52:30 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:09:41 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	add_env_variable(char *arg, t_env *env)
+int	add_env_variable(char *arg, t_env *env)
 {
 	t_env	*new;
 	t_env	*tmp;
@@ -20,11 +20,14 @@ void	add_env_variable(char *arg, t_env *env)
 	tmp = env;
 	while (tmp != NULL)
 	{
-		printf("len arg %ld len env %ld\n", ft_strlen_export(tmp->data), ft_strlen_export(tmp->data));
+		if (ft_isalpha(arg[0]) == 0)
+		{
+			printf("bash: export: `%s': not a valid identifier\n", arg);
+			return (1);
+		}
 		if (ft_strncmp(arg, tmp->data, ft_strlen_export(arg)) == 0
 			&& ft_strlen_export(tmp->data) == ft_strlen_export(arg))
 		{
-			printf("printing %s\n", tmp->data);
 			ft_delete_list_node(&env, tmp);
 			break ;
 		}
@@ -32,6 +35,7 @@ void	add_env_variable(char *arg, t_env *env)
 	}
 	new = ft_create_new_node(arg);
 	ft_add_at_tail(&env, new);
+	return (0);
 }
 
 // prints every entry with the value between quotes ("")

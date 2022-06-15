@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/13 14:53:08 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 23:04:07 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	handle_tilde(t_shell *shell, char *arg, char *home)
 }
 
 // handles the arguments prefixed by a -
-int	handle_dash(t_shell *shell, char *arg, char *home)
+int	handle_dash(t_shell *shell, char *arg)
 {
 	if (ft_strlen(arg) == 1)
 	{
@@ -64,7 +64,7 @@ int	change_directory(t_shell *shell, char *arg, char *home)
 	int		success_code;
 
 	if (arg[0] == '-')
-		success_code = handle_dash(shell, arg, home);
+		success_code = handle_dash(shell, arg);
 	else if (arg[0] == '~')
 		success_code = handle_tilde(shell, arg, home);
 	else
@@ -108,11 +108,13 @@ int	built_in_cd(t_shell *shell, char **cmd_args)
 	char		*pwd;
 	int			success_code;
 
+	success_code = 0;
 	pwd = ft_strdup(find_pwd_path(shell->env_list, "PWD"));
 	home = find_pwd_path(shell->env_list, "HOME");
-	if (!cmd_args[1] || ft_strlen(cmd_args[1]) == 2
-		&& ft_strncmp(cmd_args[1], "--", 2) == 0
-		|| ft_strlen(cmd_args[1]) == 1 && ft_strncmp(cmd_args[1], "~", 1) == 0)
+	if (!cmd_args[1] || (ft_strlen(cmd_args[1]) == 2
+			&& ft_strncmp(cmd_args[1], "--", 2) == 0)
+		|| (ft_strlen(cmd_args[1]) == 1
+			&& ft_strncmp(cmd_args[1], "~", 1) == 0))
 	{
 		success_code = chdir(home);
 		change_env_var(shell->env_list, "PWD", home);
