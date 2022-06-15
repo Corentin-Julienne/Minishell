@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/14 15:06:56 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 23:09:34 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ int			built_in_export(t_shell *shell, char **cmd_args);
 
 		/* bt_export_utils.c */
 void		print_export(char *env_export);
-void		add_env_variable(char *arg, t_env *env);
+int			add_env_variable(char *arg, t_env *env);
 
 		/* bt_pwd.c */
 int			built_in_pwd(t_shell *shell, char *cmd_args);
@@ -149,7 +149,7 @@ t_env		*target_node(t_env **head, char *var);
 t_env		*last_node(t_env **head);
 
 		/* list_update_actual_env.c */
-char		**update_env(t_env *head, char **old_env);
+char		**update_env(t_env *head);
 
 						/* EXEC */
 

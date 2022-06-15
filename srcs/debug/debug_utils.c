@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:54:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 16:35:23 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/14 22:42:38 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ void	display_every_token(t_token *token)
 	i = 0;
 	while (token)
 	{
-		dprintf(STDERR_FILENO, "token [%i] = [%s] | type = %d\n", i, token->item, token->type);
+		dprintf(STDERR_FILENO, "token [%i] = [%s] | type = %d\n",
+			i, token->item, token->type);
 		token = token->next;
 		i++;
 	}
@@ -50,7 +51,7 @@ void	inspect_exit_code(t_shell *shell)
 void	inspect_main_env(char **envp)
 {
 	int			i;
-	
+
 	i = 0;
 	while (envp && envp[i])
 	{

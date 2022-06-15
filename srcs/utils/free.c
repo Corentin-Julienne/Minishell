@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:36:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/09 22:40:48 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/14 22:39:35 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	free_split(char **split)
 	size_t		i;
 
 	i = 0;
-	while(split[i])
+	while (split[i])
 	{
 		free(split[i]);
 		split[i] = NULL;

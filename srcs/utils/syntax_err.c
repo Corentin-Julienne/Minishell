@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax_err.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 16:23:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 17:10:25 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/14 23:07:30 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	is_redir_err(t_token *check_err)
 	if (check_err->type < REDIR_INPUT || check_err->type > RO_APPEND)
 		return (0);
 	if (!check_err->next || (check_err->next
-		&& check_err->next->type != REDIR_ARG))
+			&& check_err->next->type != REDIR_ARG))
 		return (1);
 	else
 		return (0);
@@ -54,7 +54,7 @@ static int	is_pipe_err(t_token *check_err)
 	if (check_err->type != PIPE)
 		return (0);
 	if (!check_err->next || (check_err->next && check_err->next->type == PIPE)
-	|| !check_err->prev)
+		|| !check_err->prev)
 		return (1);
 	else
 		return (0);
@@ -74,7 +74,7 @@ int	is_syntax_err(t_token *token, t_shell *shell)
 		if (is_redir_err(check_err) == 1 || is_pipe_err(check_err) == 1)
 		{
 			handle_syntax_errors(check_err, shell);
-			return (1);	
+			return (1);
 		}
 		check_err = check_err->next;
 	}
