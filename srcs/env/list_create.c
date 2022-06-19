@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   create_list.c                                      :+:      :+:    :+:   */
+/*   list_create.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:48:13 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 14:30:59 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/16 13:13:45 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,11 @@ t_env	*ft_create_new_node(char *line)
 {
 	t_env	*node;
 
-	if (!line)
-		return (NULL);
 	node = malloc(sizeof(t_env));
 	if (!node)
 		return (NULL);
-	node->data = ft_strdup(line);
+	if (line != NULL)
+		node->data = ft_strdup(line);
 	node->next = NULL;
 	node->prev = NULL;
 	return (node);

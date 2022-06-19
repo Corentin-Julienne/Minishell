@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 19:55:23 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 21:57:52 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/15 14:46:34 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,15 +63,12 @@ char	**sort_env(t_env *head, char *highest, char **env)
 void	print_env_export(t_env *head)
 {
 	char	**sorted_env;
-	char	*highest;
 	int		i;
 
-	highest = ft_strdup("~~~~~~~~~~~~~~~~~~~~~~~~");
 	sorted_env = malloc(sizeof(char *) * (list_length(head)));
 	if (!sorted_env)
 		return ;
-	sorted_env = sort_env(head, highest, sorted_env);
-	free(highest);
+	sorted_env = sort_env(head, "~", sorted_env);
 	i = 0;
 	while (i < list_length(head))
 	{
