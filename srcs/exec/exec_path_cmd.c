@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:02:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/14 23:18:10 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/15 13:47:01 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,11 @@ and exit with code 127 (AKA cmd not found) */
 void	path_cmd_exec(t_shell *shell, char **cmd_args)
 {
 	char		*path_with_cmd;
+	char		**updated_env;
 
+	updated_env = update_env(shell->env_list);
 	if (is_path_functionnal(cmd_args[0], shell, cmd_args) == 0)
-		execve(cmd_args[0], cmd_args, update_env(shell->env_list));
+		execve(cmd_args[0], cmd_args, updated_env);
 	shell->paths = recup_paths(shell, cmd_args);
 	if (!shell->paths)
 		case_cmd_not_found(shell, cmd_args);
@@ -83,10 +85,11 @@ void	path_cmd_exec(t_shell *shell, char **cmd_args)
 	{
 		path_with_cmd = join_cmd_to_path(shell, cmd_args, shell->i);
 		if (is_path_functionnal(path_with_cmd, shell, cmd_args) == 0)
-			execve(path_with_cmd, cmd_args, shell->env);
+			execve(path_with_cmd, cmd_args, updated_env);
 		free(path_with_cmd);
 		path_with_cmd = NULL;
 		shell->i++;
 	}
+	free_split(updated_env);
 	case_cmd_not_found(shell, cmd_args);
 }

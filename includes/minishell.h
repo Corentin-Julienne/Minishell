@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/14 23:09:34 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/19 20:58:53 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,13 @@ typedef struct s_env
 	struct s_env	*next;
 	struct s_env	*prev;
 }				t_env;
+
+typedef struct s_exp
+{
+	int		token_num;
+	int		i;
+	bool	is_closed;
+}				t_exp;
 
 typedef struct s_shell
 {
@@ -176,7 +183,20 @@ void		process_tokens(t_token *token, t_shell *shell);
 						/* PARSING */
 
 		/* expansions.c */
-void		expand_env_var(t_token *token);
+void		expand_token(t_token *token, t_shell *shell);
+
+		/* expand_dollar.c */
+void		detect_quotes(t_token *token, t_shell *shell);
+
+		/* expand_dollar_utils.c */
+bool		is_closed(char c, char *item, int i);
+char		*isolate_variable(char *item, int i);
+bool		is_in_env(t_shell *shell, char *var);
+char		*convert_env_format(char *env, char *var);
+char		*replace_exit_code(char *item, int i, char *exit_code);
+
+		/* delete_quotes.c */
+void		detect_quotes_for_deletion(t_token *token);
 
 		/* parsing.c */
 t_token		*parse_user_input(t_shell *shell);
@@ -231,6 +251,9 @@ void		token_delone(t_token **token);
 void		token_clear(t_token **token);
 void		token_add_front(t_token **token, t_token *new);
 void		token_add_back(t_token **token, t_token *new);
+
+		/* ft_rm_substr.c */
+int			ft_rm_substr(const char *str, const char *substr, char **new_str);
 
 /* DEBUG */ // NOT TO BE INCLUDED IN FINAL REPO !!!!!
 

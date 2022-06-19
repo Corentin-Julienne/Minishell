@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:49:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/14 22:38:12 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/17 20:24:30 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,6 @@ t_token	*parse_user_input(t_shell *shell)
 		token_add_back(&token, new_elem);
 	}
 	find_token_type(token);
-	// modify_tokens(tokens); WILL DO THIS AFTER
+	expand_token(token, shell);
 	return (token);
 }
