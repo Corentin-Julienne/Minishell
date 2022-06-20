@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 12:54:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/19 21:42:59 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/20 21:34:56 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	detect_single_quotes(t_token *token, int *i)
 		free(token->item);
 		token->item = ft_strdup(new_item);
 		free(new_item);
-		*i = close - 1;
+		*i = close - 2;
 	}
 }
 
@@ -64,7 +64,7 @@ void	detect_double_quotes(t_token *token, int *i)
 		free(token->item);
 		token->item = ft_strdup(new_item);
 		free(new_item);
-		*i = close - 1;
+		*i = close - 2;
 	}
 }
 
