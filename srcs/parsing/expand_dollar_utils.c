@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/18 23:23:04 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/19 20:38:21 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/20 21:40:41 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ bool	is_in_env(t_shell *shell, char *var)
 	tmp = shell->env_list;
 	while (tmp != NULL)
 	{
-		if (ft_strncmp(var, tmp->data, ft_strlen(var)) == 0)
+		if (ft_strncmp(var, tmp->data, ft_strlen(var)) == 0
+			&& tmp->data[ft_strlen(var)] == '=')
 			return (true);
 		tmp = tmp->next;
 	}
