@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/19 20:58:53 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/22 11:32:57 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../libft/libft.h"
+# include "get_next_line_bonus.h"
 
 # include <stdio.h>
 # include <stdlib.h>
@@ -102,11 +103,16 @@ typedef struct s_token
 
 		/* bt_cd.c */
 int			built_in_cd(t_shell *shell, char **cmd_args);
-char		*expand_tilde(char *home, char *arg);
+
+		/* bt_cd_utils.c */
 void		assign_old_pwd(t_shell *shell, char *arg,
 				int success_code, char *pwd);
+char		*expand_tilde(char *home, char *arg);
 char		*expand_double_dot(char *arg, t_env *head);
 char		*double_dot_convert_to_lists(t_env *path, char **final_arg);
+
+		/* bt_cd_exec.c */
+int			change_directory(t_shell *shell, char *arg, char *home);
 
 		/* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
@@ -248,7 +254,7 @@ int			token_size(t_token *token);
 
 		/* token_utils_2.c */
 void		token_delone(t_token **token);
-void		token_clear(t_token **token);
+void		token_clear(t_token *token);
 void		token_add_front(t_token **token, t_token *new);
 void		token_add_back(t_token **token, t_token *new);
 

@@ -6,11 +6,39 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/14 23:07:55 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/22 11:45:42 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+// reads the temporary file create .heredoc_tmp and prints its content to the
+// stdout. uses get_next_line to do so
+void	print_heredoc(char *delimiter)
+{
+	char	*line;
+	int		fd;
+
+	fd = open(".heredoc_tmp", O_RDONLY);
+	line = get_next_line(fd);
+	if (!line)
+		return ;
+	printf("%s", line);
+	free(line);
+	while (line)
+	{
+		line = get_next_line(fd);
+		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
+			&& line[ft_strlen(delimiter)] == '\n')
+		{
+			free(line);
+			break ;
+		}
+		printf("%s", line);
+		free(line);
+	}
+	close(fd);
+}
 
 /*The format of here-documents is:
 
@@ -26,27 +54,29 @@
 	mand  substitution,  and arithmetic expansion.  In the latter case, the
 	character sequence \<newline> is ignored, and \ must be used  to  quote
 	the characters \, $, and `. */
-
 static void	handle_here_doc(t_shell *shell, char *delimiter, t_token *token)
 {
 	char		*user_input;
 	char		*prompt;
-	// char		*formatted_del;
 
-	prompt = "> ";
+	prompt = "heredoc> ";
+	if (token->next != NULL && ft_strncmp(token->next->item, "|", 1) == 0)
+		prompt = "pipe heredoc> ";
 	user_input = NULL;
 	while (42)
 	{
 		user_input = readline(prompt);
 		if (!user_input)
 			free_case_err(shell, token);
-		if (!ft_strncmp(user_input, delimiter, ft_strlen(delimiter)))
+		if (!ft_strncmp(user_input, delimiter, ft_strlen(delimiter))
+			&& user_input[ft_strlen(delimiter)] == '\0')
 			break ;
 		ft_putstr_fd(user_input, shell->fd_in);
 		ft_putstr_fd("\n", shell->fd_in);
 		free(user_input);
 		user_input = NULL;
 	}
+	print_heredoc(delimiter);
 }
 
 /* this function check using access wether the path of
@@ -85,7 +115,7 @@ static void	handle_no_existing_file(t_shell *shell, t_token *token, int process)
 		shell->exit_status = EXIT_FAILURE;
 	else
 	{
-		token_clear(&token);
+		token_clear(token);
 		clean_child_process(shell);
 		exit(EXIT_FAILURE);
 	}

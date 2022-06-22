@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/17 13:57:33 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/22 20:35:16 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static void	miniloop(t_shell *shell)
 	free(shell->user_input);
 	shell->user_input = NULL;
 	process_tokens(token, shell);
-	token_clear(&token);
+	token_clear(token);
 	// inspect_exit_code(shell); // debug func
 	reset_shell_struct(shell);
 }
@@ -83,17 +83,14 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
-	printf("%d\n", sig);
-	if (sig == SIGINT)
+	if (sig == SIGINT || sig == SIGQUIT)
 	{
-		printf("Signal SIGINT (CTRL-C) received\n");
-		exit(EXIT_SUCCESS);
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
 	}
-	if (sig == SIGQUIT)
-	{
-		printf("Signal SIGQUIT (CTRL-\\) received\n");
-		exit(EXIT_SUCCESS);
-	}
+	return ;
 }
 
 /* the main fonction just init the shell struct and launch minishell func */

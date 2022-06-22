@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/03 17:06:35 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/05 00:18:48 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/22 11:55:23 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ char	*ft_strjoin_and_free(char const *s1, char const *s2)
 		j++;
 	}
 	free((void *)s1);
-	s1 = NULL;
 	str[i + j] = '\0';
 	return (str);
 }
