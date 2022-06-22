@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/22 11:45:42 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/22 22:18:35 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,18 @@ void	print_heredoc(char *delimiter)
 	line = get_next_line(fd);
 	if (!line)
 		return ;
-	printf("%s", line);
-	free(line);
-	while (line)
+	while (line != NULL)
 	{
-		line = get_next_line(fd);
-		if (!ft_strncmp(line, delimiter, ft_strlen(delimiter))
-			&& line[ft_strlen(delimiter)] == '\n')
-		{
-			free(line);
-			break ;
-		}
 		printf("%s", line);
 		free(line);
+		line = get_next_line(fd);
 	}
+	if (delimiter != NULL)
+	{
+		if (ft_strncmp(line, delimiter, ft_strlen(delimiter)) != 0)
+			printf("%s\n", line);
+	}
+	free(line);
 	close(fd);
 }
 
@@ -67,7 +65,11 @@ static void	handle_here_doc(t_shell *shell, char *delimiter, t_token *token)
 	{
 		user_input = readline(prompt);
 		if (!user_input)
-			free_case_err(shell, token);
+		{
+			printf("\n");
+			print_heredoc(NULL);
+			break ;
+		}
 		if (!ft_strncmp(user_input, delimiter, ft_strlen(delimiter))
 			&& user_input[ft_strlen(delimiter)] == '\0')
 			break ;

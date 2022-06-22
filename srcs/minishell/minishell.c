@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/22 20:35:16 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/22 21:45:26 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,14 +83,13 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 {
 	(void)info;
 	(void)context;
-	if (sig == SIGINT || sig == SIGQUIT)
+	if (sig == SIGINT)
 	{
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
 		rl_on_new_line();
 		rl_redisplay();
 	}
-	return ;
 }
 
 /* the main fonction just init the shell struct and launch minishell func */
@@ -98,14 +97,17 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell				*shell;
-	struct sigaction	action;
+	struct sigaction	sig_int;
+	struct sigaction	sig_quit;
 
 	(void)argc;
 	(void)argv;
 	// inspect_main_env(envp); // debug func
-	action.sa_sigaction = signal_handler;
-	if (sigaction(SIGINT, &action, NULL) == -1
-		|| sigaction(SIGQUIT, &action, NULL))
+	sig_int.sa_sigaction = signal_handler;
+	sig_int.sa_flags = SA_RESTART;
+	sig_quit.sa_handler = SIG_IGN;
+	if (sigaction(SIGINT, &sig_int, NULL) == -1
+		|| sigaction(SIGQUIT, &sig_quit, NULL) == -1)
 	{
 		printf("failed sigaction\n");
 		exit(EXIT_FAILURE);
