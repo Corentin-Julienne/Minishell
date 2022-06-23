@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/22 11:32:57 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 11:01:06 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,6 +220,9 @@ char		*isolate_item(char *user_input, t_shell *shell, t_token *token);
 		/* fd_redirs.c */
 int			operate_redir(t_shell *shell, t_token *redir_tk,
 				t_token *token, int process);
+
+		/* heredoc.c */
+void		handle_here_doc(t_shell *shell, char *delimiter, t_token *token);
 
 		/* pipes_redirs_cmds.c */
 int			is_forking_required(t_token *token, t_shell *shell);

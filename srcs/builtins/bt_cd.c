@@ -6,12 +6,11 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/21 20:45:29 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 11:00:48 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
 
 // first part of the if/else statements of builtin cd. Norminette issues
 int	built_in_cd_home(t_shell *shell, char **cmd_args, char *pwd, int code)
