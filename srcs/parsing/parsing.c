@@ -22,8 +22,8 @@ static void	lowercase_cmds(t_token *token)
 	i = 0;
  	while (token && token->item && token->item[i])
  	{
- 		if (token->item[i] >= 97 && token->item[i] <= 122)
-			token->item[i] = token->item[i] - 32;
+ 		if (token->item[i] >= 65 && token->item[i] <= 90)
+			token->item[i] = token->item[i] + 32;
  		i++;
  	}
 }
