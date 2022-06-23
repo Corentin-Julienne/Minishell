@@ -6,48 +6,11 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/14 23:07:55 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 10:32:09 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-/*The format of here-documents is:
-
-	<<[-]word
-			here-document
-	delimiter
-
-	No parameter expansion, command substitution, arithmetic expansion,  or
-	pathname expansion is performed on word.  If any characters in word are
-	quoted, the delimiter is the result of quote removal on word,  and  the
-	lines  in the here-document are not expanded.  If word is unquoted, all
-	lines of the here-document are subjected to parameter  expansion,  com-
-	mand  substitution,  and arithmetic expansion.  In the latter case, the
-	character sequence \<newline> is ignored, and \ must be used  to  quote
-	the characters \, $, and `. */
-
-static void	handle_here_doc(t_shell *shell, char *delimiter, t_token *token)
-{
-	char		*user_input;
-	char		*prompt;
-	// char		*formatted_del;
-
-	prompt = "> ";
-	user_input = NULL;
-	while (42)
-	{
-		user_input = readline(prompt);
-		if (!user_input)
-			free_case_err(shell, token);
-		if (!ft_strncmp(user_input, delimiter, ft_strlen(delimiter)))
-			break ;
-		ft_putstr_fd(user_input, shell->fd_in);
-		ft_putstr_fd("\n", shell->fd_in);
-		free(user_input);
-		user_input = NULL;
-	}
-}
 
 /* this function check using access wether the path of
 the target fd is valid or not,
@@ -85,7 +48,7 @@ static void	handle_no_existing_file(t_shell *shell, t_token *token, int process)
 		shell->exit_status = EXIT_FAILURE;
 	else
 	{
-		token_clear(&token);
+		token_clear(token);
 		clean_child_process(shell);
 		exit(EXIT_FAILURE);
 	}

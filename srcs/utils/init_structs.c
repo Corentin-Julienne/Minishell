@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:59:00 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/13 20:53:53 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/21 20:26:06 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	reset_shell_struct(t_shell *shell)
 		free(shell->pipes);
 		shell->pipes = NULL;
 	}
+	if (access(".heredoc_tmp", F_OK) == 0)
+		unlink(".heredoc_tmp");
 }
 
 /* fulfill shell struct, exit on failure

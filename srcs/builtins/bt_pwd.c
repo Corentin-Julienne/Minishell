@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/14 21:58:17 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/21 16:06:42 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ char	*find_pwd_path(t_env *head, char *var)
 	char	*tmp;
 
 	tmp = spot_env_var(head, var);
+	if (tmp == NULL)
+		return (NULL);
 	while (tmp && *tmp != '=')
 		tmp++;
 	if (*tmp == '\0')

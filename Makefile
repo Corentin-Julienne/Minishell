@@ -6,7 +6,7 @@
 #    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
-#    Updated: 2022/06/14 23:16:33 by xle-boul         ###   ########.fr        #
+#    Updated: 2022/06/21 21:31:56 by xle-boul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,26 +27,26 @@ NAME := minishell
 TEST_NAME := minishell_test
 
 CC := gcc
-CFLAGS := -Werror -Wall -Wextra
+CFLAGS := -Werror -Wall -Wextra -g
 
 # little if / else statement to assign the proper flags for compilation
 # depending on the OS
 
-#ifeq ($(OS),Linux)
+# ifeq ($(OS),Linux)
 	READLINE := -lreadline
-#else
-#	RDL_PATH := -L/usr/local/opt/readline/lib/
-#	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
-#	RDL := -lreadline.8.1 $(RDL_PATH)
-#	RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
-#	READLINE := $(RDL) $(RDL_HISTORY)
-#endif
+# else
+# 	RDL_PATH := -L/usr/local/opt/readline/lib/
+# 	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
+# 	RDL := -lreadline.8.1 $(RDL_PATH)
+# 	RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
+# 	READLINE := $(RDL) $(RDL_HISTORY)
+# endif
 
 INCLUDES := -I includes
 
 SRC_DIR := srcs
 OBJ_DIR := objs
-SUB_DIRS := builtins debug env exec minishell parsing redirs utils
+SUB_DIRS := builtins debug env exec minishell parsing redirs utils gnl
 SOURCEDIRS := $(foreach dir, $(SUB_DIRS), $(addprefix $(SRC_DIR)/, $(dir)))
 
 SRC_FILES := $(foreach dir,$(SOURCEDIRS),$(wildcard $(dir)/*.c))

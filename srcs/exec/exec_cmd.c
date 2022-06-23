@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/14 23:10:40 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/22 11:32:24 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 	}
 	else
 	{
-		token_clear(&token);
+		token_clear(token);
 		handle_no_cmd(cmd_args, shell);
 		if (is_built_in(cmd_args[0]) == 1)
 		{

@@ -6,83 +6,32 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 23:04:07 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 11:00:48 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// handles the arguments prefixed by a ~
-int	handle_tilde(t_shell *shell, char *arg, char *home)
+// first part of the if/else statements of builtin cd. Norminette issues
+int	built_in_cd_home(t_shell *shell, char **cmd_args, char *pwd, int code)
 {
-	char	*final_arg;
-	int		success_code;
+	char	*home;
 
-	final_arg = expand_tilde(home, arg);
-	success_code = chdir(final_arg);
-	if (success_code != 0)
+	home = find_pwd_path(shell->env_list, "HOME");
+	if (home == NULL)
 	{
-		printf("bash: cd: %s: No such file or directory\n", final_arg);
-		free(final_arg);
-		return (1);
+		free(pwd);
+		return (0);
 	}
-	else
-	{
-		change_env_var(shell->env_list, "PWD", final_arg);
-		printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		free(final_arg);
-	}
+	code = chdir(home);
+	change_env_var(shell->env_list, "PWD", home);
+	printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
+	assign_old_pwd(shell, cmd_args[1], code, pwd);
 	return (0);
-}
-
-// handles the arguments prefixed by a -
-int	handle_dash(t_shell *shell, char *arg)
-{
-	if (ft_strlen(arg) == 1)
-	{
-		if (spot_env_var(shell->env_list, "OLDPWD") == NULL)
-			printf("bash: cd: OLDPWD not set\n");
-		else
-		{
-			chdir(find_pwd_path(shell->env_list, "OLDPWD"));
-			change_env_var(shell->env_list, "PWD",
-				find_pwd_path(shell->env_list, "OLDPWD"));
-			printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		}
-	}
-	else
-	{
-		printf("bash: cd: %c%c: invalid option\n", arg[0], arg[1]);
-		return (1);
-	}
-	return (0);
-}
-
-// executes the change of directory according to the constraints
-int	change_directory(t_shell *shell, char *arg, char *home)
-{
-	int		success_code;
-
-	if (arg[0] == '-')
-		success_code = handle_dash(shell, arg);
-	else if (arg[0] == '~')
-		success_code = handle_tilde(shell, arg, home);
-	else
-	{
-		success_code = chdir(arg);
-		if (success_code != 0)
-			printf("bash: cd: %s: No such file or directory\n", arg);
-		else
-		{
-			change_env_var(shell->env_list, "PWD", arg);
-			printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		}
-	}
-	return (success_code);
 }
 
 // simply the rest of the if/else statements of builtin cd. Norminette issues
-void	built_in_cd_next(t_shell *shell, char **cmd_args, int code, char *pwd)
+int	built_in_cd_else(t_shell *shell, char **cmd_args, int code, char *pwd)
 {
 	char	*home;
 
@@ -92,6 +41,7 @@ void	built_in_cd_next(t_shell *shell, char **cmd_args, int code, char *pwd)
 		cmd_args[1] = expand_double_dot(cmd_args[1], shell->env_list);
 	code = change_directory(shell, cmd_args[1], home);
 	assign_old_pwd(shell, cmd_args[1], code, pwd);
+	return (0);
 }
 
 // fonction to handle the built in cd
@@ -104,29 +54,24 @@ void	built_in_cd_next(t_shell *shell, char **cmd_args, int code, char *pwd)
 	// 	a valid path
 int	built_in_cd(t_shell *shell, char **cmd_args)
 {
-	char		*home;
 	char		*pwd;
 	int			success_code;
+	int			exit_code;
 
 	success_code = 0;
+	exit_code = 0;
 	pwd = ft_strdup(find_pwd_path(shell->env_list, "PWD"));
-	home = find_pwd_path(shell->env_list, "HOME");
 	if (!cmd_args[1] || (ft_strlen(cmd_args[1]) == 2
 			&& ft_strncmp(cmd_args[1], "--", 2) == 0)
 		|| (ft_strlen(cmd_args[1]) == 1
 			&& ft_strncmp(cmd_args[1], "~", 1) == 0))
-	{
-		success_code = chdir(home);
-		change_env_var(shell->env_list, "PWD", home);
-		printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		assign_old_pwd(shell, cmd_args[1], success_code, pwd);
-	}
+		exit_code = built_in_cd_home(shell, cmd_args, pwd, success_code);
 	else if (cmd_args[2])
 	{
 		printf("bash: cd: too many arguments\n");
-		return (1);
+		exit_code = 1;
 	}
 	else
-		built_in_cd_next(shell, cmd_args, success_code, pwd);
-	return (0);
+		exit_code = built_in_cd_else(shell, cmd_args, success_code, pwd);
+	return (exit_code);
 }
