@@ -6,12 +6,14 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 12:52:07 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/19 20:38:13 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/22 13:40:25 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+// creates a new string with the variable replaced and the relinks it to the
+// token->item
 char	*replace_variable(char *item, t_shell *shell, int i, char *var)
 {
 	char	*new_item;
@@ -32,9 +34,11 @@ char	*replace_variable(char *item, t_shell *shell, int i, char *var)
 	item += ft_strlen(var) + 1;
 	if (*item != '\0')
 		new_item = ft_strjoin_and_free(new_item, item);
+	free(env);
 	return (new_item);
 }
 
+// goes into details with the decision to expand or not a variable
 char	*dollar_hub(char *item, t_shell *shell, int i)
 {
 	char	*new_item;
@@ -52,7 +56,7 @@ char	*dollar_hub(char *item, t_shell *shell, int i)
 		ft_rm_substr(item, var, &new_item);
 	else if (ft_isalpha(item[i]) == 1 && is_in_env(shell, var) == true)
 		new_item = replace_variable(item, shell, i - 1, var);
-	free (var);
+	free(var);
 	return (new_item);
 }
 
@@ -66,6 +70,7 @@ void	handle_single_quote(t_token *token, int *i)
 	}
 }
 
+// handles if a $ variable should be expanded or not
 void	handle_dollar(t_token *token, t_shell *shell, int *i, int *_double)
 {
 	char	*tmp;
@@ -78,6 +83,10 @@ void	handle_dollar(t_token *token, t_shell *shell, int *i, int *_double)
 	*_double = 0;
 }
 
+// parses the input and detects whether the current char is
+// - $
+// - "
+// - '
 void	detect_quotes(t_token *token, t_shell *shell)
 {
 	int			_double;

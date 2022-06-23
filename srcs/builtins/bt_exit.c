@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:47:54 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 21:57:03 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/21 21:55:54 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ bool	is_arg_valid(char *arg)
 	int	i;
 
 	i = 0;
-	if (arg[i] != '-' && arg[i] != '+' && '0' > arg[i] && arg[i] > '9')
+	if (arg[i] == '\0'
+		|| (arg[i] != '-' && arg[i] != '+' && '0' > arg[i] && arg[i] > '9'))
 		return (false);
 	if (arg[i] == '-' || arg[i] == '+')
 		i++;
@@ -87,7 +88,7 @@ void	handle_invalid_arg(t_shell *shell, char *arg)
 // 255*	Exit status out of range
 void	built_in_exit(t_shell *shell, char **cmd_args)
 {
-	if (!cmd_args[1])
+	if (cmd_args[1] == NULL)
 	{
 		free_case_exit(shell);
 		exit(shell->exit_status);
@@ -98,8 +99,8 @@ void	built_in_exit(t_shell *shell, char **cmd_args)
 		free_case_exit(shell);
 		exit(2);
 	}
-	else if (cmd_args[1] && is_arg_valid(cmd_args[1]) == true)
+	else if (cmd_args[1] != NULL && is_arg_valid(cmd_args[1]) == true)
 		handle_valid_arg(shell, cmd_args[1]);
-	else if (cmd_args[1] && is_arg_valid(cmd_args[1]) == false)
+	else if (cmd_args[1] != NULL && is_arg_valid(cmd_args[1]) == false)
 		handle_invalid_arg(shell, cmd_args[1]);
 }
