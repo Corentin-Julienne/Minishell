@@ -32,15 +32,28 @@ CFLAGS := -Werror -Wall -Wextra -g
 # little if / else statement to assign the proper flags for compilation
 # depending on the OS
 
-# ifeq ($(OS),Linux)
-	READLINE := -lreadline
-# else
-# 	RDL_PATH := -L/usr/local/opt/readline/lib/
-# 	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
+# add thi to the includes
+# -I/Users/$(USER)/.brew/opt/readline/include/readline
+
+#ifeq ($(OS),Linux)
+#	READLINE := -lreadline
+#else
+#	RDL_PATH := -L/Users/$(USER)/.brew/opt/readline/lib
+# 	RDL_HISTORY_PATH := -L/Users/$(USER)/.brew/opt/readline/lib
 # 	RDL := -lreadline.8.1 $(RDL_PATH)
 # 	RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
 # 	READLINE := $(RDL) $(RDL_HISTORY)
-# endif
+#endif
+
+ifeq ($(OS),Linux)
+	READLINE := -lreadline
+else
+ 	RDL_PATH := -L/usr/local/opt/readline/lib/
+ 	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
+ 	RDL := -lreadline.8.1 $(RDL_PATH)
+ 	RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
+ 	READLINE := $(RDL) $(RDL_HISTORY)
+endif
 
 INCLUDES := -I includes
 
@@ -67,6 +80,7 @@ all: $(NAME)
 $(NAME): $(OBJ_FILES) $(LIB)
 	@printf "$(YELLOW)Linking minishell...\n\n$(END)"
 	$(CC) $(CFLAGS) $(OBJ_FILES) $(LIB) $(READLINE) -o $(NAME)
+	$(CPY_1) $(CPY_2)
 	@printf "\n$(GREEN)minishell compiled.\n$(END)Simply type $(WHITE)./minishell$(END) to execute the program. Enjoy.\n\n"
 
 $(OBJ_DIR)/%.o : %.c

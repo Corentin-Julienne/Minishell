@@ -18,8 +18,8 @@ void	reset_shell_struct(t_shell *shell)
 {
 	shell->i = 0;
 	shell->item_length = 0;
-	shell->fd_in = -1; // change this ?
-	shell->fd_out = -1; // change this ?
+	shell->fd_in = -1;
+	shell->fd_out = -1;
 	shell->nb_seq = -1;
 	shell->seq_used = -1;
 	shell->nb_pipes = -1;
@@ -47,13 +47,6 @@ void	init_shell_struct(t_shell *shell, char **envp)
 	shell->item_length = 0;
 	shell->exit_status = 0;
 	shell->env = envdup(envp, -1);
-	// if (!shell->env)
-	// {
-	// 	free(shell);
-	// 	shell = NULL;
-	// 	ft_putstr_fd(MALLOC_ERR_MSG, STDERR_FILENO);
-	// 	exit(EXIT_FAILURE);
-	// }
 	shell->env_list = ft_arg_to_chained_list(envp);
 	shell->paths = NULL;
 	shell->user_input = NULL;
