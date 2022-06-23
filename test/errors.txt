@@ -1,0 +1,111 @@
+----------------------------
+Errors : UNSET 
+----------------------------
+
+1) export A='a' B='b' C='c' PUIS unset 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C
+2) export A='a' B='b' C='c' PUIS unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf '
+3) export A='a' B='b' C='c' PUIS unset A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C
+
+Le minishell n'affiche pas de message d'erreurs, alors que bash si !!
+
+4) Unset TERM
+5) unseT TERM
+
+Encore cette bonne vieille fonction minimize qu on doit ajouter
+
+6) unset SHLVL=2 
+
+ne DOIT PAS supprimer la varibale mais retourner un message d erreur. seul unset SHLVL doit supprimer la variable
+
+----------------------------
+Errors : PWD
+----------------------------
+
+1) Pwd
+2) pwD
+
+encore ue fois, rajouter une fonction dans le parsing afin de resoudre le pb du case insensitive
+
+3) unset PWD PUIS pwd PUIS echo $PWD
+
+unset PWd supprime la variable PWD. pwd affiche le current working directory SANS utiliser la variable d'env (qui n existe plus)
+echo $PWD retrun une ligne vide
+
+4) export PWD='/etc' PUIS pwd
+
+la variable PWD est modifiee. pwd n'affiche pas /etc mais le vrai current directory
+
+5) export PWD=foo; pwd; echo $PWD
+
+Encore une fois, aucun lien entre PWD la variable d'environnement et la commande pwd
+
+CONCLUSION : utiliser getcwd pour obtenir le current working directory, ne pas lire la variable d'environnement
+d apres les tests, la variable d env PWD est modifie quand l'utilisateur change de dir (avec cd) SI ET SEULEMENT si PWD existe et n a as ete supprimee
+Attention a OLD_PWD qui est TOUJOURS l'ancienne version de PWD, mm si elle a ete modifie par l utiliser
+exemple : export PWD=truc PUIS cd next_dossier va update la variable d environnement pwd et va mettre OLD_PWD a truc (son ancienne valeur)
+
+----------------------------
+Errors : ENV
+----------------------------
+
+Functionnal. Just need to add a minimise function and apply it in every command to be case insensitive
+
+----------------------------
+Errors : EXIT 
+---------------------------- 
+
+1] bash print exit on a new line when exiting
+
+2] when argument to exit is not valid (not an int or a number sup to LL_MAX or inferior to LL_MIN, then :
+minishell: exit: <arg>: numeric argument required). the line printing exit is still there and the error message
+is printed on the next line 
+
+It STILLS exit BTW, and the rtn code should be 255 for the minishell
+
+--------------------------
+Errors : EXPORT
+--------------------------
+
+1) export A='   bonjour   je   suis  splited '
+2) export A='fi le'
+
+devrais exporter sans probleme la variable d environnement apres avoir remove les quotes. Probablement un pb de quote removal
+
+3) export test1
+4) export zz zzz= zzzz=asd
+
+Ne dois pas trigger un message d'erreur, mais ne doit pas non plus afficher la variable dans env (a corriger)
+
+5) export test= o
+
+Devrais mettre la variable test dans l'env sous forme de test= / ne devrais pas ecrire la variable o dans l'env (cf cas precedent);
+
+6) Export B=bonjour
+7) exporT B=bonjour
+
+Sur bash peut importe la casse cela va trigger la commande. Il faut reproduire ce cpt sur minishell (aouter fonction ft_minimize dans la phase de parsing)
+
+8) export
+
+export sans args tend a imprimer des variables d'environnement sup a la fin (des ~). etrange
+
+9) export $
+
+cause an infinite loop
+
+10) export BONJOURJESUIS =a 
+
+ne devrait pas imprimer BONJOURJESUIS ni =a dans les variables d'environnement
+
+11) 
+export 'AH\'=nop
+export 'AH@'=nop
+export 'AH"'=nop
+export 'AH!'=nop
+
+Ne devraient pas pour voir etre enreistrees dans l env. Devraient trigger un error msg (presence de char interdits \ @ " !)
+
+12) export A 'asdf ' B ' asdf asdf asd f' ' asdf ' '' 'asdf ' C
+
+Encore une fois, ne devrait pas imprimer les msg dans l'env. Aussi, ne declenche pas tous les msgs d erreur (voir comparaison avec bash)
+

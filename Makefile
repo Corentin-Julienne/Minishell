@@ -32,15 +32,15 @@ CFLAGS := -Werror -Wall -Wextra
 # little if / else statement to assign the proper flags for compilation
 # depending on the OS
 
-ifeq ($(OS),Linux)
+#ifeq ($(OS),Linux)
 	READLINE := -lreadline
-else
-	RDL_PATH := -L/usr/local/opt/readline/lib/
-	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
-	RDL := -lreadline.8.1 $(RDL_PATH)
-	RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
-	READLINE := $(RDL) $(RDL_HISTORY)
-endif
+#else
+#	RDL_PATH := -L/usr/local/opt/readline/lib/
+#	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
+#	RDL := -lreadline.8.1 $(RDL_PATH)
+#	RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
+#	READLINE := $(RDL) $(RDL_HISTORY)
+#endif
 
 INCLUDES := -I includes
 
