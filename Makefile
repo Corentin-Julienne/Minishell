@@ -35,8 +35,8 @@ CFLAGS := -Werror -Wall -Wextra -g
 # add thi to the includes
 
 
-RDL_PATH := -L/Users/cjulienn/.brew/opt/readline/lib/
-RDL_HISTORY_PATH := -L/Users/cjulienn/.brew/opt/readline/lib/
+RDL_PATH := -L/Users/$(USER)/.brew/opt/readline/lib/
+RDL_HISTORY_PATH := -L/Users/$(USER)/.brew/opt/readline/lib/
 RDL := -lreadline.8.1 $(RDL_PATH)
 RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
 READLINE := $(RDL) $(RDL_HISTORY)

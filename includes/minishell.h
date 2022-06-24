@@ -210,7 +210,7 @@ t_token		*parse_user_input(t_shell *shell);
 		/* quotes.c */
 int			remove_quotes(t_token *token);
 int			is_quote_valid(char *item, char sep);
-size_t		calc_quote_length(char *str, size_t i);
+int			calc_quote_length(char *str, int i);
 
 		/* tokenisation.c */
 char		*isolate_item(char *user_input, t_shell *shell, t_token *token);

@@ -15,107 +15,65 @@
 #include <unistd.h>
 #include <string.h>
 
-static char	*ft_strdup(const char *s)
+int	is_quote_valid(char *item, char sep)
 {
-	char	*str;
 	int		i;
+	int		res;
 
 	i = 0;
-	str = (char *)malloc(sizeof(char) * strlen(s) + 1);
-	if (!str)
-		return (NULL);
-	while (s[i] != '\0')
+	res = 0;
+	while (item[i])
 	{
-		str[i] = s[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
-}
-
-static int	fulfill_env(char **dup_env, char **envp)
-{
-	int			i;
-
-	i = 0;
-	while (envp[i])
-	{
-		dup_env[i] = ft_strdup(envp[i]);
-		if (!dup_env[i])
+		if (item[i] == sep && i != 0)
 		{
-			dprintf(STDERR_FILENO, "oups !\n");
-			return (-1);
+			res = 1;
+			break ;
 		}
 		i++;
 	}
-	dup_env[i] = ft_strdup("DECOY=\"truc\"");
-	dup_env[i + 1] = NULL;
-	return (0);
+	return (res);
 }
 
-static char	**envdup(char **envp)
-{
-	char		**dup_env;
-	int			i;
-	
-	i = 0;
-	while (envp[i])
-		i++;
-	dup_env = (char **)malloc(sizeof(char *) * (i + 2));
-	if (!dup_env)
-		return (NULL);
-	fulfill_env(dup_env, envp);
-	return (dup_env);
-}
+/* calc the length of the quote (for tokenisation purpose)
+return -1 if unclosed quote,
+the length of the quote otherwise
+[!!!! include the quotes in the length !!!!]
+e.g : "truc" = 6, "" = 2, "y" = 3
+*/
 
-static void	inspect_main_env(char **envp)
+size_t	calc_quote_length(char *str, size_t i)
 {
-	int			i;
-	
-	i = 0;
-	while (envp && envp[i])
+	char	sep;
+	char	*sub_str;
+	size_t	j;
+
+	sep = str[i];
+	j = i;
+	sub_str = &str[i];
+	if (!is_quote_valid(sub_str, sep))
+		return (-1);
+	if (strlen(&str[i]) >= 2 && str[i + 1] == sep)
+		return (2);
+	while (str[i])
 	{
-		dprintf(STDERR_FILENO, "var %i : %s\n", i, envp[i]);
+		if (str[i] == sep && i != 0)
+		{
+			i++;
+			break ;
+		}
 		i++;
 	}
+	return (i - j);
 }
 
 
-static void	child_process(char **envp)
+int	main(int argc, char **argv)
 {
-	char		**args;
-	const char	*path;
+	size_t		quote_size;
 
-	args = (char **)malloc(sizeof(char) * 2);
-	if (!args)
-		printf("oups\n");
-	path = "../minishell";
-	args[0] = "minishell";
-	args[1] = NULL;
-	if (execve(path, args, envp) == -1)
-		printf("marche ap\n");
-}
-
-int	main(int argc, char **argv, char **envp)
-{
-	pid_t	pid;
-	char	**fake_new_env;
-
-	(void)argc;
-	(void)argv;
-	dprintf(STDERR_FILENO, "this is the original env :\n");
-	inspect_main_env(envp);
-	dprintf(STDERR_FILENO, "\n\n--------------------------\n\n");
-	fake_new_env = envdup(envp);
-	pid = fork();
-	if (pid == -1)
-	{
-		printf("oups !\n");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
-		child_process(fake_new_env);
-	else
-		waitpid(pid, NULL, 0);
+	if (argc != 2)
+		return (1);
+	quote_size = calc_quote_length(argv[1], 0);
+	printf("the str %s have quotes of size %zu\n", argv[1], quote_size);
 	return (0);
 }
