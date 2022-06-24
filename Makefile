@@ -6,7 +6,7 @@
 #    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
-#    Updated: 2022/06/24 11:03:05 by xle-boul         ###   ########.fr        #
+#    Updated: 2022/06/24 13:39:32 by xle-boul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,11 +35,11 @@ CFLAGS := -Werror -Wall -Wextra -g
 # add thi to the includes
 
 
-RDL_PATH := -L/Users/$(USER)/.brew/opt/readline/lib/
-RDL_HISTORY_PATH := -L/Users/$(USER)/.brew/opt/readline/lib/
-RDL := -lreadline.8.1 $(RDL_PATH)
-RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
-READLINE := $(RDL) $(RDL_HISTORY)
+# RDL_PATH := -L/Users/$(USER)/.brew/opt/readline/lib/
+# RDL_HISTORY_PATH := -L/Users/$(USER)/.brew/opt/readline/lib/
+# RDL := -lreadline.8.1 $(RDL_PATH)
+# RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
+# READLINE := $(RDL) $(RDL_HISTORY)
 
 
 #ifeq ($(OS),Linux)

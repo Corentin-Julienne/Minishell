@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:51:38 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/23 11:17:03 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/24 13:48:12 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,10 @@ e.g : "truc" = 6, "" = 2, "y" = 3
 int	calc_quote_length(char *str, int i)
 {
 	char	sep;
-	char	*sub_str;
 	int		j;
 
 	sep = str[i];
 	j = i;
-	sub_str = &str[i];
 	while (str[i])
 	{
 		if (str[i] == sep && i != j)

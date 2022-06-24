@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:47:54 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/24 11:52:09 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/24 13:53:36 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,7 @@ void	built_in_exit(t_shell *shell, char **cmd_args)
 		exit(shell->exit_status);
 	}
 	else if (cmd_args[2])
-	{
 		write(STDERR_FILENO, "minishell: exit: too many arguments", 36);
-		free_case_exit(shell);
-		exit(2);
-	}
 	else if (cmd_args[1] != NULL && is_arg_valid(cmd_args[1]) == true)
 		handle_valid_arg(shell, cmd_args[1]);
 	else if (cmd_args[1] != NULL && is_arg_valid(cmd_args[1]) == false)
