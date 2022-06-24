@@ -69,7 +69,7 @@ will execute execve. Execve will kill the process, resolve leaks and exec cmd
 otherwise, if no valid path is found, we clean the child process
 and exit with code 127 (AKA cmd not found) */
 
-static void	exec_os_cmd(t_shell *shell, char *updated_env, char *cmd_args)
+static void	exec_os_cmd(t_shell *shell, char **updated_env, char **cmd_args)
 {
 	char		*path_with_cmd;
 
@@ -103,7 +103,7 @@ void	path_cmd_exec(t_shell *shell, char **cmd_args)
 	close(shell->std_fdin);
 	close(shell->std_fdout);
 	shell->i = 0;
-	exec_os_cmd(shell, update_env, cmd_args);
+	exec_os_cmd(shell, updated_env, cmd_args);
 	free_split(updated_env);
 	case_cmd_not_found(shell, cmd_args);
 }

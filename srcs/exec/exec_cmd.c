@@ -92,7 +92,7 @@ void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 	int			exit_code;
 
 	exit_code = 0;
-	if (process == PARENT) // no leaks killing needed there (parent process)
+	if (process == PARENT)
 	{
 		shell->exit_status = exec_built_in(shell, cmd_args);
 		dup2(shell->std_fdin, STDIN_FILENO);
