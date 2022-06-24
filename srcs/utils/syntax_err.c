@@ -20,9 +20,15 @@ static void	handle_syntax_errors(t_token *pb_token, t_shell *shell)
 {
 	char	*following_token;
 
-	if (!pb_token->next)
+	following_token = NULL;
+	if (pb_token->type == PIPE)
+	{
+		if (!pb_token->next || !pb_token->prev)
+			following_token = pb_token->item;
+	}
+	if (!pb_token->next && !following_token)
 		following_token = "newline";
-	else
+	else if (!following_token)
 		following_token = pb_token->next->item;
 	ft_putstr_fd(SYNT_ERR_MSG, STDERR_FILENO);
 	ft_putstr_fd(following_token, STDERR_FILENO);

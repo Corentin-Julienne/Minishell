@@ -49,7 +49,7 @@ char	*ft_new_patch(char *patch)
 		free(patch);
 		return (NULL);
 	}
-	str = malloc(sizeof(char) * (ft_strlen(patch) - i + 1));
+	str = malloc(sizeof(char) * (ft_strlen_gnl(patch) - i + 1));
 	if (!str)
 		return (NULL);
 	i++;
@@ -74,7 +74,8 @@ char	*ft_strjoin_gnl(char *patch, char *buf)
 	}
 	if (!patch || !buf)
 		return (NULL);
-	str = malloc(sizeof(char) * ((ft_strlen(patch) + ft_strlen(buf)) + 1));
+	str = malloc(sizeof(char) * ((ft_strlen_gnl(patch)
+					+ ft_strlen_gnl(buf)) + 1));
 	if (str == NULL)
 		return (NULL);
 	i = -1;
@@ -95,7 +96,7 @@ char	*ft_feed_patch(int fd, char *patch)
 	int		end;
 
 	end = 1;
-	while (!ft_strchr(patch, '\n') && end != 0)
+	while (!ft_strchr_gnl(patch, '\n') && end != 0)
 	{
 		end = read(fd, buf, BUFFER_SIZE);
 		if (end == -1)
