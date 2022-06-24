@@ -74,7 +74,6 @@ typedef struct s_shell
 	int				i;
 	size_t			item_length;
 	int				exit_status;
-	char			**env;
 	char			**paths;
 	char			*user_input;
 	int				fd_in;

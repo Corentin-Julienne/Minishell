@@ -59,14 +59,10 @@ static void	miniloop(t_shell *shell)
 }
 
 static int	minishell(t_shell *shell)
-{
-	char	*prompt;
-
+{	
 	while (42)
 	{
-		prompt = strdup(spot_env_var(shell->env_list, "USER"));
-		prompt = ft_strjoin_and_free(prompt, " $> ");
-		shell->user_input = readline(prompt);
+		shell->user_input = readline("$> ");
 		if (!shell->user_input)
 			free_case_err(shell, NULL);
 		if (ft_strlen(shell->user_input) > 0)
@@ -76,7 +72,6 @@ static int	minishell(t_shell *shell)
 			free(shell->user_input);
 			shell->user_input = NULL;
 		}
-		free(prompt);
 	}
 	return (0);
 }
