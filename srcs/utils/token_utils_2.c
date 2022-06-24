@@ -12,42 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-// void	token_delone(t_token **token)
-// {
-// 	t_token			*tmp;
-// 	t_token			*tmp_2;
-
-// 	tmp = *token;
-// 	tmp_2 = *token;
-// 	if (*token && (*token)->prev)
-// 	{
-// 		tmp = (*token)->prev;
-// 		tmp->next = NULL;
-// 	}
-// 	if (*token && (*token)->next)
-// 	{
-// 		tmp_2 = (*token)->next;
-// 		tmp_2->prev = NULL;
-// 	}
-// 	if (*token)
-// 	{
-// 		free(*token);
-// 		*token = NULL;
-// 	}
-// }
-
-// void	token_clear(t_token **token)
-// {
-// 	t_token			*tmp;
-
-// 	while (*token)
-// 	{
-// 		tmp = (*token)->next;
-// 		token_delone(token);
-// 		*token = tmp;
-// 	}
-// }
-
 void	token_clear(t_token *head)
 {
 	t_token	*tmp;

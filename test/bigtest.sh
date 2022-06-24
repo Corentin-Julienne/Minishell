@@ -319,9 +319,8 @@ echo $coucou\"
 echo "|$TEST\""
 echo "|$TEST|"
 
-#########Erreurs A renvoyer#########
+#########Erreurs A renvoyer######### [OK]
 #syntax error near unexpected token `|'
-| < a
 |echo
 |cat
 | cat
