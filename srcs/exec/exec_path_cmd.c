@@ -36,8 +36,9 @@ static char	*join_cmd_to_path(t_shell *shell, char **cmd_args, int i)
 	char	*path;
 
 	if (is_path_already_provided(cmd_args[0]) == 1)
-		return (cmd_args[0]);
-	path = ft_strjoin(shell->paths[i], cmd_args[0]);
+		path = ft_strdup(cmd_args[0]);
+	else
+		path = ft_strjoin(shell->paths[i], cmd_args[0]);
 	if (!path)
 	{
 		ft_putstr_fd(MALLOC_ERR_MSG, STDERR_FILENO);

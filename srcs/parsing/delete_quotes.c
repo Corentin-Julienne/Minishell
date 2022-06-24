@@ -48,27 +48,6 @@ void	handle_quotes(t_token *token, int *i, char c)
 	}
 }
 
-// void	detect_double_quotes(t_token *token, int *i, char c)
-// {
-// 	int		open;
-// 	int		close;
-// 	char	*new_item;
-
-// 	if (is_closed('"', token->item, *i) == true)
-// 	{
-// 		open = *i;
-// 		(*i)++;
-// 		while (token->item[*i] != '"')
-// 			(*i)++;
-// 		close = *i;
-// 		new_item = delete_quotes(token->item, open, close);
-// 		free(token->item);
-// 		token->item = ft_strdup(new_item);
-// 		free(new_item);
-// 		*i = close - 2;
-// 	}
-// }
-
 void	detect_quotes_for_deletion(t_token *token)
 {
 	int			_double;
