@@ -263,6 +263,12 @@ void		token_add_back(t_token **token, t_token *new);
 		/* ft_rm_substr.c */
 int			ft_rm_substr(const char *str, const char *substr, char **new_str);
 
+						/* PROTOS READLINE */
+
+void		rl_replace_line(const char *text, int clear_undo);
+int 		rl_on_new_line(void);
+void		rl_redisplay(void);
+
 /* DEBUG */ // NOT TO BE INCLUDED IN FINAL REPO !!!!!
 
 /* debug_utils.c */
@@ -271,6 +277,5 @@ void		inspect_char_arr(char **arr);
 void		inspect_exit_code(t_shell *shell);
 void		inspect_main_env(char **envp);
 void		leaks_killing(void);
-void		rl_replace_line(const char *text, int clear_undo);
 
 #endif

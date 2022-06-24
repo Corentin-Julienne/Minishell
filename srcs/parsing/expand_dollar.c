@@ -97,7 +97,8 @@ void	detect_quotes(t_token *token, t_shell *shell)
 	while (token->item[i] != '\0')
 	{
 		if (token->item[i] == '$' && token->item[i + 1]
-			&& ft_isalpha(token->item[i + 1]) == 1)
+			&& (ft_isalpha(token->item[i + 1]) == 1
+				|| token->item[i + 1] == '?'))
 			handle_dollar(token, shell, &i, &_double);
 		else if (token->item[i] == '\'' && _double == 0)
 			handle_single_quote(token, &i);
