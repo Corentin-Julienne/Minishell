@@ -6,35 +6,56 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 21:43:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 21:09:41 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/24 11:08:10 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	add_env_variable(char *arg, t_env *env)
+bool	var_is_valid(char *arg)
+{
+	int	i;
+	int	trigger;
+
+	i = 0;
+	trigger = 0;
+	if (ft_isalpha(arg[i]) == 0)
+		return (false);
+	while (arg[i] != '\0')
+	{
+		if (arg[i] == '=')
+			trigger = 1;
+		if ((arg[i] == '@' || arg[i] == '!' || arg[i] == '"'
+				|| arg[i] == '\\' || arg[i] == '\'') && trigger == 0)
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+int	add_env_variable(char *arg, t_env **env)
 {
 	t_env	*new;
 	t_env	*tmp;
 
-	tmp = env;
+	tmp = *env;
 	while (tmp != NULL)
 	{
-		if (ft_isalpha(arg[0]) == 0)
+		if (var_is_valid(arg) == false)
 		{
-			printf("bash: export: `%s': not a valid identifier\n", arg);
+			printf("minishell: export: `%s': not a valid identifier\n", arg);
 			return (1);
 		}
 		if (ft_strncmp(arg, tmp->data, ft_strlen_export(arg)) == 0
 			&& ft_strlen_export(tmp->data) == ft_strlen_export(arg))
 		{
-			ft_delete_list_node(&env, tmp);
+			ft_delete_list_node(env, tmp);
 			break ;
 		}
 		tmp = tmp->next;
 	}
 	new = ft_create_new_node(arg);
-	ft_add_at_tail(&env, new);
+	ft_add_at_tail(env, new);
 	return (0);
 }
 
@@ -52,5 +73,7 @@ void	print_export(char *env_export)
 			write(1, "\"", 1);
 		i++;
 	}
-	write(1, "\"\n", 3);
+	if (ft_strchr(env_export, '=') != NULL)
+		write(1, "\"", 1);
+	write(1, "\n", 1);
 }
