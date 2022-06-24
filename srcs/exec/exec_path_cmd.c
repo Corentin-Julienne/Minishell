@@ -75,11 +75,19 @@ void	path_cmd_exec(t_shell *shell, char **cmd_args)
 	char		**updated_env;
 
 	updated_env = update_env(shell->env_list);
+	if (!updated_env)
+	{
+		free(cmd_args);
+		clean_child_process(shell);
+		exit(EXIT_FAILURE);
+	}
 	if (is_path_functionnal(cmd_args[0], shell, cmd_args) == 0)
 		execve(cmd_args[0], cmd_args, updated_env);
 	shell->paths = recup_paths(shell, cmd_args);
 	if (!shell->paths)
 		case_cmd_not_found(shell, cmd_args);
+	close(shell->std_fdin);
+	close(shell->std_fdout);
 	shell->i = 0;
 	while (shell->paths[shell->i])
 	{

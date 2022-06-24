@@ -86,6 +86,13 @@ static void	find_token_type(t_token *token)
 	}
 }
 
+static t_token	*rtn_modified_tokens(t_token *token, t_shell *shell)
+{
+	find_token_type(token);
+	expand_token(token, shell);
+	return (token);
+}	
+
 /* the parse_user_input func is converting the string user_input
 into tokens. Tokens are words, quotted expressions separated
 by space or | < << >> >, or | < << >> >.
@@ -112,10 +119,11 @@ t_token	*parse_user_input(t_shell *shell)
 		ui_cpy = ui_cpy + shell->item_length;
 		new_elem = token_new(item);
 		if (!new_elem)
+		{
+			free(item);
 			free_case_err(shell, token);
+		}
 		token_add_back(&token, new_elem);
 	}
-	find_token_type(token);
-	expand_token(token, shell);
-	return (token);
+	return (rtn_modified_tokens(token, shell));
 }

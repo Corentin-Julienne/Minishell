@@ -16,8 +16,6 @@
 
 void	clean_child_process(t_shell *shell)
 {
-	if (shell->env)
-		free_split(shell->env);
 	if (shell->paths)
 		free_split(shell->paths);
 	close(shell->std_fdin);
@@ -43,8 +41,8 @@ void	clean_child_process(t_shell *shell)
 // for norminette's sake, for now.
 void	free_case_err(t_shell *shell, t_token *token)
 {
-	if (shell->env)
-		free_split(shell->env);
+	close(shell->std_fdin);
+	close(shell->std_fdout);
 	if (shell->paths)
 		free_split(shell->paths);
 	if (shell->user_input)
@@ -102,8 +100,6 @@ void	free_split(char **split)
 // allocated item before closing the program
 void	free_case_exit(t_shell *shell)
 {
-	if (shell->env)
-		free_split(shell->env);
 	if (shell->paths)
 		free_split(shell->paths);
 	if (shell->user_input)
