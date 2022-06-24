@@ -20,12 +20,12 @@ static void	lowercase_cmds(t_token *token)
 	int			i;
 
 	i = 0;
- 	while (token && token->item && token->item[i])
- 	{
- 		if (token->item[i] >= 65 && token->item[i] <= 90)
+	while (token && token->item && token->item[i])
+	{
+		if (token->item[i] >= 65 && token->item[i] <= 90)
 			token->item[i] = token->item[i] + 32;
- 		i++;
- 	}
+		i++;
+	}
 }
 
 /* should check wether token type is a CMD or not
@@ -38,7 +38,7 @@ the 2 cases identified are :
 static int	is_cmd(t_token *token)
 {
 	int		res;
-	
+
 	res = 0;
 	if (token->type == ARG)
 	{

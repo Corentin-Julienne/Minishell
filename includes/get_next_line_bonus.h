@@ -23,8 +23,8 @@
 # endif
 
 char	*get_next_line(int fd);
-char	*ft_strchr(const char *s, int c);
-size_t	ft_strlen(const char *s);
+char	*ft_strchr_gnl(const char *s, int c);
+size_t	ft_strlen_gnl(const char *s);
 char	*ft_mallocable(char *patch);
 
 #endif

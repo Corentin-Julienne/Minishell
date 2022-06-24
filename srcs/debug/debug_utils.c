@@ -60,7 +60,7 @@ void	inspect_main_env(char **envp)
 	}
 }
 
-void	leaks_killing(void) // debug func
+void	leaks_killing(void)
 {
 	system("leaks minishell");
 }
