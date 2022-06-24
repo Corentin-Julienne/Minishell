@@ -105,6 +105,7 @@ int	main(int argc, char **argv, char **envp)
 	struct sigaction	sig_int;
 	struct sigaction	sig_quit;
 
+	atexit(leaks_killing); // debug func
 	(void)argc;
 	(void)argv;
 	// inspect_main_env(envp); // debug func

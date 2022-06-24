@@ -43,7 +43,7 @@ CFLAGS := -Werror -Wall -Wextra -g
 
 
 #ifeq ($(OS),Linux)
-	READLINE := -lreadline
+	# READLINE := -lreadline
 #else
 # 	RDL_PATH := -L/usr/local/opt/readline/lib/
 #	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
