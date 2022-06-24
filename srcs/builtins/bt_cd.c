@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/23 11:00:48 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 16:31:00 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,12 @@ int	built_in_cd_else(t_shell *shell, char **cmd_args, int code, char *pwd)
 	char	*home;
 
 	home = find_pwd_path(shell->env_list, "HOME");
+	if (!home)
+		return (1);
 	if (!(ft_strlen(cmd_args[1]) == 1
-			&& ft_strncmp(cmd_args[1], "-", 1) == 0))
+			&& ft_strncmp(cmd_args[1], "-", 1) == 0)
+		&& !(ft_strlen(cmd_args[1]) == 1
+			&& ft_strncmp(cmd_args[1], "/", 1) == 0))
 		cmd_args[1] = expand_double_dot(cmd_args[1], shell->env_list);
 	code = change_directory(shell, cmd_args[1], home);
 	assign_old_pwd(shell, cmd_args[1], code, pwd);
@@ -68,9 +72,11 @@ int	built_in_cd(t_shell *shell, char **cmd_args)
 		exit_code = built_in_cd_home(shell, cmd_args, pwd, success_code);
 	else if (cmd_args[2])
 	{
-		printf("bash: cd: too many arguments\n");
+		printf("minishell: cd: too many arguments\n");
 		exit_code = 1;
 	}
+	else if (cmd_args[1][0] == '.' && !cmd_args[1][1])
+		return (exit_code);
 	else
 		exit_code = built_in_cd_else(shell, cmd_args, success_code, pwd);
 	return (exit_code);

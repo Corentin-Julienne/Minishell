@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/22 21:45:26 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 11:30:22 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,12 @@ static void	miniloop(t_shell *shell)
 
 static int	minishell(t_shell *shell)
 {
+	char	*prompt;
 	while (42)
 	{
-		shell->user_input = readline("$> ");
+		prompt = strdup(spot_env_var(shell->env_list, "USER"));
+		prompt = ft_strjoin_and_free(prompt, " $> ");
+		shell->user_input = readline(prompt);
 		if (!shell->user_input)
 			free_case_err(shell, NULL);
 		if (ft_strlen(shell->user_input) > 0)
@@ -72,6 +75,7 @@ static int	minishell(t_shell *shell)
 			free(shell->user_input);
 			shell->user_input = NULL;
 		}
+		free(prompt);
 	}
 	return (0);
 }

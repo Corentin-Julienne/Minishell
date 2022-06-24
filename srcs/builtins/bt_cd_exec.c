@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 20:45:06 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/21 20:45:32 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 16:30:58 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	handle_tilde(t_shell *shell, char *arg, char *home)
 	success_code = chdir(final_arg);
 	if (success_code != 0)
 	{
-		printf("bash: cd: %s: No such file or directory\n", final_arg);
+		printf("minishell: cd: %s: No such file or directory\n", final_arg);
 		free(final_arg);
 		return (1);
 	}
@@ -41,7 +41,7 @@ int	handle_dash(t_shell *shell, char *arg)
 	if (ft_strlen(arg) == 1)
 	{
 		if (spot_env_var(shell->env_list, "OLDPWD") == NULL)
-			printf("bash: cd: OLDPWD not set\n");
+			printf("minishell: cd: OLDPWD not set\n");
 		else
 		{
 			chdir(find_pwd_path(shell->env_list, "OLDPWD"));
@@ -52,10 +52,20 @@ int	handle_dash(t_shell *shell, char *arg)
 	}
 	else
 	{
-		printf("bash: cd: %c%c: invalid option\n", arg[0], arg[1]);
+		printf("minishell: cd: %c%c: invalid option\n", arg[0], arg[1]);
 		return (1);
 	}
 	return (0);
+}
+
+int	handle_slash(t_shell *shell, char *arg)
+{
+	int	code;
+
+	code = chdir(arg);
+	change_env_var(shell->env_list, "PWD", arg);
+	printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
+	return (code);
 }
 
 // executes the change of directory according to the constraints
@@ -67,11 +77,13 @@ int	change_directory(t_shell *shell, char *arg, char *home)
 		success_code = handle_dash(shell, arg);
 	else if (arg[0] == '~')
 		success_code = handle_tilde(shell, arg, home);
+	else if (arg[0] == '/')
+		success_code = handle_slash(shell, arg);
 	else
 	{
 		success_code = chdir(arg);
 		if (success_code != 0)
-			printf("bash: cd: %s: No such file or directory\n", arg);
+			printf("minishell: cd: %s: No such file or directory\n", arg);
 		else
 		{
 			change_env_var(shell->env_list, "PWD", arg);

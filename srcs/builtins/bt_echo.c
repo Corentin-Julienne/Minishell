@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:04 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/14 21:56:32 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 11:44:52 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,20 @@
 // returns true if it is, false if not
 bool	check_n_flag(char *arg)
 {
-	if (!arg || !(ft_strncmp(arg, "-n", 2) == 0 && ft_strlen (arg) == 2))
+	int	i;
+
+	i = 2;
+	if (!arg || !(ft_strncmp(arg, "-n", 2) == 0))
 		return (false);
+	if (ft_strncmp(arg, "-n", 2) == 0 && ft_strlen(arg) > 2)
+	{
+		while (arg[i] != '\0')
+		{
+			if (arg[i] != 'n')
+				return (false);
+			i++;
+		}
+	}
 	return (true);
 }
 
@@ -31,10 +43,6 @@ void	print_echo(t_shell *shell, char *line)
 	(void)shell;
 	while (line[i] != '\0')
 	{
-		// if (line[i] == '\\' && line[i + 1] == '\0')
-		// 	break ;
-		// if (line[i] == '\\' && line[i + 1] != '\0')
-		// 	i++;
 		write(1, &line[i], 1);
 		i++;
 	}
@@ -50,10 +58,6 @@ void	print_echo_end(t_shell *shell, char *line)
 	(void)shell;
 	while (line[i] != '\0')
 	{
-		// if (line[i] == '\\' && line[i + 1] == '\0')
-		// 	break ;
-		// if (line[i] == '\\' && line[i + 1] != '\0')
-		// 	i++;
 		write(1, &line[i], 1);
 		i++;
 	}
@@ -74,7 +78,7 @@ int	built_in_echo(t_shell *shell, char **cmd_args)
 		printf("\n");
 		return (0);
 	}
-	if (check_n_flag(cmd_args[i]) == true)
+	while (check_n_flag(cmd_args[i]) == true)
 	{
 		n_flag = true;
 		i++;

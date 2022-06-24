@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 15:42:59 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/13 11:34:09 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 17:35:13 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	built_in_env(t_shell *shell, char **cmd_args)
 	tmp = shell->env_list;
 	while (tmp != NULL)
 	{
-		printf("%s\n", tmp->data);
+		if (ft_strchr(tmp->data, '=') != NULL)
+			printf("%s\n", tmp->data);
 		tmp = tmp->next;
 	}
 	return (0);

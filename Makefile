@@ -6,7 +6,7 @@
 #    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
-#    Updated: 2022/06/21 21:31:56 by xle-boul         ###   ########.fr        #
+#    Updated: 2022/06/24 11:03:05 by xle-boul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,8 +41,9 @@ RDL := -lreadline.8.1 $(RDL_PATH)
 RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
 READLINE := $(RDL) $(RDL_HISTORY)
 
+
 #ifeq ($(OS),Linux)
-#	READLINE := -lreadline
+	READLINE := -lreadline
 #else
 # 	RDL_PATH := -L/usr/local/opt/readline/lib/
 #	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
