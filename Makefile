@@ -43,7 +43,7 @@ READLINE := $(RDL) $(RDL_HISTORY)
 
 
 #ifeq ($(OS),Linux)
-	READLINE := -lreadline
+	# READLINE := -lreadline
 #else
 # 	RDL_PATH := -L/usr/local/opt/readline/lib/
 #	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/

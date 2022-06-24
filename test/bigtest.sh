@@ -321,7 +321,6 @@ echo "|$TEST|"
 
 #########Erreurs A renvoyer#########
 #syntax error near unexpected token `|'
-| ; a
 | < a
 |echo
 |cat
@@ -356,7 +355,7 @@ echo bonjour > bar ; cat << < bar
 echo ''#enlever une simple quote
 echo '\'''#enlever une simple quote
 echo ""#enlever une double quote
-echo ''''''''''''''''''''''''''''''''''''''''''''#enlever une simple quote
+echo ''''''''''''''''''''''''''''''''''''''''''''#enlever une simple quote NON !!!!
 echo "\\"""#enlever une double quote
 echo "AH\""#enlever une double quote
 echo """" #enlever une double quote : boucle infinie

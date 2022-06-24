@@ -44,12 +44,10 @@ e.g : "truc" = 6, "" = 2, "y" = 3
 int	calc_quote_length(char *str, int i)
 {
 	char	sep;
-	char	*sub_str;
 	int		j;
 
 	sep = str[i];
 	j = i;
-	sub_str = &str[i];
 	while (str[i])
 	{
 		if (str[i] == sep && i != j)
