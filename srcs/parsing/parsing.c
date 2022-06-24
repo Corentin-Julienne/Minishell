@@ -15,53 +15,41 @@
 /* bash allows CMDS to work regardless of the case
 e.g echo will works but also Echo or eChO */
 
-// static void	*lowercase_cmds(t_token *token)
-// {
-// 	int			i;
+static void	lowercase_cmds(t_token *token)
+{
+	int			i;
 
-// 	i = 0;
-// 	while (token->item[i])
-// 	{
-// 		if (token->item[i] >= 97 && token->item[i] <= 122)
-// 			token->item[i] = token->item[i] - 32;
-// 		i++;
-// 	}
-// }
-
-// /* as asked by the subject, we need to expand the
-// env variables (preceeded by $)*/
-
-// int	modify_tokens(t_token *token)
-// {
-// 	while (token)
-// 	{
-// 		expand_env_var(token);
-// 		if (remove_quotes(token) == -1)
-// 			; // handle this
-// 		if (token->type == CMD)
-// 			;// implement  lowercase_cmds(token) later !!!
-// 		token = token->next;
-// 	}
-// 	return (0);
-// }
+	i = 0;
+ 	while (token && token->item && token->item[i])
+ 	{
+ 		if (token->item[i] >= 65 && token->item[i] <= 90)
+			token->item[i] = token->item[i] + 32;
+ 		i++;
+ 	}
+}
 
 /* should check wether token type is a CMD or not
 return 1 if the case, 0 otherwise 
 the 2 cases identified are :
-1) the token is the first token or is locatec just after a pipe
+1) the token is the first token or is located just after a pipe
 2) the token is an ARG situated after the filename for a redirection
 (or the heredoc DELIMITER) */
 
 static int	is_cmd(t_token *token)
 {
+	int		res;
+	
+	res = 0;
 	if (token->type == ARG)
 	{
 		if (!token->prev || (token->prev && token->prev->type == PIPE))
-			return (1);
+			res = 1;
 		if (token->prev && token->prev->type == REDIR_ARG)
-			return (1);
+			res = 1;
 	}
-	return (0);
+	if (res > 0)
+		lowercase_cmds(token);
+	return (res);
 }
 
 /* find thew type of the token (among | < < >> >>)

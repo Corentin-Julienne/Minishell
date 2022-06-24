@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:59:00 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/23 11:19:57 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/24 11:01:54 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ void	reset_shell_struct(t_shell *shell)
 {
 	shell->i = 0;
 	shell->item_length = 0;
-	shell->fd_in = -1; // change this ?
-	shell->fd_out = -1; // change this ?
+	shell->fd_in = -1;
+	shell->fd_out = -1;
 	shell->nb_seq = -1;
 	shell->seq_used = -1;
 	shell->nb_pipes = -1;

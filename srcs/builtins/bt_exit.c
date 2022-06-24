@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:47:54 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/23 17:10:55 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/24 11:52:09 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@
 // false if not
 bool	is_arg_valid(char *arg)
 {
-	int			i;
-	long long	_atoi;
+	int						i;
+	unsigned long long int	_atoi;
 
 	i = 0;
 	if (arg[i] == '\0'
@@ -34,9 +34,12 @@ bool	is_arg_valid(char *arg)
 			return (false);
 		i++;
 	}
-	_atoi = ft_atolli(arg);
-	printf("%llu\n%ld\n", _atoi, LL_MAX);
-	if (_atoi > LL_MAX)
+	_atoi = ft_atollu(arg);
+	if (ft_strncmp(arg, "-9223372036854775808", 21) == 0)
+		return (true);
+	if (i > 20
+		|| (_atoi > LL_MAX && (ft_isalpha(arg[0]) == 1 || arg[0] == '+'))
+		|| (_atoi > LL_MAX && arg[0] == '-'))
 		return (false);
 	return (true);
 }

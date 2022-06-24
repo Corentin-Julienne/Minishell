@@ -271,5 +271,6 @@ void		display_every_token(t_token *token);
 void		inspect_char_arr(char **arr);
 void		inspect_exit_code(t_shell *shell);
 void		inspect_main_env(char **envp);
+void		rl_replace_line(const char *text, int clear_undo);
 
 #endif

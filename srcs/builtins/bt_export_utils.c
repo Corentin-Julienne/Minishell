@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 21:43:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/24 10:55:57 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/24 11:08:10 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,18 @@
 bool	var_is_valid(char *arg)
 {
 	int	i;
+	int	trigger;
 
 	i = 0;
+	trigger = 0;
 	if (ft_isalpha(arg[i]) == 0)
 		return (false);
 	while (arg[i] != '\0')
 	{
-		if (arg[i] == '@' || arg[i] == '!'
-			|| arg[i] == '"' || arg[i] == '\\' || arg[i] == '\'')
+		if (arg[i] == '=')
+			trigger = 1;
+		if ((arg[i] == '@' || arg[i] == '!' || arg[i] == '"'
+				|| arg[i] == '\\' || arg[i] == '\'') && trigger == 0)
 			return (false);
 		i++;
 	}

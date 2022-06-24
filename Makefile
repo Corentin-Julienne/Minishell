@@ -6,7 +6,7 @@
 #    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
-#    Updated: 2022/06/21 21:31:56 by xle-boul         ###   ########.fr        #
+#    Updated: 2022/06/24 11:03:05 by xle-boul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,15 +32,24 @@ CFLAGS := -Werror -Wall -Wextra -g
 # little if / else statement to assign the proper flags for compilation
 # depending on the OS
 
-# ifeq ($(OS),Linux)
+# add thi to the includes
+
+
+# RDL_PATH := -L/Users/cjulienn/.brew/opt/readline/lib/
+# RDL_HISTORY_PATH := -L/Users/cjulienn/.brew/opt/readline/lib/
+# RDL := -lreadline.8.1 $(RDL_PATH)
+# RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
+# READLINE := $(RDL) $(RDL_HISTORY)
+
+#ifeq ($(OS),Linux)
 	READLINE := -lreadline
-# else
+#else
 # 	RDL_PATH := -L/usr/local/opt/readline/lib/
-# 	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
+#	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
 # 	RDL := -lreadline.8.1 $(RDL_PATH)
 # 	RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
 # 	READLINE := $(RDL) $(RDL_HISTORY)
-# endif
+#endif
 
 INCLUDES := -I includes
 
@@ -72,7 +81,7 @@ $(NAME): $(OBJ_FILES) $(LIB)
 $(OBJ_DIR)/%.o : %.c
 	@$(MKDIR) $(OBJ_DIR)
 	@printf "$(YELLOW)Compiling object:\n$(END)"
-	$(CC) $(CFLAGS) $(INCLUDE) -c -o $@ $<
+	$(CC) $(CFLAGS) -I/Users/cjulienn/.brew/opt/readline/include/readline $(INCLUDE) -c -o $@ $<
 	@printf "$(GREEN)Object $(UNDERLINE)$(WHITE)$(notdir $@)$(END)$(GREEN) successfully compiled\n\n$(END)"
 
 $(LIB):
