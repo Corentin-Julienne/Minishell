@@ -41,22 +41,18 @@ the length of the quote otherwise
 e.g : "truc" = 6, "" = 2, "y" = 3
 */
 
-size_t	calc_quote_length(char *str, size_t i)
+int	calc_quote_length(char *str, int i)
 {
 	char	sep;
 	char	*sub_str;
-	size_t	j;
+	int		j;
 
 	sep = str[i];
 	j = i;
 	sub_str = &str[i];
-	if (!is_quote_valid(sub_str, sep))
-		return (-1);
-	if (ft_strlen(&str[i]) >= 2 && str[i + 1] == sep)
-		return (2);
 	while (str[i])
 	{
-		if (str[i] == sep && i != 0)
+		if (str[i] == sep && i != j)
 		{
 			i++;
 			break ;

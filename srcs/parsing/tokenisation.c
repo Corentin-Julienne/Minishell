@@ -43,7 +43,7 @@ static size_t	manage_chevrons_length(char *user_input, size_t i)
 
 static size_t	calc_token_length(char *user_input)
 {
-	size_t		i;
+	int			i;
 
 	i = 0;
 	while (user_input[i])
@@ -51,7 +51,7 @@ static size_t	calc_token_length(char *user_input)
 		if (user_input[i] == '\'' || user_input[i] == '"')
 		{
 			if (is_quote_valid(&user_input[i], user_input[i]) == 1)
-				i = i + calc_quote_length(user_input, i) - 1;
+				i = i + calc_quote_length(user_input, i);
 		}
 		else if (user_input[i] == '|' || user_input[i] == '<'
 			|| user_input[i] == '>')
@@ -61,11 +61,11 @@ static size_t	calc_token_length(char *user_input)
 			else
 				return (manage_chevrons_length(user_input, i));
 		}
-		else if (user_input[i] == ' ')
+		if (user_input[i] == ' ')
 			break ;
 		i++;
 	}
-	return (i);
+	return ((size_t)i);
 }
 
 /* the goal is to cut every token :
