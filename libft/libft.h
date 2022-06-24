@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/03 14:26:16 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/22 11:16:02 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 16:53:15 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_list
 }				t_list;
 
 int		ft_atoi(const char *str);
+int		ft_atolli(const char *str);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t nmemb, size_t size);
 int		ft_isalnum(int c);

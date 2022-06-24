@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 12:52:07 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/22 13:40:25 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/24 10:26:15 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,8 @@ void	detect_quotes(t_token *token, t_shell *shell)
 	i = 0;
 	while (token->item[i] != '\0')
 	{
-		if (token->item[i] == '$')
+		if (token->item[i] == '$' && token->item[i + 1]
+			&& ft_isalpha(token->item[i + 1]) == 1)
 			handle_dollar(token, shell, &i, &_double);
 		else if (token->item[i] == '\'' && _double == 0)
 			handle_single_quote(token, &i);

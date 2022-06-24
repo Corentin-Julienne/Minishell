@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:30:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/14 21:54:47 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 16:09:10 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,11 +103,17 @@ char	*expand_double_dot(char *arg, t_env *head)
 	final_arg = ft_split(arg, '/');
 	if (ft_strncmp(final_arg[0], "~", 1) == 0)
 		pwd = ft_split(find_pwd_path(head, "HOME"), '/');
+	else if (ft_strncmp(arg, "/", 1) == 0)
+		pwd = NULL;
 	else
 		pwd = ft_split(find_pwd_path(head, "PWD"), '/');
-	path = ft_arg_to_chained_list(pwd);
+	if (pwd != NULL)
+		path = ft_arg_to_chained_list(pwd);
+	else
+		path = ft_create_new_node("/");
 	final_pwd = double_dot_convert_to_lists(path, final_arg);
-	free_split(pwd);
+	if (pwd != NULL)
+		free_split(pwd);
 	free_split(final_arg);
 	return (final_pwd);
 }

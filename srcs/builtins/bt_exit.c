@@ -6,18 +6,21 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:47:54 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/21 21:55:54 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/23 17:10:55 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+#define LL_MAX 9223372036854775807
 
 // checks if the argument is numeric. Takes into account the - or + that can
 // prefix the argument. it will return true if the argument is numeric and
 // false if not
 bool	is_arg_valid(char *arg)
 {
-	int	i;
+	int			i;
+	long long	_atoi;
 
 	i = 0;
 	if (arg[i] == '\0'
@@ -31,6 +34,10 @@ bool	is_arg_valid(char *arg)
 			return (false);
 		i++;
 	}
+	_atoi = ft_atolli(arg);
+	printf("%llu\n%ld\n", _atoi, LL_MAX);
+	if (_atoi > LL_MAX)
+		return (false);
 	return (true);
 }
 
@@ -53,12 +60,13 @@ void	handle_valid_arg(t_shell *shell, char *arg)
 		code = 256 - (code);
 	}
 	free_case_exit(shell);
+	printf("exit\n");
 	exit(code);
 }
 
 void	handle_invalid_arg(t_shell *shell, char *arg)
 {
-	printf("bash: exit: %s: numeric argument required", arg);
+	printf("exit\nminishell: exit: %s: numeric argument required", arg);
 	free_case_exit(shell);
 	exit(2);
 }
@@ -91,11 +99,12 @@ void	built_in_exit(t_shell *shell, char **cmd_args)
 	if (cmd_args[1] == NULL)
 	{
 		free_case_exit(shell);
+		printf("exit\n");
 		exit(shell->exit_status);
 	}
 	else if (cmd_args[2])
 	{
-		printf("bash: exit: too many arguments");
+		write(STDERR_FILENO, "minishell: exit: too many arguments", 36);
 		free_case_exit(shell);
 		exit(2);
 	}
