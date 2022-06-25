@@ -6,11 +6,21 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 21:43:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/24 11:08:10 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 05:49:13 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+void	bt_export_error_handler(int err, char *arg)
+{
+	if (err == 0)
+	{
+		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
+	}
+}
 
 bool	var_is_valid(char *arg)
 {
@@ -26,7 +36,8 @@ bool	var_is_valid(char *arg)
 		if (arg[i] == '=')
 			trigger = 1;
 		if ((arg[i] == '@' || arg[i] == '!' || arg[i] == '"'
-				|| arg[i] == '\\' || arg[i] == '\'') && trigger == 0)
+				|| arg[i] == '\\' || arg[i] == '\'' || arg[i] == ' ')
+			&& trigger == 0)
 			return (false);
 		i++;
 	}
@@ -43,7 +54,7 @@ int	add_env_variable(char *arg, t_env **env)
 	{
 		if (var_is_valid(arg) == false)
 		{
-			printf("minishell: export: `%s': not a valid identifier\n", arg);
+			bt_export_error_handler(0, arg);
 			return (1);
 		}
 		if (ft_strncmp(arg, tmp->data, ft_strlen_export(arg)) == 0
