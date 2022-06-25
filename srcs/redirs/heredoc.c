@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/23 10:31:20 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/23 11:00:28 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 05:23:21 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static char	*obtain_trimmed_ui(t_shell *shell)
 		free(user_input);
 		return (NULL);
 	}
+	free(user_input);
 	return (cutted_ui);
 }
 
@@ -59,7 +60,7 @@ void	handle_here_doc(t_shell *shell, char *delimiter)
 	while (19)
 	{
 		cutted_ui = obtain_trimmed_ui(shell);
-		if (!cutted_ui)
+		if (cutted_ui == NULL)
 		{
 			printf("^D\n");
 			break ;

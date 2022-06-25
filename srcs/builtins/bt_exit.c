@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:47:54 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/24 13:53:36 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 05:27:38 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ void	handle_valid_arg(t_shell *shell, char *arg)
 
 void	handle_invalid_arg(t_shell *shell, char *arg)
 {
-	printf("exit\nminishell: exit: %s: numeric argument required", arg);
+	ft_putstr_fd("exit\nminishell: exit: ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
 	free_case_exit(shell);
 	exit(2);
 }
@@ -106,7 +108,7 @@ void	built_in_exit(t_shell *shell, char **cmd_args)
 		exit(shell->exit_status);
 	}
 	else if (cmd_args[2])
-		write(STDERR_FILENO, "minishell: exit: too many arguments", 36);
+		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
 	else if (cmd_args[1] != NULL && is_arg_valid(cmd_args[1]) == true)
 		handle_valid_arg(shell, cmd_args[1]);
 	else if (cmd_args[1] != NULL && is_arg_valid(cmd_args[1]) == false)
