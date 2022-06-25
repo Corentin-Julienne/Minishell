@@ -72,7 +72,7 @@ typedef struct s_exp
 typedef struct s_shell
 {
 	int				i;
-	size_t			item_length;
+	int				item_length;
 	int				exit_status;
 	char			**paths;
 	char			*user_input;
@@ -182,6 +182,8 @@ void		path_cmd_exec(t_shell *shell, char **cmd_args);
 
 						/* MINISHELL */
 
+		/* minishell.c */
+int			is_spaces_only(char *str);
 		/* process_tokens.c */
 void		process_tokens(t_token *token, t_shell *shell);
 
@@ -243,6 +245,7 @@ void		free_split(char **split);
 void		free_env(char **env);
 
 		/* init_structs.c */
+void		lowercase_cmds(t_token *token);
 void		reset_shell_struct(t_shell *shell);
 void		init_shell_struct(t_shell *shell, char **envp);
 
