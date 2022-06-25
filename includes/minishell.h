@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/25 01:37:54 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:08:47 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,9 @@ void		path_cmd_exec(t_shell *shell, char **cmd_args);
 
 						/* MINISHELL */
 
+		/* minishell.c */
+int			is_spaces_only(char *str);
+
 		/* process_tokens.c */
 void		process_tokens(t_token *token, t_shell *shell);
 
@@ -254,6 +257,7 @@ void		free_env(char **env);
 		/* init_structs.c */
 void		reset_shell_struct(t_shell *shell);
 void		init_shell_struct(t_shell *shell, char **envp);
+void		lowercase_cmds(t_token *token);
 
 		/* syntax_err.c */
 int			is_syntax_err(t_token *token, t_shell *shell);
