@@ -15,10 +15,10 @@
 /* return 1 if pipe or < or >, 
 return 2 if << or >> */
 
-static size_t	manage_chevrons_length(char *user_input, size_t i)
+static int	manage_chevrons_length(char *user_input, int i)
 {
 	char	*cutted_str;
-	size_t	len;
+	int		len;
 
 	cutted_str = &user_input[i];
 	len = ft_strlen(cutted_str);
@@ -41,12 +41,12 @@ static size_t	manage_chevrons_length(char *user_input, size_t i)
 => if blank space and not inside quote, then stop there 
 */
 
-static size_t	calc_token_length(char *user_input)
+static int	calc_token_length(char *user_input)
 {
 	int			i;
 
 	i = 0;
-	while (user_input[i])
+	while (user_input && user_input[i])
 	{
 		if (user_input[i] == '\'' || user_input[i] == '"')
 		{
@@ -65,7 +65,7 @@ static size_t	calc_token_length(char *user_input)
 			break ;
 		i++;
 	}
-	return ((size_t)i);
+	return (i);
 }
 
 /* the goal is to cut every token :
@@ -82,22 +82,19 @@ move ui_copy later
 char	*isolate_item(char *user_input, t_shell *shell, t_token *token)
 {
 	char	*item;
-	size_t	free_space_len;
+	int		free_space_len;
 
 	free_space_len = 0;
-	while (user_input[0] == ' ')
+	shell->item_length = 0;
+	while (user_input && user_input[0] == ' ')
 	{
 		free_space_len++;
 		user_input++;
 	}
-	shell->item_length = 0;
 	shell->item_length = calc_token_length(user_input);
-	if (shell->item_length == 0)
-		return (NULL);
-	item = (char *)malloc(sizeof(char) * (shell->item_length + 1));
+	item = ft_substr(user_input, 0, shell->item_length);
 	if (!item)
 		free_case_err(shell, token);
-	ft_strlcpy(item, user_input, shell->item_length + 1);
 	shell->item_length += free_space_len;
 	return (item);
 }

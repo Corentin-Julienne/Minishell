@@ -12,6 +12,22 @@
 
 #include "../../includes/minishell.h"
 
+/* bash allows CMDS to work regardless of the case
+e.g echo will works but also Echo or eChO */
+
+void	lowercase_cmds(t_token *token)
+{
+	int			i;
+
+	i = 0;
+	while (token && token->item && token->item[i])
+	{
+		if (token->item[i] >= 65 && token->item[i] <= 90)
+			token->item[i] = token->item[i] + 32;
+		i++;
+	}
+}
+
 /* refresh the shell values between two user inputs */
 
 void	reset_shell_struct(t_shell *shell)

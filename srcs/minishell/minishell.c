@@ -16,7 +16,7 @@
 by assessing if the user input is only composed of whitespace
 return 1 if only whitespace, 0 otherwise */
 
-static int	is_spaces_only(char *str)
+int	is_spaces_only(char *str)
 {
 	int		i;
 	int		error;
@@ -49,12 +49,12 @@ static void	miniloop(t_shell *shell)
 	if (is_spaces_only(shell->user_input) == 1)
 		return ;
 	token = parse_user_input(shell);
-	// display_every_token(token); // debug func
+	display_every_token(token); // debug func
 	free(shell->user_input);
 	shell->user_input = NULL;
 	process_tokens(token, shell);
 	token_clear(token);
-	// inspect_exit_code(shell); // debug func
+	inspect_exit_code(shell); // debug func
 	reset_shell_struct(shell);
 }
 
@@ -87,8 +87,8 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 	{
 		write(1, "\n", 1);
 		rl_replace_line("", 0);
-		//rl_on_new_line();
-		//rl_redisplay();
+		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 
@@ -103,7 +103,6 @@ int	main(int argc, char **argv, char **envp)
 	// atexit(leaks_killing); // debug func
 	(void)argc;
 	(void)argv;
-	// inspect_main_env(envp); // debug func
 	sig_int.sa_sigaction = signal_handler;
 	sig_int.sa_flags = SA_RESTART;
 	sig_quit.sa_handler = SIG_IGN;
