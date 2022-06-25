@@ -6,14 +6,14 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/23 16:32:23 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/24 20:15:19 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // a simple function to find the pwd at the time
-char	*find_pwd_path(t_env *head, char *var)
+char	*find_var_path(t_env *head, char *var)
 {
 	char	*tmp;
 
@@ -35,6 +35,8 @@ int	built_in_pwd(t_shell *shell, char *cmd_args)
 	(void)shell;
 	(void)cmd_args;
 	pwd = malloc(sizeof(char) * MAX_PATH);
+	if (!pwd)
+		return (1);
 	pwd = getcwd(pwd, MAX_PATH);
 	if (pwd == NULL)
 	{

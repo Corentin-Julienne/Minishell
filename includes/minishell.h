@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/23 17:26:19 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 01:37:54 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,21 @@ int			built_in_cd(t_shell *shell, char **cmd_args);
 		/* bt_cd_utils.c */
 void		assign_old_pwd(t_shell *shell, char *arg,
 				int success_code, char *pwd);
-char		*expand_tilde(char *home, char *arg);
-char		*expand_double_dot(char *arg, t_env *head);
-char		*double_dot_convert_to_lists(t_env *path, char **final_arg);
+char		*define_pwd(void);
+void		path_list_create(char *arg, t_env **path);
+
+		/* bt_cd_parser.c */
+char		*bt_cd_parser(char *arg, t_shell *shell, char *pwd);
+
+		/* bt_cd_dots.c */
+void		reshape_arg(t_env *path);
 
 		/* bt_cd_exec.c */
-int			change_directory(t_shell *shell, char *arg, char *home);
+int			change_directory(char *final_path, char *arg);
+int			deal_with_dash(t_shell *shell, char *pwd);
+
+		/* bt_cd_errors.c */
+void		bt_cd_error_handler(int err, char *arg);
 
 		/* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
@@ -135,7 +144,7 @@ int			add_env_variable(char *arg, t_env **env);
 
 		/* bt_pwd.c */
 int			built_in_pwd(t_shell *shell, char *cmd_args);
-char		*find_pwd_path(t_env *head, char *var);
+char		*find_var_path(t_env *head, char *var);
 
 		/* bt_unset.c */
 int			built_in_unset(t_shell *shell, char **cmd_args);

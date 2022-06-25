@@ -6,89 +6,41 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 20:45:06 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/23 16:30:58 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 01:46:32 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// handles the arguments prefixed by a ~
-int	handle_tilde(t_shell *shell, char *arg, char *home)
+int	deal_with_dash(t_shell *shell, char *arg)
 {
-	char	*final_arg;
-	int		success_code;
-
-	final_arg = expand_tilde(home, arg);
-	success_code = chdir(final_arg);
-	if (success_code != 0)
+	if (spot_env_var(shell->env_list, "OLDPWD") == NULL)
+		bt_cd_error_handler(1, arg);
+	else if (spot_env_var(shell->env_list, "OLDPWD") != NULL)
 	{
-		printf("minishell: cd: %s: No such file or directory\n", final_arg);
-		free(final_arg);
-		return (1);
+		chdir(find_var_path(shell->env_list, "OLDPWD"));
+		change_env_var(shell->env_list, "PWD",
+			find_var_path(shell->env_list, "OLDPWD"));
+		printf("%s\n", find_var_path(shell->env_list, "PWD"));
 	}
 	else
 	{
-		change_env_var(shell->env_list, "PWD", final_arg);
-		printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		free(final_arg);
-	}
-	return (0);
-}
-
-// handles the arguments prefixed by a -
-int	handle_dash(t_shell *shell, char *arg)
-{
-	if (ft_strlen(arg) == 1)
-	{
-		if (spot_env_var(shell->env_list, "OLDPWD") == NULL)
-			printf("minishell: cd: OLDPWD not set\n");
-		else
-		{
-			chdir(find_pwd_path(shell->env_list, "OLDPWD"));
-			change_env_var(shell->env_list, "PWD",
-				find_pwd_path(shell->env_list, "OLDPWD"));
-			printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		}
-	}
-	else
-	{
-		printf("minishell: cd: %c%c: invalid option\n", arg[0], arg[1]);
+		bt_cd_error_handler(2, arg);
 		return (1);
 	}
 	return (0);
 }
 
-int	handle_slash(t_shell *shell, char *arg)
+int	change_directory(char *final_path, char *arg)
 {
-	int	code;
+	int	exit_code;
 
-	code = chdir(arg);
-	change_env_var(shell->env_list, "PWD", arg);
-	printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-	return (code);
-}
-
-// executes the change of directory according to the constraints
-int	change_directory(t_shell *shell, char *arg, char *home)
-{
-	int		success_code;
-
-	if (arg[0] == '-')
-		success_code = handle_dash(shell, arg);
-	else if (arg[0] == '~')
-		success_code = handle_tilde(shell, arg, home);
-	else if (arg[0] == '/')
-		success_code = handle_slash(shell, arg);
-	else
+	exit_code = chdir(final_path);
+	if (exit_code != 0)
 	{
-		success_code = chdir(arg);
-		if (success_code != 0)
-			printf("minishell: cd: %s: No such file or directory\n", arg);
-		else
-		{
-			change_env_var(shell->env_list, "PWD", arg);
-			printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		}
+		bt_cd_error_handler(0, arg);
+		return (exit_code);
 	}
-	return (success_code);
+	printf("%s\n", final_path);
+	return (exit_code);
 }
