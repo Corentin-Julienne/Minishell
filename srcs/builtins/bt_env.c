@@ -6,13 +6,29 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/11 15:42:59 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/23 17:35:13 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 10:23:30 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 #include <sys/stat.h>
 #include <sys/file.h>
+
+void	bt_env_error_handler(int err, char *arg)
+{
+	if (err == 0)
+	{
+		ft_putstr_fd("env: ‘", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putendl_fd("’: No such file or directory", STDERR_FILENO);
+	}
+	if (err == 1)
+	{
+		ft_putstr_fd("env: ‘", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putendl_fd("‘: Permission denied", STDERR_FILENO);
+	}
+}
 
 // has 2 roles:
 // 	- if there is one or more arguments, it only takes into account
@@ -32,9 +48,9 @@ int	built_in_env(t_shell *shell, char **cmd_args)
 	{
 		status = stat(cmd_args[1], &stats);
 		if (S_ISREG(stats.st_mode) || status != 0)
-			printf("env: ‘%s’: No such file or directory\n", cmd_args[1]);
+			bt_env_error_handler(0, cmd_args[1]);
 		else if (S_ISDIR(stats.st_mode))
-			printf("env: ‘%s‘: Permission denied\n", cmd_args[1]);
+			bt_env_error_handler(1, cmd_args[1]);
 		return (126);
 	}
 	tmp = shell->env_list;
