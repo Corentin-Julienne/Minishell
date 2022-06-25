@@ -233,7 +233,7 @@ int			operate_redir(t_shell *shell, t_token *redir_tk,
 				t_token *token, int process);
 
 		/* heredoc.c */
-void		handle_here_doc(t_shell *shell, char *delimiter, t_token *token);
+void		handle_here_doc(t_shell *shell, char *delimiter);
 
 		/* pipes_redirs_cmds.c */
 int			is_forking_required(t_token *token, t_shell *shell);

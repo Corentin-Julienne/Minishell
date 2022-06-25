@@ -12,50 +12,11 @@
 
 #include "../../includes/minishell.h"
 
-// reads the temporary file create .heredoc_tmp and prints its content to the
-// stdout. uses get_next_line to do so
-void	print_heredoc(void)
+static void	redirect_heredoc(t_shell *shell)
 {
-	char	*line;
-	int		fd;
-
-	fd = open(".heredoc_tmp", O_RDONLY);
-	line = get_next_line(fd);
-	if (!line)
-		return ;
-	while (line != NULL)
-	{
-		printf("%s", line);
-		free(line);
-		line = get_next_line(fd);
-	}
-	free(line);
-	close(fd);
-}
-
-void	heredoc_loop(t_shell *shell, char *delimiter,
-	char *user_input, char *prompt)
-{
-	while (19)
-	{
-		user_input = readline(prompt);
-		if (!user_input)
-		{
-			printf("^D\n");
-			break ;
-		}
-		if (!ft_strncmp(user_input, delimiter, ft_strlen(delimiter))
-			&& user_input[ft_strlen(delimiter)] == '\0')
-		{
-			free(user_input);
-			print_heredoc();
-			break ;
-		}
-		ft_putstr_fd(user_input, shell->fd_in);
-		ft_putstr_fd("\n", shell->fd_in);
-		free(user_input);
-		user_input = NULL;
-	}
+	shell->fd_in = open(".heredoc_tmp", O_RDONLY);
+	dup2(shell->fd_in, STDIN_FILENO);
+	close(shell->fd_in);
 }
 
 /*The format of here-documents is:
@@ -72,14 +33,48 @@ void	heredoc_loop(t_shell *shell, char *delimiter,
 	mand  substitution,  and arithmetic expansion.  In the latter case, the
 	character sequence \<newline> is ignored, and \ must be used  to  quote
 	the characters \, $, and `. */
-void	handle_here_doc(t_shell *shell, char *delimiter, t_token *token)
-{
-	char		*user_input;
-	char		*prompt;
 
-	prompt = "heredoc> ";
-	if (token->next != NULL && ft_strncmp(token->next->item, "|", 1) == 0)
-		prompt = "pipe heredoc> ";
-	user_input = NULL;
-	heredoc_loop(shell, delimiter, user_input, prompt);
+static char	*obtain_trimmed_ui(t_shell *shell)
+{
+	char	*cutted_ui;
+	char	*user_input;
+
+	write(shell->std_fdout, "> ", ft_strlen("> "));
+	user_input = get_next_line(shell->std_fdin);
+	if (!user_input)
+		return (NULL);
+	cutted_ui = ft_substr(user_input, 0, ft_strlen(user_input) - 1);
+	if (!cutted_ui)
+	{
+		free(user_input);
+		return (NULL);
+	}
+	return (cutted_ui);
+}
+
+void	handle_here_doc(t_shell *shell, char *delimiter)
+{
+	char		*cutted_ui;
+
+	while (19)
+	{
+		cutted_ui = obtain_trimmed_ui(shell);
+		if (!cutted_ui)
+		{
+			printf("^D\n");
+			break ;
+		}
+		if (!ft_strncmp(cutted_ui, delimiter, ft_strlen(delimiter))
+			&& cutted_ui[ft_strlen(delimiter)] == '\0')
+		{
+			free(cutted_ui);
+			break ;
+		}
+		ft_putstr_fd(cutted_ui, shell->fd_in);
+		ft_putstr_fd("\n", shell->fd_in);
+		free(cutted_ui);
+		cutted_ui = NULL;
+	}
+	close(shell->fd_in);
+	redirect_heredoc(shell);
 }
