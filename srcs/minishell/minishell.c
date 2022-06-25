@@ -100,7 +100,7 @@ int	main(int argc, char **argv, char **envp)
 	struct sigaction	sig_int;
 	struct sigaction	sig_quit;
 
-	// atexit(leaks_killing); // debug func
+	atexit(leaks_killing); // debug func
 	(void)argc;
 	(void)argv;
 	sig_int.sa_sigaction = signal_handler;
