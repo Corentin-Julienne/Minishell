@@ -49,12 +49,12 @@ static void	miniloop(t_shell *shell)
 	if (is_spaces_only(shell->user_input) == 1)
 		return ;
 	token = parse_user_input(shell);
-	display_every_token(token); // debug func
+	//display_every_token(token); // debug func
 	free(shell->user_input);
 	shell->user_input = NULL;
 	process_tokens(token, shell);
 	token_clear(token);
-	inspect_exit_code(shell); // debug func
+	//inspect_exit_code(shell); // debug func
 	reset_shell_struct(shell);
 }
 
@@ -100,7 +100,7 @@ int	main(int argc, char **argv, char **envp)
 	struct sigaction	sig_int;
 	struct sigaction	sig_quit;
 
-	atexit(leaks_killing); // debug func
+	//atexit(leaks_killing); // debug func
 	(void)argc;
 	(void)argv;
 	sig_int.sa_sigaction = signal_handler;

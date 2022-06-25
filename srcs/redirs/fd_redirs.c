@@ -29,7 +29,7 @@ static void	file_opener(t_shell *shell, int type, char *path)
 		shell->fd_in = open(path, O_RDONLY);
 	}
 	else if (type == HERE_DOC)
-		shell->fd_in = open(".heredoc_tmp", O_RDWR | O_CREAT | O_TRUNC, 0644);
+		shell->fd_in = open(".heredoc_tmp", O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	else if (type == REDIR_OUTPUT)
 		shell->fd_out = open(path, O_RDWR | O_CREAT | O_TRUNC, 0644);
 	else
@@ -74,9 +74,12 @@ int	operate_redir(t_shell *shell, t_token *redir_tk,
 			return (-1);
 		}
 		if (type == HERE_DOC)
-			handle_here_doc(shell, path, token);
-		dup2(shell->fd_in, STDIN_FILENO);
-		close(shell->fd_in);
+			handle_here_doc(shell, path);
+		else
+		{
+			dup2(shell->fd_in, STDIN_FILENO);
+			close(shell->fd_in);
+		}
 	}
 	else if (type == REDIR_OUTPUT || type == RO_APPEND)
 	{
