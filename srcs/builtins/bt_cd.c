@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/25 03:10:20 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 04:39:19 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ int	built_in_cd_conditions(char **cmd_args, t_shell *shell,
 
 	exit_code = 0;
 	if (!cmd_args[1] || (ft_strlen(cmd_args[1]) == 2
-			&& ft_strncmp(cmd_args[1], "--", 2) == 0)
-		|| (ft_strlen(cmd_args[1]) == 1
-			&& ft_strncmp(cmd_args[1], "~", 1) == 0))
+			&& ft_strncmp(cmd_args[1], "--", 2) == 0))
 	{
 		if (spot_env_var(shell->env_list, "HOME") == NULL)
 			return (1);
@@ -65,6 +63,31 @@ int	built_in_cd_conditions_main(char **cmd_args, t_shell *shell,
 	return (exit_code);
 }
 
+int	special_case_home(char **cmd_args, char *final_path, t_shell *shell, int go)
+{
+	int		exit_code;
+	t_env	*env;
+
+	env = shell->env_list;
+	exit_code = 0;
+	if ((!cmd_args[1] && spot_env_var(env, "HOME") != NULL)
+		|| (cmd_args[1] && ft_strncmp(cmd_args[1], "--", 2) == 0
+			&& ft_strlen(cmd_args[1]) == 2
+			&& spot_env_var(env, "HOME") != NULL))
+		exit_code = change_dir(final_path, find_var_path(env, "HOME"), go);
+	else if ((!cmd_args[1] && spot_env_var(env, "HOME") == NULL)
+		|| (cmd_args[1] && ft_strncmp(cmd_args[1], "--", 2) == 0
+			&& ft_strlen(cmd_args[1]) == 2
+			&& spot_env_var(env, "HOME") == NULL))
+	{
+		ft_putendl_fd("minishell: cd: HOME not set", STDERR_FILENO);
+		exit_code = change_dir(final_path, find_var_path(env, "HOME"), go);
+	}
+	else
+		exit_code = change_dir(final_path, cmd_args[1], go);
+	return (exit_code);
+}
+
 // fonction to handle the built in cd
 // a few mentions:
 	// cd without any argument will drive to home if home is in the env
@@ -85,7 +108,7 @@ int	built_in_cd(t_shell *shell, char **cmd_args)
 	go = 0;
 	pwd = define_pwd();
 	go = built_in_cd_conditions_main(cmd_args, shell, &final_path, pwd);
-	exit_code = change_directory(final_path, cmd_args[1], go);
+	special_case_home(cmd_args, final_path, shell, go);
 	assign_old_pwd(shell, cmd_args[1], exit_code, pwd);
 	if (final_path)
 		free(final_path);

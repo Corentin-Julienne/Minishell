@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/21 20:45:06 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/25 03:25:54 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 04:26:36 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	deal_with_dash(t_shell *shell, char *arg, char **final_path)
 
 // executes the change of directory and returns the status code from
 // chdir
-int	change_directory(char *final_path, char *arg, int go)
+int	change_dir(char *final_path, char *arg, int go)
 {
 	int	exit_code;
 

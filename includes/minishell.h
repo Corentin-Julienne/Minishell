@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/25 02:55:03 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 04:30:39 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ typedef struct s_shell
 	int				*pipes;
 	pid_t			*pids_arr;
 	t_env			*env_list;
+	char			*home;
 }					t_shell;
 
 typedef struct s_token
@@ -116,7 +117,7 @@ char		*bt_cd_parser(char *arg, t_shell *shell, char *pwd);
 void		reshape_arg(t_env *path);
 
 		/* bt_cd_exec.c */
-int			change_directory(char *final_path, char *arg, int go);
+int			change_dir(char *final_path, char *arg, int go);
 int			deal_with_dash(t_shell *shell, char *pwd, char **final_path);
 
 		/* bt_cd_errors.c */
