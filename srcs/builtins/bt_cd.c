@@ -6,12 +6,16 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/25 01:48:54 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 03:10:20 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+// second part of the conditions
+// it is worth to mention that this function throws the row
+// argument into a parser that will handle all the syntaxic
+// parameters that CD encounters in minishell
 int	built_in_cd_conditions(char **cmd_args, t_shell *shell,
 		char **final_path, char *pwd)
 {
@@ -32,7 +36,30 @@ int	built_in_cd_conditions(char **cmd_args, t_shell *shell,
 		*final_path = bt_cd_parser(cmd_args[1], shell, pwd);
 	else if (cmd_args[2])
 	{
-		printf("minishell: cd: too many arguments\n");
+		bt_cd_error_handler(3, NULL);
+		exit_code = 1;
+	}
+	return (exit_code);
+}
+
+// first part of a long series of conditions that CD has to meet.
+int	built_in_cd_conditions_main(char **cmd_args, t_shell *shell,
+		char **final_path, char *pwd)
+{
+	int	exit_code;
+
+	exit_code = 0;
+	if (cmd_args[1] && !cmd_args[2] && cmd_args[1][0] == '-' &&
+		ft_strlen(cmd_args[1]) == 1)
+		exit_code = deal_with_dash(shell, pwd, final_path);
+	else if (cmd_args[1] && !cmd_args[2] && cmd_args[1][0] == '-'
+			&& cmd_args[1][1] != '-')
+	{
+		bt_cd_error_handler(2, cmd_args[1]);
+		exit_code = 1;
+	}
+	else if (built_in_cd_conditions(cmd_args, shell, final_path, pwd) != 0)
+	{
 		exit_code = 1;
 	}
 	return (exit_code);
@@ -51,25 +78,14 @@ int	built_in_cd(t_shell *shell, char **cmd_args)
 	char		*pwd;
 	int			exit_code;
 	char		*final_path;
+	int			go;
 
 	exit_code = 0;
 	final_path = NULL;
+	go = 0;
 	pwd = define_pwd();
-	// if (!cmd_args[2] && cmd_args[1][0] == '-' && ft_strlen(cmd_args[1]) == 1)
-	// 	deal_with_dash(shell, pwd);
-	// else if (!cmd_args[2] && cmd_args[1][0] == '-'
-	// 		&& cmd_args[1][1] != '-')
-	// {
-	// 	bt_cd_error_handler(2, cmd_args[1]);
-	// 	free(pwd);
-	// 	return (1);
-	// }
-	if (built_in_cd_conditions(cmd_args, shell, &final_path, pwd) != 0)
-	{
-		free(pwd);
-		return (1);
-	}
-	exit_code = change_directory(final_path, cmd_args[1]);
+	go = built_in_cd_conditions_main(cmd_args, shell, &final_path, pwd);
+	exit_code = change_directory(final_path, cmd_args[1], go);
 	assign_old_pwd(shell, cmd_args[1], exit_code, pwd);
 	if (final_path)
 		free(final_path);

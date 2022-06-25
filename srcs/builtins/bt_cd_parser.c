@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 23:55:21 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/25 01:24:05 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 03:22:22 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,13 @@ void	deal_with_rest(char *pwd, t_env **path)
 	free_split(current);
 }
 
+// according to the first char encountered, the beginning of the path
+// changes. this function takes care of that:
+// 	- if it is '/', then the first chunk is /
+// 	- if it is '~', then the first chunk remains / but the following
+// 		come out of $HOME, as long as $HOME exists
+// 	- if it is any other, then again, the first chunk is /
+// 		but the following come out of PWD
 void	analyse_first_char(t_env **path, char **arg, t_shell *shell, char *pwd)
 {
 	t_env	*new;
@@ -69,6 +76,7 @@ void	analyse_first_char(t_env **path, char **arg, t_shell *shell, char *pwd)
 		deal_with_rest(pwd, path);
 }
 
+// reconstructs the new path
 char	*glue_path(t_env *path)
 {
 	char	*final_path;
@@ -90,6 +98,16 @@ char	*glue_path(t_env *path)
 	return (final_path);
 }
 
+// receives the raw argument and acts as follows:
+// 	- transforms the argument into a linked list with each
+// 		link containing a chunck (and text following a '/')
+// 		of path given as argument
+// 	- deletes the necessary nodes according to the . and .. inputs.
+// 		. will delete its own node
+// 		.. will delete its own and the previous (unless the previous)
+// 		is the first '/'
+// 	- reconstructs a new path from each chunk left in the linked list
+// 		puts a '/' in between every chunk
 char	*bt_cd_parser(char *arg, t_shell *shell, char *pwd)
 {
 	t_env	*path;

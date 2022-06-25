@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/25 02:08:47 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:55:03 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef struct s_exp
 typedef struct s_shell
 {
 	int				i;
-	size_t			item_length;
+	int				item_length;
 	int				exit_status;
 	char			**paths;
 	char			*user_input;
@@ -116,8 +116,8 @@ char		*bt_cd_parser(char *arg, t_shell *shell, char *pwd);
 void		reshape_arg(t_env *path);
 
 		/* bt_cd_exec.c */
-int			change_directory(char *final_path, char *arg);
-int			deal_with_dash(t_shell *shell, char *pwd);
+int			change_directory(char *final_path, char *arg, int go);
+int			deal_with_dash(t_shell *shell, char *pwd, char **final_path);
 
 		/* bt_cd_errors.c */
 void		bt_cd_error_handler(int err, char *arg);
@@ -255,6 +255,7 @@ void		free_split(char **split);
 void		free_env(char **env);
 
 		/* init_structs.c */
+void		lowercase_cmds(t_token *token);
 void		reset_shell_struct(t_shell *shell);
 void		init_shell_struct(t_shell *shell, char **envp);
 void		lowercase_cmds(t_token *token);
@@ -279,7 +280,7 @@ int			ft_rm_substr(const char *str, const char *substr, char **new_str);
 						/* PROTOS READLINE */
 
 void		rl_replace_line(const char *text, int clear_undo);
-int 		rl_on_new_line(void);
+int			rl_on_new_line(void);
 void		rl_redisplay(void);
 
 /* DEBUG */ // NOT TO BE INCLUDED IN FINAL REPO !!!!!

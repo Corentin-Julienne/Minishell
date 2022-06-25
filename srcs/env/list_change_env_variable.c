@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 21:39:46 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/25 02:03:45 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:13:02 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	create_env_var(t_env *head, char *name, char *value)
 	t_env	*new;
 
 	tmp = head;
-	printf("value = %s\n", value);
 	while (tmp->next)
 	{
 		if (spot_env_var(head, name) != NULL)
