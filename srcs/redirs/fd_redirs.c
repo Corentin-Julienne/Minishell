@@ -57,6 +57,12 @@ static void	handle_no_existing_file(t_shell *shell, t_token *token, int process)
 /* operate_redir should take the parsing parameter and perform
 a SINGLE redir per call, based on the parameter */
 
+static void	handle_redir_output(t_shell *shell)
+{
+	dup2(shell->fd_out, STDOUT_FILENO);
+	close(shell->fd_out);
+}
+
 int	operate_redir(t_shell *shell, t_token *redir_tk,
 	t_token *token, int process)
 {
@@ -82,9 +88,6 @@ int	operate_redir(t_shell *shell, t_token *redir_tk,
 		}
 	}
 	else if (type == REDIR_OUTPUT || type == RO_APPEND)
-	{
-		dup2(shell->fd_out, STDOUT_FILENO);
-		close(shell->fd_out);
-	}
+		handle_redir_output(shell);
 	return (0);
 }
