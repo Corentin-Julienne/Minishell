@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:36:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/22 11:32:43 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 04:32:40 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	clean_child_process(t_shell *shell)
 	}
 	if (shell->env_list != NULL)
 		free_list(shell->env_list);
+	if (shell->home != NULL)
+		free(shell->home);
 	free(shell);
 }
 
@@ -55,6 +57,8 @@ void	free_case_err(t_shell *shell, t_token *token)
 		free(shell->pids_arr);
 	if (shell->env_list != NULL)
 		free_list(shell->env_list);
+	if (shell->home != NULL)
+		free(shell->home);
 	shell = NULL;
 	if (token)
 		token_clear(token);
@@ -113,5 +117,7 @@ void	free_case_exit(t_shell *shell)
 		free(shell->pids_arr);
 	if (shell->env_list != NULL)
 		free_list(shell->env_list);
+	if (shell->home != NULL)
+		free(shell->home);
 	shell = NULL;
 }

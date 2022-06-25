@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:59:00 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/24 11:01:54 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 04:31:27 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	init_shell_struct(t_shell *shell, char **envp)
 	shell->item_length = 0;
 	shell->exit_status = 0;
 	shell->env_list = ft_arg_to_chained_list(envp);
+	shell->home = ft_strdup(find_var_path(shell->env_list, "HOME"));
 	shell->paths = NULL;
 	shell->user_input = NULL;
 	shell->fd_in = -1;

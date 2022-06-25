@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 23:55:21 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/25 03:22:22 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 04:47:52 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,23 @@ void	deal_with_tilde(char **arg, t_shell *shell, t_env **path)
 {
 	t_env	*new;
 	char	**home;
+	char	*tmp;
 	int		i;
 
 	(*arg)++;
-	if (spot_env_var(shell->env_list, "HOME") != NULL)
+	tmp = ft_strdup(shell->home);
+	new = ft_create_new_node("/");
+	ft_add_at_tail(path, new);
+	home = ft_split(tmp, '/');
+	free(tmp);
+	i = 0;
+	while (home[i] != NULL)
 	{
-		new = ft_create_new_node("/");
+		new = ft_create_new_node(home[i]);
 		ft_add_at_tail(path, new);
-		home = ft_split((find_var_path(shell->env_list, "HOME")), '/');
-		i = 0;
-		while (home[i])
-		{
-			new = ft_create_new_node(home[i]);
-			ft_add_at_tail(path, new);
-			i++;
-		}
-		free_split(home);
+		i++;
 	}
+	free_split(home);
 }
 
 void	deal_with_rest(char *pwd, t_env **path)
