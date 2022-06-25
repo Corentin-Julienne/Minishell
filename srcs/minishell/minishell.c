@@ -16,7 +16,7 @@
 by assessing if the user input is only composed of whitespace
 return 1 if only whitespace, 0 otherwise */
 
-static int	is_spaces_only(char *str)
+int	is_spaces_only(char *str)
 {
 	int		i;
 	int		error;

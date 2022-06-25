@@ -12,22 +12,6 @@
 
 #include "../../includes/minishell.h"
 
-/* bash allows CMDS to work regardless of the case
-e.g echo will works but also Echo or eChO */
-
-static void	lowercase_cmds(t_token *token)
-{
-	int			i;
-
-	i = 0;
-	while (token && token->item && token->item[i])
-	{
-		if (token->item[i] >= 65 && token->item[i] <= 90)
-			token->item[i] = token->item[i] + 32;
-		i++;
-	}
-}
-
 /* should check wether token type is a CMD or not
 return 1 if the case, 0 otherwise 
 the 2 cases identified are :
@@ -86,13 +70,6 @@ static void	find_token_type(t_token *token)
 	}
 }
 
-static t_token	*rtn_modified_tokens(t_token *token, t_shell *shell)
-{
-	find_token_type(token);
-	expand_token(token, shell);
-	return (token);
-}	
-
 /* the parse_user_input func is converting the string user_input
 into tokens. Tokens are words, quotted expressions separated
 by space or | < << >> >, or | < << >> >.
@@ -100,30 +77,56 @@ every token is a part of a linked list containing the str,
 the type of the token, if it is surrounded by closed quotes or not
 */
 
+static t_token	*rtn_new_elem(t_shell *shell, t_token *token,
+				char *ui_cpy, char *item)
+{
+	t_token		*new_elem;
+
+	if (!item)
+	{
+		free(ui_cpy);
+		free_case_err(shell, token);
+	}
+	new_elem = token_new(ft_strdup(item));
+	if (!new_elem)
+	{
+		if (!item)
+			free(item);
+		free(ui_cpy);
+		free_case_err(shell, token);
+	}
+	free(ui_cpy);
+	ui_cpy = NULL;
+	free(item);
+	item = NULL;
+	return (new_elem);
+}
+
 t_token	*parse_user_input(t_shell *shell)
 {
 	t_token		*token;
 	t_token		*new_elem;
 	char		*item;
 	char		*ui_cpy;
+	int			added_item_len;
 
 	token = NULL;
-	ui_cpy = shell->user_input;
-	while (ui_cpy)
+	added_item_len = 0;
+	while (42)
 	{
-		item = isolate_item(ui_cpy, shell, token);
-		if (!item && shell->item_length > 0)
-			free_case_err(shell, token);
-		if (!item && shell->item_length == 0)
+		if (ft_strlen(shell->user_input) <= (size_t)added_item_len
+			|| is_spaces_only(shell->user_input + added_item_len) == 1)
 			break ;
-		ui_cpy = ui_cpy + shell->item_length;
-		new_elem = token_new(item);
-		if (!new_elem)
-		{
-			free(item);
+		ui_cpy = ft_substr(shell->user_input, added_item_len,
+				ft_strlen(shell->user_input) - shell->item_length);
+		if (!ui_cpy)
 			free_case_err(shell, token);
-		}
+		item = isolate_item(ui_cpy, shell, token);
+		added_item_len += shell->item_length;
+		new_elem = rtn_new_elem(shell, token, ui_cpy, item);
 		token_add_back(&token, new_elem);
 	}
-	return (rtn_modified_tokens(token, shell));
+	find_token_type(token);
+	expand_token(token, shell);
+	return (token);
 }
