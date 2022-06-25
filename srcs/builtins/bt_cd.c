@@ -6,46 +6,63 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/23 16:31:00 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 03:10:20 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// first part of the if/else statements of builtin cd. Norminette issues
-int	built_in_cd_home(t_shell *shell, char **cmd_args, char *pwd, int code)
+// second part of the conditions
+// it is worth to mention that this function throws the row
+// argument into a parser that will handle all the syntaxic
+// parameters that CD encounters in minishell
+int	built_in_cd_conditions(char **cmd_args, t_shell *shell,
+		char **final_path, char *pwd)
 {
-	char	*home;
+	int	exit_code;
 
-	home = find_pwd_path(shell->env_list, "HOME");
-	if (home == NULL)
+	exit_code = 0;
+	if (!cmd_args[1] || (ft_strlen(cmd_args[1]) == 2
+			&& ft_strncmp(cmd_args[1], "--", 2) == 0)
+		|| (ft_strlen(cmd_args[1]) == 1
+			&& ft_strncmp(cmd_args[1], "~", 1) == 0))
 	{
-		free(pwd);
-		return (0);
+		if (spot_env_var(shell->env_list, "HOME") == NULL)
+			return (1);
+		*final_path = bt_cd_parser(find_var_path(shell->env_list,
+					"HOME"), shell, pwd);
 	}
-	code = chdir(home);
-	change_env_var(shell->env_list, "PWD", home);
-	printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-	assign_old_pwd(shell, cmd_args[1], code, pwd);
-	return (0);
+	else if (cmd_args[1] && !cmd_args[2])
+		*final_path = bt_cd_parser(cmd_args[1], shell, pwd);
+	else if (cmd_args[2])
+	{
+		bt_cd_error_handler(3, NULL);
+		exit_code = 1;
+	}
+	return (exit_code);
 }
 
-// simply the rest of the if/else statements of builtin cd. Norminette issues
-int	built_in_cd_else(t_shell *shell, char **cmd_args, int code, char *pwd)
+// first part of a long series of conditions that CD has to meet.
+int	built_in_cd_conditions_main(char **cmd_args, t_shell *shell,
+		char **final_path, char *pwd)
 {
-	char	*home;
+	int	exit_code;
 
-	home = find_pwd_path(shell->env_list, "HOME");
-	if (!home)
-		return (1);
-	if (!(ft_strlen(cmd_args[1]) == 1
-			&& ft_strncmp(cmd_args[1], "-", 1) == 0)
-		&& !(ft_strlen(cmd_args[1]) == 1
-			&& ft_strncmp(cmd_args[1], "/", 1) == 0))
-		cmd_args[1] = expand_double_dot(cmd_args[1], shell->env_list);
-	code = change_directory(shell, cmd_args[1], home);
-	assign_old_pwd(shell, cmd_args[1], code, pwd);
-	return (0);
+	exit_code = 0;
+	if (cmd_args[1] && !cmd_args[2] && cmd_args[1][0] == '-' &&
+		ft_strlen(cmd_args[1]) == 1)
+		exit_code = deal_with_dash(shell, pwd, final_path);
+	else if (cmd_args[1] && !cmd_args[2] && cmd_args[1][0] == '-'
+			&& cmd_args[1][1] != '-')
+	{
+		bt_cd_error_handler(2, cmd_args[1]);
+		exit_code = 1;
+	}
+	else if (built_in_cd_conditions(cmd_args, shell, final_path, pwd) != 0)
+	{
+		exit_code = 1;
+	}
+	return (exit_code);
 }
 
 // fonction to handle the built in cd
@@ -59,25 +76,19 @@ int	built_in_cd_else(t_shell *shell, char **cmd_args, int code, char *pwd)
 int	built_in_cd(t_shell *shell, char **cmd_args)
 {
 	char		*pwd;
-	int			success_code;
 	int			exit_code;
+	char		*final_path;
+	int			go;
 
-	success_code = 0;
 	exit_code = 0;
-	pwd = ft_strdup(find_pwd_path(shell->env_list, "PWD"));
-	if (!cmd_args[1] || (ft_strlen(cmd_args[1]) == 2
-			&& ft_strncmp(cmd_args[1], "--", 2) == 0)
-		|| (ft_strlen(cmd_args[1]) == 1
-			&& ft_strncmp(cmd_args[1], "~", 1) == 0))
-		exit_code = built_in_cd_home(shell, cmd_args, pwd, success_code);
-	else if (cmd_args[2])
-	{
-		printf("minishell: cd: too many arguments\n");
-		exit_code = 1;
-	}
-	else if (cmd_args[1][0] == '.' && !cmd_args[1][1])
-		return (exit_code);
-	else
-		exit_code = built_in_cd_else(shell, cmd_args, success_code, pwd);
+	final_path = NULL;
+	go = 0;
+	pwd = define_pwd();
+	go = built_in_cd_conditions_main(cmd_args, shell, &final_path, pwd);
+	exit_code = change_directory(final_path, cmd_args[1], go);
+	assign_old_pwd(shell, cmd_args[1], exit_code, pwd);
+	if (final_path)
+		free(final_path);
+	free(pwd);
 	return (exit_code);
 }

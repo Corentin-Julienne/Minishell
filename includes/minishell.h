@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/23 17:26:19 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:55:03 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,12 +106,21 @@ int			built_in_cd(t_shell *shell, char **cmd_args);
 		/* bt_cd_utils.c */
 void		assign_old_pwd(t_shell *shell, char *arg,
 				int success_code, char *pwd);
-char		*expand_tilde(char *home, char *arg);
-char		*expand_double_dot(char *arg, t_env *head);
-char		*double_dot_convert_to_lists(t_env *path, char **final_arg);
+char		*define_pwd(void);
+void		path_list_create(char *arg, t_env **path);
+
+		/* bt_cd_parser.c */
+char		*bt_cd_parser(char *arg, t_shell *shell, char *pwd);
+
+		/* bt_cd_dots.c */
+void		reshape_arg(t_env *path);
 
 		/* bt_cd_exec.c */
-int			change_directory(t_shell *shell, char *arg, char *home);
+int			change_directory(char *final_path, char *arg, int go);
+int			deal_with_dash(t_shell *shell, char *pwd, char **final_path);
+
+		/* bt_cd_errors.c */
+void		bt_cd_error_handler(int err, char *arg);
 
 		/* bt_echo.c */
 int			built_in_echo(t_shell *shell, char **cmd_args);
@@ -135,7 +144,7 @@ int			add_env_variable(char *arg, t_env **env);
 
 		/* bt_pwd.c */
 int			built_in_pwd(t_shell *shell, char *cmd_args);
-char		*find_pwd_path(t_env *head, char *var);
+char		*find_var_path(t_env *head, char *var);
 
 		/* bt_unset.c */
 int			built_in_unset(t_shell *shell, char **cmd_args);
@@ -184,6 +193,7 @@ void		path_cmd_exec(t_shell *shell, char **cmd_args);
 
 		/* minishell.c */
 int			is_spaces_only(char *str);
+
 		/* process_tokens.c */
 void		process_tokens(t_token *token, t_shell *shell);
 
@@ -248,6 +258,7 @@ void		free_env(char **env);
 void		lowercase_cmds(t_token *token);
 void		reset_shell_struct(t_shell *shell);
 void		init_shell_struct(t_shell *shell, char **envp);
+void		lowercase_cmds(t_token *token);
 
 		/* syntax_err.c */
 int			is_syntax_err(t_token *token, t_shell *shell);
@@ -269,7 +280,7 @@ int			ft_rm_substr(const char *str, const char *substr, char **new_str);
 						/* PROTOS READLINE */
 
 void		rl_replace_line(const char *text, int clear_undo);
-int 		rl_on_new_line(void);
+int			rl_on_new_line(void);
 void		rl_redisplay(void);
 
 /* DEBUG */ // NOT TO BE INCLUDED IN FINAL REPO !!!!!
