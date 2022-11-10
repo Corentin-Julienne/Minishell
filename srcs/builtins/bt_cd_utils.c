@@ -6,98 +6,86 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:30:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/12 23:08:27 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 03:45:54 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+// conditions to figure out if OLDPWD and PWD exist in env
+void	old_pwd_conditions(t_shell *shell, char *pwd)
+{
+	if (spot_env_var(shell->env_list, "PWD") != NULL)
+	{
+		if (spot_env_var(shell->env_list, "OLDPWD") == NULL)
+			create_env_var(shell->env_list, "OLDPWD",
+				ft_strchr(spot_env_var(shell->env_list, "PWD"), '=') + 1);
+		else if (spot_env_var(shell->env_list, "OLDPWD") != NULL)
+			change_env_var(shell->env_list, "OLDPWD",
+				ft_strchr(spot_env_var(shell->env_list, "PWD"), '=') + 1);
+	}
+	else
+	{
+		if (spot_env_var(shell->env_list, "OLDPWD") == NULL)
+			create_env_var(shell->env_list, "OLDPWD", pwd);
+		else if (spot_env_var(shell->env_list, "OLDPWD") != NULL)
+			change_env_var(shell->env_list, "OLDPWD", pwd);
+	}
+}
+
 // function to properly assign the path to old_pwd. careful though:
 // if its value hasn't been assigned because it is the first cd command,
 // its value remains NULL.
+// a few key points:
+// 	- if OLDPWD didn't exist prior to a cd movement, it is created
+// 	- if PWD exists in the env, it will take its value
+// 	- if PWD doesn't exist in the env, it'll take getcwd's value
 // keep in mind it's a pointer to a malloc'd memory space, thus it has to
 // be freed before exiting minishell.
 void	assign_old_pwd(t_shell *shell, char *arg, int success_code, char *pwd)
 {
+	char	*new_pwd;
+
 	if ((arg && arg[0] == '-' && ft_strlen(arg) == 1
-		&& spot_env_var(shell->env_list, "OLDPWD") == NULL)
+			&& spot_env_var(shell->env_list, "OLDPWD") == NULL)
 		|| success_code != 0)
 		return ;
-	else if (spot_env_var(shell->env_list, "OLDPWD") == NULL)
-		create_env_var(shell->env_list, "OLDPWD", pwd);
-	else if (spot_env_var(shell->env_list, "OLDPWD") != NULL)
-		change_env_var(shell->env_list, "OLDPWD", pwd);
-	free(pwd);
+	old_pwd_conditions(shell, pwd);
+	new_pwd = define_pwd();
+	if (spot_env_var(shell->env_list, "PWD") != NULL)
+		change_env_var(shell->env_list, "PWD", new_pwd);
+	free(new_pwd);
 }
 
-// replaces the ~ by home path
-char	*expand_tilde(char *home, char *arg)
+// simple function that returns the pwd. it is malloc'd
+char	*define_pwd(void)
 {
-	size_t	final_len_arg;
-	char	*final_arg;
+	char	*pwd;
 
-	final_arg = ft_strdup(home);
-	arg++;
-	final_arg = ft_strjoin_and_free(final_arg, arg);
-	return (final_arg);
+	pwd = malloc(sizeof(char) * MAX_PATH);
+	if (!pwd)
+		return (NULL);
+	pwd = getcwd(pwd, MAX_PATH);
+	return (pwd);
 }
 
-// this whole mess has to be normalized. It basically finds out if
-// there is a ../ or ./ in the path and converts the path to a format
-// that will fit into the variable pwd
-char	*double_dot_convert_to_lists(char **pwd, char **final_arg)
+// initiates the creation of a chained list containing each chunck
+// (a chunk = any text following a '/')
+void	path_list_create(char *arg, t_env **path)
 {
-	t_env	*arg;
-	t_env	*path;
-	t_env	*tmp_path;
-	t_env	*tmp_arg;
+	char	**split;
 	t_env	*new;
-	char	*final_pwd;
+	int		i;
 
-	arg = ft_arg_to_chained_list(final_arg);
-	path = ft_arg_to_chained_list(pwd);
-	tmp_path = path;
-	tmp_arg = arg;
-	while (arg != NULL)
+	i = 0;
+	split = ft_split(arg, '/');
+	while (split[i])
 	{
-		if (ft_strncmp(arg->data, "..", ft_strlen(arg->data)) == 0)
-		{
-			ft_delete_list_node(&path, last_node(&path));
-			arg = arg->next;
-		}
-		else if (arg->next && ft_strncmp(arg->data, ".", ft_strlen(arg->data)) == 0)
-			arg = arg->next;
-		else
-		{
-			new = ft_create_new_node(arg->data);
-			ft_add_at_tail(&path, new);
-			arg = arg->next;
-		}
+		new = ft_create_new_node(split[i]);
+		ft_add_at_tail(path, new);
+		i++;
 	}
-	final_pwd = ft_strdup("/");
-	path = tmp_path;
-	while (tmp_path != NULL)
-	{
-		final_pwd = ft_strjoin_and_free(final_pwd, tmp_path->data);
-		final_pwd = ft_strjoin_and_free(final_pwd, "/");
-		tmp_path = tmp_path->next;
-	}
-	free_list(path);
-	free_list(tmp_arg);
-	return (final_pwd);
+	free_split(split);
 }
 
 // handles the path given in argument and treats the ../ and ./ accordingly
-char	*expand_double_dot(char *arg, t_env *head)
-{
-	char	**pwd;
-	char	**final_arg;
-	char	*final_pwd;
-
-	final_arg = ft_split(arg, '/');
-	pwd = ft_split(find_pwd_path(head, "PWD"), '/');
-	final_pwd = double_dot_convert_to_lists(pwd, final_arg);
-	free_split(pwd);
-	free_split(final_arg);
-	return (final_pwd);
-}

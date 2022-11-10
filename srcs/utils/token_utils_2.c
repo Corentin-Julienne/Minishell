@@ -3,49 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:09:29 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/25 16:18:39 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/22 11:33:25 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	token_delone(t_token **token)
+void	token_clear(t_token *head)
 {
-	t_token			*tmp;
-	t_token			*tmp_2;
+	t_token	*tmp;
 
-	tmp = *token;
-	tmp_2 = *token;
-	if (*token && (*token)->prev)
+	if (!head)
+		return ;
+	while (head->next)
 	{
-		tmp = (*token)->prev;
-		tmp->next = NULL;
+		tmp = head->next;
+		free(head->item);
+		free(head);
+		head = tmp;
 	}
-	if (*token && (*token)->next)
-	{
-		tmp_2 = (*token)->next;
-		tmp_2->prev = NULL;
-	}
-	if (*token)
-	{
-		free(*token);
-		*token = NULL;
-	}
-}
-
-void	token_clear(t_token **token)
-{
-	t_token			*tmp;
-	
-	while (*token)
-	{
-		tmp = (*token)->next;
-		token_delone(token);
-		*token = tmp;
-	}
+	free(head->item);
+	free(head);
+	head = NULL;
 }
 
 void	token_add_front(t_token **token, t_token *new)

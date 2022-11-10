@@ -1,9 +1,0 @@
-echo blablabla >test.txt
-	colle bien le texte avec la nouvelle ligne
-
-echo -n blablabla >test.txt
-	ne colle pas le texte dans le fichier mais l'imprime sur la STDOUT
-
-si faute de frappe: cd../../..
-	minishell: Command not found: �H�=oU
-	double free or corruption (fasttop)cd..

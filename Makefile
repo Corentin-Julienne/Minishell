@@ -6,7 +6,7 @@
 #    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
-#    Updated: 2022/06/07 22:14:57 by xle-boul         ###   ########.fr        #
+#    Updated: 2022/06/24 20:22:22 by xle-boul         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,46 +21,39 @@ UNDERLINE	= \e[4m
 RESET		= \033[0m
 END			= \e[0m
 
-OS = $(shell uname -s)
+OS := $(shell uname -s)
 
 NAME := minishell
 TEST_NAME := minishell_test
 
 CC := gcc
-CFLAGS := -Werror -Wall -Wextra
+CFLAGS := -Werror -Wall -Wextra -g
 
-# little if / else statement to assign the proper flags for compilation
-# depending on the OS
-
-ifeq ($(OS),Linux)
-	READLINE := -lreadline
-else
-	RDL_PATH := -L/usr/local/opt/readline/lib/
-	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
-	RDL := -lreadline.8.1 $(RDL_PATH)
-	RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
-	READLINE := $(RDL) $(RDL_HISTORY)
-endif
+RDL_PATH := -L/Users/$(USER)/.brew/opt/readline/lib/
+RDL_HISTORY_PATH := -L/Users/$(USER)/.brew/opt/readline/lib/
+RDL := -lreadline.8.1 $(RDL_PATH)
+RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
+READLINE := $(RDL) $(RDL_HISTORY)
 
 INCLUDES := -I includes
 
 SRC_DIR := srcs
 OBJ_DIR := objs
-SUB_DIRS := builtins debug env exec minishell parsing redirs utils
+SUB_DIRS := builtins debug env exec minishell parsing redirs utils gnl
 SOURCEDIRS := $(foreach dir, $(SUB_DIRS), $(addprefix $(SRC_DIR)/, $(dir)))
 
 SRC_FILES := $(foreach dir,$(SOURCEDIRS),$(wildcard $(dir)/*.c))
 OBJ_FILES := $(addprefix $(OBJ_DIR)/,$(notdir $(SRC_FILES:.c=.o)))
 
-RM = rm -rf
-MKDIR = mkdir -p
+RM := rm -rf
+MKDIR := mkdir -p
 
 LIB_DIR := libft
 LIB_OBJ_DIR := libft/obj
 LIB_OBJ_DIR_BONUS := libft/obj_bonus
 LIB := libft.a
 
-VPATH = $(SOURCEDIRS)
+VPATH := $(SOURCEDIRS)
 
 all: $(NAME)
 
@@ -72,7 +65,7 @@ $(NAME): $(OBJ_FILES) $(LIB)
 $(OBJ_DIR)/%.o : %.c
 	@$(MKDIR) $(OBJ_DIR)
 	@printf "$(YELLOW)Compiling object:\n$(END)"
-	$(CC) $(CFALGS) $(INCLUDE) -c -o $@ $<
+	$(CC) $(CFLAGS) -I/Users/cjulienn/.brew/opt/readline/include/readline $(INCLUDE) -c -o $@ $<
 	@printf "$(GREEN)Object $(UNDERLINE)$(WHITE)$(notdir $@)$(END)$(GREEN) successfully compiled\n\n$(END)"
 
 $(LIB):
@@ -95,5 +88,8 @@ fclean: clean
 	@printf "$(GREEN)All clean!\n\n$(END)"
 
 re: fclean all
+
+norm:
+	@norminette includes libft srcs
 
 .PHONY: clean fclean all re

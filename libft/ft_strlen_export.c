@@ -1,42 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin_and_free.c                              :+:      :+:    :+:   */
+/*   ft_strlen_export.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/03 17:06:35 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/22 11:55:23 by xle-boul         ###   ########.fr       */
+/*   Created: 2021/10/01 21:37:46 by xle-boul          #+#    #+#             */
+/*   Updated: 2022/06/14 14:17:50 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/* 	joins s2 after s1 in a new string
-	which memory is allocated with malloc */
+/* returns the amount of characters a string contains (careful, starts at 0) */
 
-char	*ft_strjoin_and_free(char const *s1, char const *s2)
+size_t	ft_strlen_export(const char *s)
 {
-	int		i;
-	int		j;
-	char	*str;
+	int	i;
 
 	i = 0;
-	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!str)
-		return (NULL);
-	while (s1[i] != '\0')
+	while (*s != '\0')
 	{
-		str[i] = s1[i];
+		if (*s == '=')
+			break ;
 		i++;
+		s++;
 	}
-	j = 0;
-	while (s2[j] != '\0')
-	{
-		str[i + j] = s2[j];
-		j++;
-	}
-	free((void *)s1);
-	str[i + j] = '\0';
-	return (str);
+	return (i);
 }

@@ -1,0 +1,7 @@
+when empty shell cmd, put shell->rtn to 0
+suppress history with function clear_history
+heredocs
+signals
+resolve bugs with \n in input
+verify syntax error output on STDERR
+leaks killing

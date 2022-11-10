@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 16:09:27 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/04/28 17:07:06 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/21 21:49:08 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 t_token	*token_new(char *item)
 {
 	t_token		*new;
-	
+
 	new = (t_token *)malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);

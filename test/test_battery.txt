@@ -1,0 +1,169 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    test_battery.txt                                   :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/06/17 17:15:03 by cjulienn          #+#    #+#              #
+#    Updated: 2022/06/17 18:39:04 by cjulienn         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
+// test battery should be as comprehensive as possible
+
+// 1] test de tokenisation
+
+1) standard :
+
+cat<infile.txt|grep truc|wc -l>outfile.txt
+cat < infile.txt | grep truc | wc -l >outfile.txt
+
+2) redirs between quotes
+
+cat "<" infile.txt '|' grep truc | wc -l ">>" outfile.txt
+
+3) spaces between quotes
+
+cat < infile.txt | "echo" tersadd"  ssd   < >>    "fsdssdf
+"echo truc"
+cat < infile.txt|" 'vdvdsss  "'
+cat <infile.txt | '
+cat <infile.txt "| 'ssdsd"  " '
+"  '           '
+' "      '
+echo -n a '' b '' c '' d
+
+4) fake pipes
+
+cat < infile.txt'|' wc -l
+cat <infile.txt"|" wc -l
+cat <infile.txt '|' wc -l
+
+5) multilines input
+
+      cat < infile.txt | grep test | wc 
+-l
+
+cat < infile.txt        | grep test | wc -l
+      
+// 2] simple minishell testing 
+
+1) standard case : pipex-like case scenario [OK]
+
+cat  < infile.txt | grep truc | wc -l > outfile.txt
+exit status : 0
+
+cat<infile.txt|grep truc|wc -l>outfile.txt
+exit status : 0
+
+2) standard case : redirection, no pipes and single cmd [OK]
+<infile.txt cat
+cat <infile.txt
+cat<infile.txt
+exit status : 0
+
+<infile.txtcat
+exit status : 1
+
+3) standard case : no redirection, single cmd [OK pour le freeze MAIS reste à implementer le signal]
+wc -l
+freeze (kill with signal)
+exit status : 130
+
+4) standard case : no redirections, multiple pipes [OK]
+echo truc | grep t | wc -l
+exit status : 0
+
+5) tricky case : input redirections between pipes [OK]
+echo truc | <infile.txt cat | wc -l  
+exit status : 0
+
+6) tricky case : output redirections between pipes [OK]
+cat <infile.txt | grep test >outfile.txt | wc -l
+exit status : 0
+
+7) tricky case : redirection between cmd and argument [OK]
+echo >outfile.txt truc
+exit status : 0
+
+8) tricky case : nothing between two pipes [KO : exit status AND err msg non fonctionnals]
+cat <infile.txt | | wc -l
+exit status : 0
+
+9) tricky case : only redirection, no cmd, no pipes
+<infile.txt
+>outfile.txt
+exit status : 0
+
+10) tricky case : only redirection, no cmd between two pipes [OK]
+cat <infile.txt | >outfile.txt | wc -l
+exit status : 0 
+
+11) tricky case : redirection without target, between two pipes [KO : exit code are differents]
+cat <infile.txt | grep test > | wc -l
+exit status : 258 bash: syntax error near unexpected token `|'
+cat <infile.txt | grep test < | wc -l
+exit status : 258 bash: syntax error near unexpected token `|'
+
+12) tricky case : redirection without target, only [KO : exit code = 2, not 258]
+<
+exit status : 258 bash: syntax error near unexpected token `newline'
+>
+exit status : 258 bash: syntax error near unexpected token `newline'
+
+13) tricky case : redirection without target, followed by other pipes and commands
+< | echo truc | wc -l
+> | echo truc | wc -l
+
+14) tricky case : only a pipe, nothing else
+|
+
+15 ) tricky case : only multiple pipes, nothing else [KO : multiple syntax error msgs]
+|||||||||||||||||||||||
+
+// 3] syntax errors errors
+
+1) simple case : multiple pipes
+
+|
+
+expected output: bash: syntax error near unexpected token `|'
+
+2) redir operator only
+
+<
+>>
+<<
+>
+
+expected output : bash: syntax error near unexpected token `newline'
+
+3) redir op and pipe
+
+< | 
+
+expected output: bash: syntax error near unexpected token `|'
+
+// 4] multiple spawns of sub minishells
+
+1) ./minishell
+
+2) echo truc | <infile.txt | ./minishell
+
+3) ./minishell | echo truc
+
+4) ./minishell | ./minishell | ./minishell | ./minishell
+
+5) exit | ./minishell
+
+6) ./minishell | exit
+
+// 5] expansion test
+
+TO IMPLEMENT
+
+// 6] builtin tests 
+
+TO IMPLEMENT
+

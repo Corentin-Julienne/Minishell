@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 16:58:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 18:48:51 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/25 05:46:08 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 by assessing if the user input is only composed of whitespace
 return 1 if only whitespace, 0 otherwise */
 
-static int	is_spaces_only(char *str)
+int	is_spaces_only(char *str)
 {
 	int		i;
 	int		error;
@@ -49,17 +49,15 @@ static void	miniloop(t_shell *shell)
 	if (is_spaces_only(shell->user_input) == 1)
 		return ;
 	token = parse_user_input(shell);
-	display_every_token(token); // debug func
 	free(shell->user_input);
 	shell->user_input = NULL;
 	process_tokens(token, shell);
-	token_clear(&token);
-	inspect_exit_code(shell); // debug func
+	token_clear(token);
 	reset_shell_struct(shell);
 }
 
 static int	minishell(t_shell *shell)
-{
+{	
 	while (42)
 	{
 		shell->user_input = readline("$> ");
@@ -82,16 +80,13 @@ static int	minishell(t_shell *shell)
 void	signal_handler(int sig, siginfo_t *info, void *context)
 {
 	(void)info;
-	printf("%d\n", sig);
+	(void)context;
 	if (sig == SIGINT)
 	{
-		printf("Signal SIGINT (CTRL-C) received\n");
-		exit(EXIT_SUCCESS);
-	}
-	if (sig == SIGQUIT)
-	{
-		printf("Signal SIGQUIT (CTRL-\\) received\n");
-		exit(EXIT_SUCCESS);
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
 	}
 }
 
@@ -100,16 +95,18 @@ void	signal_handler(int sig, siginfo_t *info, void *context)
 int	main(int argc, char **argv, char **envp)
 {
 	t_shell				*shell;
-	struct sigaction	action;
+	struct sigaction	sig_int;
+	struct sigaction	sig_quit;
 
 	(void)argc;
 	(void)argv;
-	inspect_main_env(envp); // debug func
-	action.sa_sigaction = signal_handler;
-	if (sigaction(SIGINT, &action, NULL) == -1
-		|| sigaction(SIGQUIT, &action, NULL))
+	sig_int.sa_sigaction = signal_handler;
+	sig_int.sa_flags = SA_RESTART;
+	sig_quit.sa_handler = SIG_IGN;
+	if (sigaction(SIGINT, &sig_int, NULL) == -1
+		|| sigaction(SIGQUIT, &sig_quit, NULL) == -1)
 	{
-		printf("failed sigaction\n");
+		ft_putstr_fd("Error: Failed sigaction\n", STDERR_FILENO);
 		exit(EXIT_FAILURE);
 	}
 	shell = (t_shell *)malloc(sizeof(t_shell));

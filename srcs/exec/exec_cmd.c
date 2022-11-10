@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:01:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 22:11:26 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/22 11:32:24 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int	exec_built_in(t_shell *shell, char **cmd_args)
 	else if (!ft_strncmp(cmd_args[0], "unset", 5)
 		&& ft_strlen(cmd_args[0]) == 5)
 		return (built_in_unset(shell, cmd_args));
+	return (0);
 }
 
 /* return 0 if cmd is not a builtin, 1 otherwise */
@@ -46,7 +47,7 @@ int	is_built_in(const char *cmd)
 	if (!ft_strncmp(cmd, "cd", 2) && ft_strlen(cmd) == 2)
 		return (1);
 	else if (!ft_strncmp(cmd, "echo", 4) && ft_strlen(cmd) == 4)
-		return (1);	
+		return (1);
 	else if (!ft_strncmp(cmd, "env", 3) && ft_strlen(cmd) == 3)
 		return (1);
 	else if (!ft_strncmp(cmd, "exit", 4) && ft_strlen(cmd) == 4)
@@ -82,15 +83,16 @@ an external cmd, process will be equal to CHILD (the "else" path)
 were changes, then put the exit code to the rtn code of the triggered builtin
 2) in the CHILD case, we execute the builtin if the cmd is a builtin,
 otherwise we execute the external cmd  
-NB : if their is no cmd (aka cmd_args[0] = NULL), then we exit if in child process,
+NB : if their is no cmd (aka cmd_args[0] = NULL),
+then we exit if in child process,
 and of course we free everything before */
 
 void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 {
 	int			exit_code;
-	
+
 	exit_code = 0;
-	if (process == PARENT) // no leaks killing needed there (parent process)
+	if (process == PARENT)
 	{
 		shell->exit_status = exec_built_in(shell, cmd_args);
 		dup2(shell->std_fdin, STDIN_FILENO);
@@ -99,7 +101,7 @@ void	cmd_exec(t_shell *shell, char **cmd_args, t_token *token, int process)
 	}
 	else
 	{
-		token_clear(&token);
+		token_clear(token);
 		handle_no_cmd(cmd_args, shell);
 		if (is_built_in(cmd_args[0]) == 1)
 		{

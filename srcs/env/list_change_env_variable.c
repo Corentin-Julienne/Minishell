@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   change_env_variable.c                              :+:      :+:    :+:   */
+/*   list_change_env_variable.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/08 21:39:46 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/11 11:31:49 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 02:13:02 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,10 @@ void	create_env_var(t_env *head, char *name, char *value)
 	}
 	new = ft_create_new_node(name);
 	new->data = ft_strjoin_and_free(new->data, "=");
-	new->data = ft_strjoin_and_free(new->data, value);
+	if (value != NULL)
+		new->data = ft_strjoin_and_free(new->data, value);
 	ft_add_at_tail(&head, new);
 }
-
 
 // utility to check if a variable exists within the env
 // returns the string if it does and NULL if not
@@ -53,7 +53,7 @@ char	*spot_env_var(t_env *head, char *var)
 // string new_var.
 void	change_env_var(t_env *head, char *name, char *value)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	tmp = head;
 	while (tmp != NULL)
@@ -63,7 +63,8 @@ void	change_env_var(t_env *head, char *name, char *value)
 			free(tmp->data);
 			tmp->data = ft_strdup(name);
 			tmp->data = ft_strjoin_and_free(tmp->data, "=");
-			tmp->data = ft_strjoin_and_free(tmp->data, value);
+			if (value != NULL)
+				tmp->data = ft_strjoin_and_free(tmp->data, value);
 			break ;
 		}
 		tmp = tmp->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_path_cmd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/19 18:02:11 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 18:22:42 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/15 13:47:01 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ static char	*join_cmd_to_path(t_shell *shell, char **cmd_args, int i)
 	char	*path;
 
 	if (is_path_already_provided(cmd_args[0]) == 1)
-		return (cmd_args[0]);
-	path = ft_strjoin(shell->paths[i], cmd_args[0]);
+		path = ft_strdup(cmd_args[0]);
+	else
+		path = ft_strjoin(shell->paths[i], cmd_args[0]);
 	if (!path)
 	{
 		ft_putstr_fd(MALLOC_ERR_MSG, STDERR_FILENO);
@@ -69,24 +70,41 @@ will execute execve. Execve will kill the process, resolve leaks and exec cmd
 otherwise, if no valid path is found, we clean the child process
 and exit with code 127 (AKA cmd not found) */
 
-void	path_cmd_exec(t_shell *shell, char **cmd_args)
+static void	exec_os_cmd(t_shell *shell, char **updated_env, char **cmd_args)
 {
 	char		*path_with_cmd;
 
-	if (is_path_functionnal(cmd_args[0], shell, cmd_args) == 0)
-		execve(cmd_args[0], cmd_args, shell->env); // put instead the conversion function from list
-	shell->paths = recup_paths(shell, cmd_args);
-	if (!shell->paths)
-		case_cmd_not_found(shell, cmd_args);
-	shell->i = 0;
 	while (shell->paths[shell->i])
 	{
 		path_with_cmd = join_cmd_to_path(shell, cmd_args, shell->i);
 		if (is_path_functionnal(path_with_cmd, shell, cmd_args) == 0)
-			execve(path_with_cmd, cmd_args, shell->env);
+			execve(path_with_cmd, cmd_args, updated_env);
 		free(path_with_cmd);
 		path_with_cmd = NULL;
 		shell->i++;
 	}
+}
+
+void	path_cmd_exec(t_shell *shell, char **cmd_args)
+{
+	char		**updated_env;
+
+	updated_env = update_env(shell->env_list);
+	if (!updated_env)
+	{
+		free(cmd_args);
+		clean_child_process(shell);
+		exit(EXIT_FAILURE);
+	}
+	if (is_path_functionnal(cmd_args[0], shell, cmd_args) == 0)
+		execve(cmd_args[0], cmd_args, updated_env);
+	shell->paths = recup_paths(shell, cmd_args);
+	if (!shell->paths)
+		case_cmd_not_found(shell, cmd_args);
+	close(shell->std_fdin);
+	close(shell->std_fdout);
+	shell->i = 0;
+	exec_os_cmd(shell, updated_env, cmd_args);
+	free_split(updated_env);
 	case_cmd_not_found(shell, cmd_args);
 }

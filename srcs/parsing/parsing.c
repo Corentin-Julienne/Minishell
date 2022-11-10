@@ -3,64 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/25 15:49:57 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/03 17:35:31 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/22 10:41:23 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-/* bash allows CMDS to work regardless of the case
-e.g echo will works but also Echo or eChO */
-
-// static void	*lowercase_cmds(t_token *token)
-// {
-// 	int			i;
-
-// 	i = 0;
-// 	while (token->item[i])
-// 	{
-// 		if (token->item[i] >= 97 && token->item[i] <= 122)
-// 			token->item[i] = token->item[i] - 32;
-// 		i++;
-// 	}
-// }
-
-// /* as asked by the subject, we need to expand the env variables (preceeded by $)*/
-
-// int	modify_tokens(t_token *token)
-// {
-// 	while (token)
-// 	{
-// 		expand_env_var(token);
-// 		if (remove_quotes(token) == -1)
-// 			; // handle this
-// 		if (token->type == CMD)
-// 			;// implement  lowercase_cmds(token) later !!!
-// 		token = token->next;
-// 	}
-// 	return (0);
-// }
-
 /* should check wether token type is a CMD or not
 return 1 if the case, 0 otherwise 
 the 2 cases identified are :
-1) the token is the first token or is locatec just after a pipe
+1) the token is the first token or is located just after a pipe
 2) the token is an ARG situated after the filename for a redirection
 (or the heredoc DELIMITER) */
 
 static int	is_cmd(t_token *token)
 {
+	int		res;
+
+	res = 0;
 	if (token->type == ARG)
 	{
 		if (!token->prev || (token->prev && token->prev->type == PIPE))
-			return (1);
+			res = 1;
 		if (token->prev && token->prev->type == REDIR_ARG)
-			return (1);
+			res = 1;
 	}
-	return (0);
+	if (res > 0)
+		lowercase_cmds(token);
+	return (res);
 }
 
 /* find thew type of the token (among | < < >> >>)
@@ -104,29 +77,56 @@ every token is a part of a linked list containing the str,
 the type of the token, if it is surrounded by closed quotes or not
 */
 
+static t_token	*rtn_new_elem(t_shell *shell, t_token *token,
+				char *ui_cpy, char *item)
+{
+	t_token		*new_elem;
+
+	if (!item)
+	{
+		free(ui_cpy);
+		free_case_err(shell, token);
+	}
+	new_elem = token_new(ft_strdup(item));
+	if (!new_elem)
+	{
+		if (!item)
+			free(item);
+		free(ui_cpy);
+		free_case_err(shell, token);
+	}
+	free(ui_cpy);
+	ui_cpy = NULL;
+	free(item);
+	item = NULL;
+	return (new_elem);
+}
+
 t_token	*parse_user_input(t_shell *shell)
 {
 	t_token		*token;
 	t_token		*new_elem;
 	char		*item;
 	char		*ui_cpy;
+	int			added_item_len;
 
 	token = NULL;
-	ui_cpy = shell->user_input;
-	while (ui_cpy)
+	added_item_len = 0;
+	while (42)
 	{
-		item = isolate_item(ui_cpy, shell, token);
-		if (!item && shell->item_length > 0)
-			free_case_err(shell, token);
-		if (!item && shell->item_length == 0)
+		if (ft_strlen(shell->user_input) <= (size_t)added_item_len
+			|| is_spaces_only(shell->user_input + added_item_len) == 1)
 			break ;
-		ui_cpy = ui_cpy + shell->item_length;
-		new_elem = token_new(item);
-		if (!new_elem)
+		ui_cpy = ft_substr(shell->user_input, added_item_len,
+				ft_strlen(shell->user_input) - shell->item_length);
+		if (!ui_cpy)
 			free_case_err(shell, token);
+		item = isolate_item(ui_cpy, shell, token);
+		added_item_len += shell->item_length;
+		new_elem = rtn_new_elem(shell, token, ui_cpy, item);
 		token_add_back(&token, new_elem);
 	}
 	find_token_type(token);
-	// modify_tokens(tokens); WILL DO THIS AFTER
+	expand_token(token, shell);
 	return (token);
 }

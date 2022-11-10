@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenisation.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:04:56 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/05/31 16:30:13 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/14 22:40:15 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 /* return 1 if pipe or < or >, 
 return 2 if << or >> */
 
-static size_t	manage_chevrons_length(char *user_input, size_t i)
+static int	manage_chevrons_length(char *user_input, int i)
 {
 	char	*cutted_str;
-	size_t	len;
-	
+	int		len;
+
 	cutted_str = &user_input[i];
 	len = ft_strlen(cutted_str);
 	if (user_input[i] == '<' && len > 1)
@@ -41,17 +41,17 @@ static size_t	manage_chevrons_length(char *user_input, size_t i)
 => if blank space and not inside quote, then stop there 
 */
 
-static size_t	calc_token_length(char *user_input)
+static int	calc_token_length(char *user_input)
 {
-	size_t		i;
+	int			i;
 
 	i = 0;
-	while (user_input[i])
+	while (user_input && user_input[i])
 	{
 		if (user_input[i] == '\'' || user_input[i] == '"')
 		{
 			if (is_quote_valid(&user_input[i], user_input[i]) == 1)
-				i = i + calc_quote_length(user_input, i) - 1;
+				i = i + calc_quote_length(user_input, i);
 		}
 		else if (user_input[i] == '|' || user_input[i] == '<'
 			|| user_input[i] == '>')
@@ -61,7 +61,7 @@ static size_t	calc_token_length(char *user_input)
 			else
 				return (manage_chevrons_length(user_input, i));
 		}
-		else if (user_input[i] == ' ')
+		if (user_input[i] == ' ')
 			break ;
 		i++;
 	}
@@ -82,22 +82,19 @@ move ui_copy later
 char	*isolate_item(char *user_input, t_shell *shell, t_token *token)
 {
 	char	*item;
-	size_t	free_space_len;
+	int		free_space_len;
 
 	free_space_len = 0;
-	while (user_input[0] == ' ')
+	shell->item_length = 0;
+	while (user_input && user_input[0] == ' ')
 	{
 		free_space_len++;
 		user_input++;
 	}
-	shell->item_length = 0;
 	shell->item_length = calc_token_length(user_input);
-	if (shell->item_length == 0)
-		return (NULL);
-	item = (char *)malloc(sizeof(char) * (shell->item_length + 1));
+	item = ft_substr(user_input, 0, shell->item_length);
 	if (!item)
 		free_case_err(shell, token);
-	ft_strlcpy(item, user_input, shell->item_length + 1);
 	shell->item_length += free_space_len;
 	return (item);
 }

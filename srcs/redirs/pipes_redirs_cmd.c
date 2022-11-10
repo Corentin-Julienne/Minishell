@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes_redirs_cmd.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/20 13:59:33 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/10 15:54:03 by cjulienn         ###   ########.fr       */
+/*   Updated: 2022/06/14 22:39:56 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static char	**rtn_cmd_arr(t_token *cmd_token)
 	i = 0;
 	while (i < cmd_len)
 	{
-		if(cmd_token->type == CMD || cmd_token->type == ARG)
+		if (cmd_token->type == CMD || cmd_token->type == ARG)
 		{
 			cmd_arr[i] = ft_strdup(cmd_token->item);
 			if (!cmd_arr[i])
@@ -86,7 +86,7 @@ or to the beginning of the tokens if iter == 0
 NB : case there is nothing between two pipes (no tokens),
 we throw an error (err msg AND exit code 258) */
 
-static t_token	*goto_relevant_token(t_token *token, int iter, t_shell *shell)
+static t_token	*goto_relevant_token(t_token *token, int iter)
 {
 	t_token		*gd_token;
 	int			i;
@@ -119,7 +119,7 @@ void	pipes_redirs_cmd(t_shell *shell, t_token *token, int iter, int process)
 	char		**cmd_arr;
 	int			res_redir;
 
-	redir_tk = goto_relevant_token(token, iter, shell);
+	redir_tk = goto_relevant_token(token, iter);
 	if (shell->nb_pipes != 0)
 		redirect_to_pipe(shell, iter);
 	cmd_tk = redir_tk;

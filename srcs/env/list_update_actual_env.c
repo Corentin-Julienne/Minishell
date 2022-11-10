@@ -1,42 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin_and_free.c                              :+:      :+:    :+:   */
+/*   list_update_actual_env.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/03 17:06:35 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/22 11:55:23 by xle-boul         ###   ########.fr       */
+/*   Created: 2022/06/14 14:19:56 by xle-boul          #+#    #+#             */
+/*   Updated: 2022/06/14 23:09:19 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../../includes/minishell.h"
 
-/* 	joins s2 after s1 in a new string
-	which memory is allocated with malloc */
-
-char	*ft_strjoin_and_free(char const *s1, char const *s2)
+char	**update_env(t_env *head)
 {
 	int		i;
-	int		j;
-	char	*str;
+	t_env	*tmp;
+	char	**new_env;
 
 	i = 0;
-	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
-	if (!str)
+	new_env = malloc(sizeof(char *) * (list_length(head) + 1));
+	if (!new_env || !head)
 		return (NULL);
-	while (s1[i] != '\0')
+	tmp = head;
+	while (tmp != NULL)
 	{
-		str[i] = s1[i];
+		new_env[i] = ft_strdup(tmp->data);
 		i++;
+		tmp = tmp->next;
 	}
-	j = 0;
-	while (s2[j] != '\0')
-	{
-		str[i + j] = s2[j];
-		j++;
-	}
-	free((void *)s1);
-	str[i + j] = '\0';
-	return (str);
+	new_env[i] = NULL;
+	return (new_env);
 }

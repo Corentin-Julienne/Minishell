@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strldup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/03 11:37:22 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/22 11:07:49 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/16 16:35:43 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 /*	duplicates a string into a new one, using malloc to assign memory */
 
-char	*ft_strdup(const char *s)
+char	*ft_strldup(const char *s, size_t n)
 {
 	char	*str;
 	int		i;
 
 	i = 0;
-	str = (char *)malloc(sizeof(char) * ft_strlen(s) + 1);
+	str = (char *)malloc(sizeof(char) * (n + 1));
 	if (!str)
 		return (NULL);
-	while (s[i] != '\0')
+	while (i < (int)n)
 	{
 		str[i] = s[i];
 		i++;

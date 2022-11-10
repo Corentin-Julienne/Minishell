@@ -6,18 +6,20 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/23 15:37:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/11 15:00:13 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 05:16:13 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
 // a simple function to find the pwd at the time
-char	*find_pwd_path(t_env *head, char *var)
+char	*find_var_path(t_env *head, char *var)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = spot_env_var(head, var);
+	if (tmp == NULL)
+		return (NULL);
 	while (tmp && *tmp != '=')
 		tmp++;
 	if (*tmp == '\0')
@@ -28,11 +30,20 @@ char	*find_pwd_path(t_env *head, char *var)
 // simple function that prints the pwd to the terminal then frees the vairable
 int	built_in_pwd(t_shell *shell, char *cmd_args)
 {
-	if (find_pwd_path(shell->env_list, "PWD") == NULL)
+	char	*pwd;
+
+	(void)shell;
+	(void)cmd_args;
+	pwd = malloc(sizeof(char) * MAX_PATH);
+	if (!pwd)
+		return (1);
+	pwd = getcwd(pwd, MAX_PATH);
+	if (pwd == NULL)
 	{
-		printf("bash: pwd: PWD not set\n");
+		free(pwd);
 		return (1);
 	}
-	printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
+	printf("%s\n", pwd);
+	free(pwd);
 	return (0);
 }

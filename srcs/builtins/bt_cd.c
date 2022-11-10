@@ -6,78 +6,86 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 10:36:12 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/11 15:25:38 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 04:39:19 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-// handles the arguments prefixed by a ~
-int	handle_tilde(t_shell *shell, char *arg, char *home)
+// second part of the conditions
+// it is worth to mention that this function throws the row
+// argument into a parser that will handle all the syntaxic
+// parameters that CD encounters in minishell
+int	built_in_cd_conditions(char **cmd_args, t_shell *shell,
+		char **final_path, char *pwd)
 {
-	char	*final_arg;
-	int		success_code;
+	int	exit_code;
 
-	final_arg = expand_tilde(home, arg);
-	success_code = chdir(final_arg);
-	if (success_code != 0)
+	exit_code = 0;
+	if (!cmd_args[1] || (ft_strlen(cmd_args[1]) == 2
+			&& ft_strncmp(cmd_args[1], "--", 2) == 0))
 	{
-		printf("bash: cd: %s: No such file or directory\n", final_arg);
-		free(final_arg);
-		return (1);
+		if (spot_env_var(shell->env_list, "HOME") == NULL)
+			return (1);
+		*final_path = bt_cd_parser(find_var_path(shell->env_list,
+					"HOME"), shell, pwd);
 	}
-	else
+	else if (cmd_args[1] && !cmd_args[2])
+		*final_path = bt_cd_parser(cmd_args[1], shell, pwd);
+	else if (cmd_args[2])
 	{
-		change_env_var(shell->env_list, "PWD", final_arg);
-		printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		free(final_arg);
+		bt_cd_error_handler(3, NULL);
+		exit_code = 1;
 	}
-	return (0);
+	return (exit_code);
 }
 
-// handles the arguments prefixed by a -
-int	handle_dash(t_shell *shell, char *arg, char *home)
+// first part of a long series of conditions that CD has to meet.
+int	built_in_cd_conditions_main(char **cmd_args, t_shell *shell,
+		char **final_path, char *pwd)
 {
-	if (ft_strlen(arg) == 1)
+	int	exit_code;
+
+	exit_code = 0;
+	if (cmd_args[1] && !cmd_args[2] && cmd_args[1][0] == '-' &&
+		ft_strlen(cmd_args[1]) == 1)
+		exit_code = deal_with_dash(shell, pwd, final_path);
+	else if (cmd_args[1] && !cmd_args[2] && cmd_args[1][0] == '-'
+			&& cmd_args[1][1] != '-')
 	{
-		if (spot_env_var(shell->env_list, "OLDPWD") == NULL)
-			printf("bash: cd: OLDPWD not set\n");
-		else
-		{
-			chdir(find_pwd_path(shell->env_list, "OLDPWD"));
-			change_env_var(shell->env_list, "PWD", find_pwd_path(shell->env_list, "OLDPWD"));
-			printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		}
+		bt_cd_error_handler(2, cmd_args[1]);
+		exit_code = 1;
 	}
-	else
+	else if (built_in_cd_conditions(cmd_args, shell, final_path, pwd) != 0)
 	{
-		printf("bash: cd: %c%c: invalid option\n", arg[0], arg[1]);
-		return (1);
+		exit_code = 1;
 	}
-	return (0);
+	return (exit_code);
 }
 
-// executes the change of directory according to the constraints
-int	change_directory(t_shell *shell, char *arg, char *home)
+int	special_case_home(char **cmd_args, char *final_path, t_shell *shell, int go)
 {
-	int		success_code;
+	int		exit_code;
+	t_env	*env;
 
-	if (arg[0] == '-')
-		success_code = handle_dash(shell, arg, home);
-	else if (arg[0] == '~')
-		success_code = handle_tilde(shell, arg, home);
-	else
+	env = shell->env_list;
+	exit_code = 0;
+	if ((!cmd_args[1] && spot_env_var(env, "HOME") != NULL)
+		|| (cmd_args[1] && ft_strncmp(cmd_args[1], "--", 2) == 0
+			&& ft_strlen(cmd_args[1]) == 2
+			&& spot_env_var(env, "HOME") != NULL))
+		exit_code = change_dir(final_path, find_var_path(env, "HOME"), go);
+	else if ((!cmd_args[1] && spot_env_var(env, "HOME") == NULL)
+		|| (cmd_args[1] && ft_strncmp(cmd_args[1], "--", 2) == 0
+			&& ft_strlen(cmd_args[1]) == 2
+			&& spot_env_var(env, "HOME") == NULL))
 	{
-		success_code = chdir(arg);
-		if (success_code != 0)
-			printf("bash: cd: %s: No such file or directory\n", arg);
-		else
-		{
-			change_env_var(shell->env_list, "PWD", arg);
-			printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		}
+		ft_putendl_fd("minishell: cd: HOME not set", STDERR_FILENO);
+		exit_code = change_dir(final_path, find_var_path(env, "HOME"), go);
 	}
-	return (success_code);
+	else
+		exit_code = change_dir(final_path, cmd_args[1], go);
+	return (exit_code);
 }
 
 // fonction to handle the built in cd
@@ -90,31 +98,20 @@ int	change_directory(t_shell *shell, char *arg, char *home)
 	// 	a valid path
 int	built_in_cd(t_shell *shell, char **cmd_args)
 {
-	char		*home;
 	char		*pwd;
-	int			success_code;
+	int			exit_code;
+	char		*final_path;
+	int			go;
 
-	pwd = ft_strdup(find_pwd_path(shell->env_list, "PWD"));
-	home = find_pwd_path(shell->env_list, "HOME");
-	if (!cmd_args[1] || ft_strlen(cmd_args[1]) == 2 && ft_strncmp(cmd_args[1], "--", 2) == 0
-		|| ft_strlen(cmd_args[1]) == 2 && ft_strncmp(cmd_args[1], "~", 2) == 0)
-	{
-		success_code = chdir(home);
-		change_env_var(shell->env_list, "PWD", home);
-		printf("%s\n", find_pwd_path(shell->env_list, "PWD"));
-		assign_old_pwd(shell, cmd_args[1], success_code, pwd);
-	}
-	else if (cmd_args[2])
-	{
-		printf("bash: cd: too many arguments\n");
-		return (1);
-	}
-	else
-	{
-		if (!(ft_strlen(cmd_args[1]) == 1 && ft_strncmp(cmd_args[1], "-", 1) == 0))
-			cmd_args[1] = expand_double_dot(cmd_args[1], shell->env_list);
-		success_code = change_directory(shell, cmd_args[1], home);
-		assign_old_pwd(shell, cmd_args[1], success_code, pwd);
-	}
-	return (0);
+	exit_code = 0;
+	final_path = NULL;
+	go = 0;
+	pwd = define_pwd();
+	go = built_in_cd_conditions_main(cmd_args, shell, &final_path, pwd);
+	special_case_home(cmd_args, final_path, shell, go);
+	assign_old_pwd(shell, cmd_args[1], exit_code, pwd);
+	if (final_path)
+		free(final_path);
+	free(pwd);
+	return (exit_code);
 }

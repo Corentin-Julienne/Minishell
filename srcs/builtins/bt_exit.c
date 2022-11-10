@@ -3,24 +3,28 @@
 /*                                                        :::      ::::::::   */
 /*   bt_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
+/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 20:47:54 by xle-boul          #+#    #+#             */
-/*   Updated: 2022/06/09 17:26:17 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 05:27:38 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+#define LL_MAX 9223372036854775807
 
 // checks if the argument is numeric. Takes into account the - or + that can
 // prefix the argument. it will return true if the argument is numeric and
 // false if not
 bool	is_arg_valid(char *arg)
 {
-	int	i;
+	int						i;
+	unsigned long long int	_atoi;
 
 	i = 0;
-	if (arg[i] != '-' && arg[i] != '+' && '0' > arg[i] && arg[i] > '9')
+	if (arg[i] == '\0'
+		|| (arg[i] != '-' && arg[i] != '+' && '0' > arg[i] && arg[i] > '9'))
 		return (false);
 	if (arg[i] == '-' || arg[i] == '+')
 		i++;
@@ -30,6 +34,13 @@ bool	is_arg_valid(char *arg)
 			return (false);
 		i++;
 	}
+	_atoi = ft_atollu(arg);
+	if (ft_strncmp(arg, "-9223372036854775808", 21) == 0)
+		return (true);
+	if (i > 20
+		|| (_atoi > LL_MAX && (ft_isalpha(arg[0]) == 1 || arg[0] == '+'))
+		|| (_atoi > LL_MAX && arg[0] == '-'))
+		return (false);
 	return (true);
 }
 
@@ -40,8 +51,10 @@ void	handle_valid_arg(t_shell *shell, char *arg)
 
 	code = ft_atoi(arg);
 	if (0 <= code)
+	{
 		if (code > 255)
 			code %= 256;
+	}
 	else
 	{
 		code *= -1;
@@ -50,12 +63,15 @@ void	handle_valid_arg(t_shell *shell, char *arg)
 		code = 256 - (code);
 	}
 	free_case_exit(shell);
+	printf("exit\n");
 	exit(code);
 }
 
 void	handle_invalid_arg(t_shell *shell, char *arg)
 {
-	printf("bash: exit: %s: numeric argument required", arg);
+	ft_putstr_fd("exit\nminishell: exit: ", STDERR_FILENO);
+	ft_putstr_fd(arg, STDERR_FILENO);
+	ft_putendl_fd(": numeric argument required", STDERR_FILENO);
 	free_case_exit(shell);
 	exit(2);
 }
@@ -85,19 +101,16 @@ void	handle_invalid_arg(t_shell *shell, char *arg)
 // 255*	Exit status out of range
 void	built_in_exit(t_shell *shell, char **cmd_args)
 {
-	if (!cmd_args[1])
+	if (cmd_args[1] == NULL)
 	{
 		free_case_exit(shell);
+		printf("exit\n");
 		exit(shell->exit_status);
 	}
 	else if (cmd_args[2])
-	{
-		printf("bash: exit: too many arguments");
-		free_case_exit(shell);
-		exit(2);
-	}
-	else if (cmd_args[1] && is_arg_valid(cmd_args[1]) == true)
+		ft_putendl_fd("minishell: exit: too many arguments", STDERR_FILENO);
+	else if (cmd_args[1] != NULL && is_arg_valid(cmd_args[1]) == true)
 		handle_valid_arg(shell, cmd_args[1]);
-	else if (cmd_args[1] && is_arg_valid(cmd_args[1]) == false)
+	else if (cmd_args[1] != NULL && is_arg_valid(cmd_args[1]) == false)
 		handle_invalid_arg(shell, cmd_args[1]);
 }

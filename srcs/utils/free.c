@@ -6,7 +6,7 @@
 /*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:36:30 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/09 22:40:48 by xle-boul         ###   ########.fr       */
+/*   Updated: 2022/06/25 04:32:40 by xle-boul         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,11 @@
 
 void	clean_child_process(t_shell *shell)
 {
-	if (shell->env)
-		free_split(shell->env);
 	if (shell->paths)
 		free_split(shell->paths);
 	close(shell->std_fdin);
 	close(shell->std_fdout);
+	clear_history();
 	if (shell->pipes)
 	{
 		free(shell->pipes);
@@ -32,6 +31,10 @@ void	clean_child_process(t_shell *shell)
 		free(shell->pids_arr);
 		shell->pids_arr = NULL;
 	}
+	if (shell->env_list != NULL)
+		free_list(shell->env_list);
+	if (shell->home != NULL)
+		free(shell->home);
 	free(shell);
 }
 
@@ -41,8 +44,9 @@ void	clean_child_process(t_shell *shell)
 // for norminette's sake, for now.
 void	free_case_err(t_shell *shell, t_token *token)
 {
-	if (shell->env)
-		free_split(shell->env);
+	close(shell->std_fdin);
+	close(shell->std_fdout);
+	clear_history();
 	if (shell->paths)
 		free_split(shell->paths);
 	if (shell->user_input)
@@ -51,10 +55,13 @@ void	free_case_err(t_shell *shell, t_token *token)
 		free(shell->pipes);
 	if (shell->pids_arr)
 		free(shell->pids_arr);
-	free(shell);
+	if (shell->env_list != NULL)
+		free_list(shell->env_list);
+	if (shell->home != NULL)
+		free(shell->home);
 	shell = NULL;
 	if (token)
-		token_clear(&token);
+		token_clear(token);
 	exit(EXIT_FAILURE);
 }
 
@@ -85,7 +92,7 @@ void	free_split(char **split)
 	size_t		i;
 
 	i = 0;
-	while(split[i])
+	while (split[i])
 	{
 		free(split[i]);
 		split[i] = NULL;
@@ -99,8 +106,7 @@ void	free_split(char **split)
 // allocated item before closing the program
 void	free_case_exit(t_shell *shell)
 {
-	if (shell->env)
-		free_split(shell->env);
+	clear_history();
 	if (shell->paths)
 		free_split(shell->paths);
 	if (shell->user_input)
@@ -109,6 +115,9 @@ void	free_case_exit(t_shell *shell)
 		free(shell->pipes);
 	if (shell->pids_arr)
 		free(shell->pids_arr);
-	free(shell);
+	if (shell->env_list != NULL)
+		free_list(shell->env_list);
+	if (shell->home != NULL)
+		free(shell->home);
 	shell = NULL;
 }
