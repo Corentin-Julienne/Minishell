@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+         #
+#    By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/04 14:24:31 by xle-boul          #+#    #+#              #
-#    Updated: 2022/06/24 20:22:22 by xle-boul         ###   ########.fr        #
+#    Updated: 2023/05/05 19:10:28 by cjulienn         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,28 +29,11 @@ TEST_NAME := minishell_test
 CC := gcc
 CFLAGS := -Werror -Wall -Wextra -g
 
-# little if / else statement to assign the proper flags for compilation
-# depending on the OS
-
-# add thi to the includes
-
-
 RDL_PATH := -L/Users/$(USER)/.brew/opt/readline/lib/
 RDL_HISTORY_PATH := -L/Users/$(USER)/.brew/opt/readline/lib/
 RDL := -lreadline.8.1 $(RDL_PATH)
 RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
 READLINE := $(RDL) $(RDL_HISTORY)
-
-
-#ifeq ($(OS),Linux)
-	#READLINE := -lreadline
-#else
-# 	RDL_PATH := -L/usr/local/opt/readline/lib/
-#	RDL_HISTORY_PATH := -L/usr/local/opt/readline/lib/
-# 	RDL := -lreadline.8.1 $(RDL_PATH)
-# 	RDL_HISTORY := -lhistory.8.1 $(RDL_HISTORY_PATH)
-# 	READLINE := $(RDL) $(RDL_HISTORY)
-#endif
 
 INCLUDES := -I includes
 

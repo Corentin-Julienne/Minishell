@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: xle-boul <xle-boul@student.s19.be>         +#+  +:+       +#+        */
+/*   By: cjulienn <cjulienn@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/24 17:01:13 by cjulienn          #+#    #+#             */
-/*   Updated: 2022/06/25 05:38:34 by xle-boul         ###   ########.fr       */
+/*   Updated: 2023/05/05 19:11:29 by cjulienn         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -285,14 +285,5 @@ int			ft_rm_substr(const char *str, const char *substr, char **new_str);
 void		rl_replace_line(const char *text, int clear_undo);
 int			rl_on_new_line(void);
 void		rl_redisplay(void);
-
-/* DEBUG */ // NOT TO BE INCLUDED IN FINAL REPO !!!!!
-
-/* debug_utils.c */
-void		display_every_token(t_token *token);
-void		inspect_char_arr(char **arr);
-void		inspect_exit_code(t_shell *shell);
-void		inspect_main_env(char **envp);
-void		leaks_killing(void);
 
 #endif

@@ -45,8 +45,6 @@ int	change_dir(char *final_path, char *arg, int go)
 			bt_cd_error_handler(0, arg);
 			return (exit_code);
 		}
-		// if (!(ft_strncmp(arg, ".", 1) == 0 && ft_strlen(arg) == 1))
-		// 	printf("%s\n", final_path);
 		return (exit_code);
 	}
 	return (go);
